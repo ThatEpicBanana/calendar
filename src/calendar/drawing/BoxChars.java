@@ -2,14 +2,14 @@ package calendar.drawing;
 
 import java.util.HashMap;
 
-public class Text {
+public class BoxChars {
     // map of the basic light unicode box chars
     // each axis represents if the line is present in that direction
     //   up down left right
     // for example, a vertical line is [1][1][0][0]
     //   because up and down are present
-    public static final char[][][][] lightBoxChars;
-    public static final char[][][][] heavyBoxChars;
+    public static final char[][][][] light;
+    public static final char[][][][] heavy;
 
     // some commonly used characters
     public static final char LIGHT_VERTICAL;
@@ -24,19 +24,19 @@ public class Text {
     private static void add(
         int up,   int down, 
         int left, int right, 
-        char light, char heavy
+        char newlight, char newheavy
     ) {
-        lightBoxChars[up][down][left][right] = light;
-        heavyBoxChars[up][down][left][right] = heavy;
+        light[up][down][left][right] = newlight;
+        heavy[up][down][left][right] = newheavy;
 
         int[] array = { up, down, left, right };
-        map.put(light, array);
-        map.put(heavy, array);
+        map.put(newlight, array);
+        map.put(newheavy, array);
     }
 
     // combines the directions of two seperate characters
     // and outputs the corresponding character with the given darkness
-    public static char combine(char a, char b, boolean heavy) {
+    public static char combine(char a, char b, boolean make_heavy) {
         int[] a_dirs = map.get(a);
         int[] b_dirs = map.get(b);
 
@@ -45,15 +45,15 @@ public class Text {
         int left  = Math.min(a_dirs[2] + b_dirs[2], 1);
         int right = Math.min(a_dirs[3] + b_dirs[3], 1);
         
-        if(heavy)
-            return heavyBoxChars[up][down][left][right];
+        if(make_heavy)
+            return heavy[up][down][left][right];
         else
-            return lightBoxChars[up][down][left][right];
+            return light[up][down][left][right];
     }
 
     static {
-        lightBoxChars = new char[2][2][2][2];
-        heavyBoxChars = new char[2][2][2][2];
+        light = new char[2][2][2][2];
+        heavy = new char[2][2][2][2];
         map = new HashMap<Character, int[]>();
 
         add(0,0,0,0, ' ', ' ');
@@ -73,9 +73,9 @@ public class Text {
         add(1,1,1,0, '┤', '┫');
         add(1,1,1,1, '┼', '╋');
 
-        LIGHT_VERTICAL = lightBoxChars[1][1][0][0];
-        LIGHT_HORIZONTAL = lightBoxChars[0][0][1][1];
-        HEAVY_VERTICAL = heavyBoxChars[1][1][0][0];
-        HEAVY_HORIZONTAL = heavyBoxChars[0][0][1][1];
+        LIGHT_VERTICAL = light[1][1][0][0];
+        LIGHT_HORIZONTAL = light[0][0][1][1];
+        HEAVY_VERTICAL = heavy[1][1][0][0];
+        HEAVY_HORIZONTAL = heavy[0][0][1][1];
     }
 }

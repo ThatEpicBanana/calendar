@@ -13,7 +13,7 @@ public class Popup implements Drawable {
     }
 
     public char[][] draw() {
-        return Shapes.rectangle(width, height, false);
+        return Shapes.rectangle(width, height, true);
     }
 
     public int width() { return this.width; }

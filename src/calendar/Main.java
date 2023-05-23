@@ -1,6 +1,6 @@
 package calendar;
 
-import calendar.drawing.Text;
+import calendar.drawing.BoxChars;
 import calendar.drawing.layers.Layer;
 import calendar.drawing.layers.Popup;
 
@@ -40,14 +40,24 @@ public class Main {
         // layer.chars[3][0] = Text.LIGHT_VERTICAL;
 
         // layer.print();
+        
+        // light
+        // String background = "\033[48;2;239;241;245m";
+        // String foreground = "\033[38;2;230;69;83m";
+        // dark
+        // String background = "\033[48;2;30;30;46m";
+        // String foreground = "\033[38;2;243;139;168m";
+        // String reset = "\033[0m";
 
-        char up = Text.lightBoxChars[1][0][0][0];
-        char right = Text.lightBoxChars[0][0][0][1];
+        char up = BoxChars.light[1][0][0][0];
+        char right = BoxChars.light[0][0][0][1];
 
         System.out.println("up char: '" + up + "', right char: '" + right + "'");
-        System.out.println("combined: '" + Text.combine(up, right, false) + "'");
+        System.out.println("combined: '" + BoxChars.combine(up, right, false) + "'");
 
-        Popup popup = new Popup(10, 10);
+        Popup popup = new Popup(10, 5);
+        // System.out.print(background + foreground);
         popup.print();
+        // System.out.print(reset);
     }
 }

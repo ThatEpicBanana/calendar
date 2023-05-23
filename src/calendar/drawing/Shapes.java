@@ -1,20 +1,21 @@
 package calendar.drawing;
 
-import static calendar.drawing.Text.heavyBoxChars;
-import static calendar.drawing.Text.lightBoxChars;
-
 public class Shapes {
+    // creates an empty canvas filled with ' '
     public static char[][] empty(int width, int height) {
         char[][] canvas = new char[width][height];
+
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
                 canvas[x][y] = ' ';
+
         return canvas;
     }
 
+    // creates a rectangle filling a canvas of width and height
     public static char[][] rectangle(int width, int height, boolean heavy) {
         char[][] canvas = empty(width, height);
-        char[][][][] chars = heavy ? heavyBoxChars : lightBoxChars;
+        char[][][][] chars = heavy ? BoxChars.heavy : BoxChars.light;
 
         int left = 0;
         int right = width - 1;
