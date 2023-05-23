@@ -1,8 +1,8 @@
 package calendar.drawing.layers;
 
+// TODO: remove all this and just replace it with Drawable
 public class Layer {
     // 2D array of all of the chars in the layer
-    // column arrays!
     public char[][] chars;
 
     private int width;
@@ -17,8 +17,8 @@ public class Layer {
     }
 
     private void fill(char with) {
-        for(int i = 0; i < width; i++)
-            for(int j = 0; j < height; j++)
+        for(int i = 0; i < height; i++)
+            for(int j = 0; j < width; j++)
                 this.chars[i][j] = with;
     }
 

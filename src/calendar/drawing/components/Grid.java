@@ -1,4 +1,4 @@
-package calendar;
+package calendar.drawing.components;
 
 public class Grid {
     private int rows;
