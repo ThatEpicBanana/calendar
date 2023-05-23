@@ -23,7 +23,7 @@ public class Main {
         // nah there'll probably be a seperate class that manages the month and all the popups
         // each screen is year-month-day (although the others may be too time-consuming)
 
-        System.out.println("BELLOOOOO yesyes");
+        System.out.println("its so over");
 
         // notice: layers will probably just get replaced with Drawable
         // but this is good for a bit of testing
