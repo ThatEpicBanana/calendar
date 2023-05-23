@@ -3,7 +3,7 @@ package calendar.drawing.layers;
 public class Layer {
     // 2D array of all of the chars in the layer
     // column arrays!
-    private char[][] chars;
+    public char[][] chars;
 
     private int width;
     private int height;
