@@ -4,6 +4,8 @@ import calendar.drawing.layers.Layer;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("BELLOOOOO?!");
+
         Layer layer = new Layer(16, 16);
 
         layer.chars[5][10] = 'a';
