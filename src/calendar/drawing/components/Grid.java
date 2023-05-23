@@ -4,11 +4,13 @@ public class Grid {
     private int height;
     private int width;
     private String[][] grid;
+    private Justification justification;
 
-    public Grid(int height, int width) {
+    public Grid(int height, int width, Justification justification) {
         this.height = height;
         this.width = width;
         this.grid = new String[width][height];
+        this.justification = justification;
     }
 
     public void setValue(int x, int y, String value) {
@@ -39,5 +41,10 @@ public class Grid {
             }
             System.out.println();
         }
+    }
+
+    public static enum Justification {
+        BottomRight,
+        Middle
     }
 }
