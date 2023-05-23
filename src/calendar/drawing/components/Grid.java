@@ -1,41 +1,41 @@
 package calendar.drawing.components;
 
 public class Grid {
-    private int rows;
-    private int columns;
-    private int[][] grid;
+    private int height;
+    private int width;
+    private String[][] grid;
 
-    public Grid(int rows, int columns) {
-        this.rows = rows;
-        this.columns = columns;
-        this.grid = new int[rows][columns];
+    public Grid(int height, int width) {
+        this.height = height;
+        this.width = width;
+        this.grid = new String[width][height];
     }
 
-    public void setValue(int row, int column, int value) {
-        if (isValidPosition(row, column)) {
-            grid[row][column] = value;
+    public void setValue(int x, int y, String value) {
+        if (isValidPosition(x, y)) {
+            grid[x][y] = value;
         } else {
             System.out.println("Invalid position!");
         }
     }
 
-    public int getValue(int row, int column) {
-        if (isValidPosition(row, column)) {
-            return grid[row][column];
+    public String getValue(int x, int y) {
+        if (isValidPosition(x, y)) {
+            return grid[x][y];
         } else {
             System.out.println("Invalid position!");
-            return -1; // or any other suitable default value
+            return null; // or any other suitable default value
         }
     }
 
-    private boolean isValidPosition(int row, int column) {
-        return row >= 0 && row < rows && column >= 0 && column < columns;
+    private boolean isValidPosition(int x, int y) {
+        return y >= 0 && y < height && x >= 0 && x < width;
     }
     
     public void printGrid() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                System.out.print(grid[i][j] + " ");
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(grid[x][y] + " ");
             }
             System.out.println();
         }
