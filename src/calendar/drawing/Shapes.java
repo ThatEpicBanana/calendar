@@ -37,7 +37,7 @@ public class Shapes {
     }
 
     private static void vertical(char[][] canvas, int x, int starty, int endy, char[][][][] chars) {
-        char vertical   = chars[1][1][0][0]; // │
+        char vertical = chars[1][1][0][0]; // │
          
         for(int y = starty; y <= endy; y++) {
             canvas[x][y] = vertical;
@@ -62,26 +62,26 @@ public class Shapes {
         int width = cellLengthToGrid(cellWidth, columns);
         int height = cellLengthToGrid(cellHeight, rows);
 
-        int left = 0;
-        int right = width - 1;
-        int top = 0;
-        int bottom = height - 1;
+        final int left = 0;
+        final int right = width - 1;
+        final int top = 0;
+        final int bottom = height - 1;
 
-        int xdiff = cellWidth + 1;
-        int ydiff = cellHeight + 1;
+        final int xdiff = cellWidth + 1;
+        final int ydiff = cellHeight + 1;
 
         char[][] canvas = rectangle(width, height, heavy);
 
         
         for(int x = xdiff; x < width - 1; x += xdiff) {
-            vertical(canvas, x, 1, height - 2, chars); // ─
             canvas[x][top] = chars[0][1][1][1]; // ┬
+            vertical(canvas, x, top + 1, bottom - 1, chars); // │
             canvas[x][bottom] = chars[1][0][1][1]; // ┴
         }
         
         for(int y = ydiff; y < height - 1; y += ydiff) {
-            horizontal(canvas, y, 1, width - 2, chars); // │
             canvas[left][y] = chars[1][1][0][1]; // ├
+            horizontal(canvas, y, left + 1, right - 1, chars); // ─
             canvas[right][y] = chars[1][1][1][0]; // ┤
         }
 
@@ -91,5 +91,4 @@ public class Shapes {
 
         return canvas;
     }
-
 }

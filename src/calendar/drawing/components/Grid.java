@@ -58,8 +58,48 @@ public class Grid implements Drawable {
         return Shapes.grid(cellWidth, cellHeight, columns, rows, false);
     }
 
+    // TODO: replace in Canvas
     public static enum Justification {
         BottomRight,
-        Middle
+        Middle;
+
+        public char[][] write(String string, int width, int height) {
+            switch(this) {
+                case BottomRight:
+                    return bottomRight(string, width, height);
+                case Middle:
+                    return middle(string, width, height);
+                default:
+                    // wtf how
+                    return null;
+            }
+        }
+
+        private char[][] bottomRight(String string, int width, int height) {
+            char[][] canvas = Shapes.empty(width, height);
+
+            int length = string.length();
+            int bottom = height - 1;
+            int right = width - 1;
+
+            if(length < width - 2) {
+                for(int i = 0; i < length; i++) {
+                    char letter = string.charAt(i);
+                    int offset = length - i;
+
+                    canvas[right - 1 - offset][bottom] = letter;
+                }
+            } else {
+                // TODO: implement
+            }
+
+            return canvas;
+        }
+
+        private char[][] middle(String string, int width, int height) {
+            char[][] canvas = Shapes.empty(width, height);
+
+            return canvas;
+        }
     }
 }
