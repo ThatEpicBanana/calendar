@@ -1,6 +1,8 @@
 package calendar;
 
 import calendar.drawing.BoxChars;
+import calendar.drawing.components.Grid;
+import calendar.drawing.components.Grid.Justification;
 import calendar.drawing.layers.Layer;
 import calendar.drawing.layers.Popup;
 
@@ -44,6 +46,7 @@ public class Main {
         // light
         // String background = "\033[48;2;239;241;245m";
         // String foreground = "\033[38;2;230;69;83m";
+        // String foreground = "\033[38;2;76;79;105m";
         // dark
         // String background = "\033[48;2;30;30;46m";
         // String foreground = "\033[38;2;243;139;168m";
@@ -55,9 +58,14 @@ public class Main {
         System.out.println("up char: '" + up + "', right char: '" + right + "'");
         System.out.println("combined: '" + BoxChars.combine(up, right, false) + "'");
 
-        Popup popup = new Popup(10, 5);
+        // Popup popup = new Popup(10, 5);
         // System.out.print(background + foreground);
-        popup.print();
+        // popup.print();
+        // System.out.print(reset);
+        
+        // System.out.print(background + foreground);
+        Grid grid = new Grid(11, 4, 5, 5, Justification.Middle);
+        grid.print();
         // System.out.print(reset);
     }
 }
