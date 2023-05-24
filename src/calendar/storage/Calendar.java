@@ -97,7 +97,7 @@ public class Calendar {
     }
 
     public static void main(String[] args) {
-        Section section = new Section("Red", "\u001B[31m");
+        Section section = new Section("Important Things", "\u001B[31m");
         Calendar calendar = new Calendar("Dentist Appointment",
                 LocalDate.of(2023, 2, 23),
                 LocalDate.of(2023, 2, 24),
