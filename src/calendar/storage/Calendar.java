@@ -97,7 +97,7 @@ public class Calendar {
     }
 
     public static void main(String[] args) {
-        Section section = new Section("Important Things", "\u001B[31m");
+        Section section = new Section("Important Things", "\033[38;5;161m"); 
         Calendar calendar = new Calendar("Dentist Appointment",
                 LocalDate.of(2023, 2, 23),
                 LocalDate.of(2023, 2, 24),
@@ -112,7 +112,7 @@ public class Calendar {
         calendar.setTitle("Haircut Appointment");
         calendar.setEndTime(17.5);
 
-        // Display the modified calendar information
+        // Display the modified calendar information again
         calendar.display();
     }
 }
