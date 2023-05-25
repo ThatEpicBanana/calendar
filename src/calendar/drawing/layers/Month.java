@@ -19,6 +19,15 @@ public class Month extends MultiBox {
     private static final String[][] weekdaysShort = 
         { { "S" }, { "M" }, { "T" }, { "W" }, { "T" }, { "F" }, { "S" } };
 
+    private String[][] sizedWeekdays(int width) {
+        if(width >= 11)
+            return weekdaysFull;
+        else if(width >= 5)
+            return weekdaysSemi;
+        else
+            return weekdaysShort;
+    }
+
     public Month(int cellWidth, int cellHeight, String header) {
         super(
             new Drawable[3],
@@ -42,17 +51,11 @@ public class Month extends MultiBox {
         this.boxes[0] = title; this.boxes[1] = weekdays; this.boxes[2] = month;
     }
 
-    private String[][] sizedWeekdays(int width) {
-        if(width >= 11)
-            return weekdaysFull;
-        else if(width >= 5)
-            return weekdaysSemi;
-        else
-            return weekdaysShort;
+    public Canvas draw() {
+        Canvas canvas = super.draw();
+
+        // TODO: tasks
+
+        return canvas;
     }
-
-//     public Canvas draw() {
-
-//         return canvas;
-//     }
 }
