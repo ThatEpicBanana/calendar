@@ -27,13 +27,9 @@ public class Month extends MultiBox {
     private Grid weekdays;
     private Grid month;
 
-    private LocalDate calendar;
-
     private static final int WEEKS = 5;
 
-    private static final HashMap<Integer, String> monthNames = new HashMap<>();
-
-    public Month(State state, int cellWidth, int cellHeight, LocalDate calendar) {
+    public Month(State state, int cellWidth, int cellHeight) {
         super(
             new Drawable[3],
             // the first box is the title, in the middle of the third day
@@ -47,12 +43,13 @@ public class Month extends MultiBox {
 
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
-        this.calendar = calendar;
 
         this.initTitle();
         this.initWeek();
         this.initMonth();
     }
+
+    private LocalDate date() { return state.date(); }
 
     private void initTitle() {
         // in the middle of the third day
@@ -62,7 +59,7 @@ public class Month extends MultiBox {
         int width = cellWidth * 2 + 3;
         int height = 3;
 
-        String name = calendar.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + calendar.getYear();
+        String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
 
         this.boxes[0] = title = new Box(width, height, name, false, Justification.Middle);
     }
@@ -80,7 +77,7 @@ public class Month extends MultiBox {
 
         // add the day names
         for(int day = 0; day < 7; day++)
-            weekdays.grid[day][0] = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+            weekdays.grid[day][0] = DayOfWeek.of(day + 1).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 
     private void initMonth() {
@@ -99,12 +96,12 @@ public class Month extends MultiBox {
 
     private void initDays() {
         // current month
-        LocalDate current = calendar.withDayOfMonth(1);
+        LocalDate current = date().withDayOfMonth(1);
         int length = current.lengthOfMonth();
         int startDay = current.getDayOfWeek().getValue(); // Sunday is 1 so subtract
 
         // previous month
-        LocalDate previous = calendar.minusMonths(1);
+        LocalDate previous = current.minusMonths(1);
         int previousLength = previous.lengthOfMonth();
 
         // this is wacky, it's the offset from the start day of the month going in the past
@@ -152,20 +149,5 @@ public class Month extends MultiBox {
         canvas.overlay(0, 0, super.draw());
 
         return canvas;
-    }
-
-    static {
-        monthNames.put(Calendar.JANUARY,   "January");
-        monthNames.put(Calendar.FEBRUARY,  "Feburary");
-        monthNames.put(Calendar.MARCH,     "March");
-        monthNames.put(Calendar.APRIL,     "April");
-        monthNames.put(Calendar.MAY,       "May");
-        monthNames.put(Calendar.JUNE,      "June");
-        monthNames.put(Calendar.JULY,      "July");
-        monthNames.put(Calendar.AUGUST,    "August");
-        monthNames.put(Calendar.SEPTEMBER, "September");
-        monthNames.put(Calendar.OCTOBER,   "October");
-        monthNames.put(Calendar.NOVEMBER,  "November");
-        monthNames.put(Calendar.DECEMBER,  "December");
     }
 }

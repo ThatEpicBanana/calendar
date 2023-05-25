@@ -9,8 +9,10 @@ public class Event {
     private double startTime;
     private double endTime;
     private Section section;
+    private Calendar calendar;
 
-    public Event(String title, LocalDate startDate, LocalDate endDate, double startTime, double endTime, Section section) {
+    public Event(Calendar calendar, String title, LocalDate startDate, LocalDate endDate, double startTime, double endTime, Section section) {
+        this.calendar = calendar;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -94,25 +96,5 @@ public class Event {
                 endDate + " " + endTimeFormatted);
         System.out.println("Section: " + section.title());
         System.out.println("Section Color: " + section.color());
-    }
-
-    public static void main(String[] args) {
-        Section section = new Section("Important Things", "\033[38;5;161m"); 
-        Event event = new Event("Dentist Appointment",
-                LocalDate.of(2023, 2, 23),
-                LocalDate.of(2023, 2, 24),
-                8.0,
-                16.0,
-                section);
-
-        // Display the event information
-        event.display();
-
-        // Modify the event properties
-        event.setTitle("Haircut Appointment");
-        event.setEndTime(17.5);
-
-        // Display the modified event information again
-        event.display();
     }
 }

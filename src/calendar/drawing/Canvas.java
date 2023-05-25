@@ -32,14 +32,15 @@ public class Canvas {
     public int height() { return height; }
     public int width() { return width; }
 
-
-    // colors //
+    // fil //
 
     public void fillWith(char val) {
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
                 this.text[x][y] = ' ';
     }
+
+    // colors //
 
     public void fillColor(Color foreground, Color background) {
         for(int x = 0; x < width; x++)

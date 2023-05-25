@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import calendar.drawing.BoxChars;
 import calendar.drawing.layers.Month;
+import calendar.state.State;
 
 public class Main {
     public static void main(String[] args) {
@@ -49,7 +50,9 @@ public class Main {
 
         LocalDate date = LocalDate.now();
 
-        Month month = new Month(11, 4, date);
+        State state = new State(date);
+
+        Month month = new Month(state, 11, 4);
         month.print();
     }
 }
