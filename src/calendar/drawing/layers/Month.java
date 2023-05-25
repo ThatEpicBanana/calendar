@@ -1,5 +1,6 @@
 package calendar.drawing.layers;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Calendar;
@@ -14,10 +15,13 @@ import calendar.drawing.Justification;
 import calendar.drawing.components.Box;
 import calendar.drawing.components.Grid;
 import calendar.drawing.components.MultiBox;
+import calendar.state.State;
 
 public class Month extends MultiBox {
     private int cellWidth;
     private int cellHeight;
+
+    private State state;
 
     private Box title;
     private Grid weekdays;
@@ -27,16 +31,9 @@ public class Month extends MultiBox {
 
     private static final int WEEKS = 5;
 
-    private static final String[][] weekdaysFull = 
-        { { "Sunday" }, { "Monday" }, { "Tuesday" }, { "Wednesday" }, { "Thursday" }, { "Friday" }, { "Saturday" } };
-    private static final String[][] weekdaysSemi = 
-        { { "Sun" }, { "Mon" }, { "Tue" }, { "Wed" }, { "Thu" }, { "Fri" }, { "Sat" } };
-    private static final String[][] weekdaysShort = 
-        { { "S" }, { "M" }, { "T" }, { "W" }, { "T" }, { "F" }, { "S" } };
-
     private static final HashMap<Integer, String> monthNames = new HashMap<>();
 
-    public Month(int cellWidth, int cellHeight, LocalDate calendar) {
+    public Month(State state, int cellWidth, int cellHeight, LocalDate calendar) {
         super(
             new Drawable[3],
             // the first box is the title, in the middle of the third day
@@ -45,6 +42,8 @@ public class Month extends MultiBox {
             Canvas.cellDimToFull(cellWidth, 7), 
             Canvas.cellDimToFull(cellHeight, WEEKS) + 4
         );
+
+        this.state = state;
 
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
@@ -80,16 +79,8 @@ public class Month extends MultiBox {
         this.boxes[1] = weekdays = new Grid(cellWidth, weekCellHeight, columns, rows, Justification.Middle);
 
         // add the day names
-        weekdays.grid = sizedWeekdays(cellWidth);
-    }
-
-    private String[][] sizedWeekdays(int width) {
-        if(width >= 11)
-            return weekdaysFull;
-        else if(width >= 5)
-            return weekdaysSemi;
-        else
-            return weekdaysShort;
+        for(int day = 0; day < 7; day++)
+            weekdays.grid[day][0] = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 
     private void initMonth() {

@@ -92,8 +92,8 @@ public class Event {
         System.out.println("Title: " + title);
         System.out.println("Time Frame: " + startDate + " " + startTimeFormatted + " to " +
                 endDate + " " + endTimeFormatted);
-        System.out.println("Section: " + section.getTitle());
-        System.out.println("Section Color: " + section.getColor());
+        System.out.println("Section: " + section.title());
+        System.out.println("Section Color: " + section.color());
     }
 
     public static void main(String[] args) {
