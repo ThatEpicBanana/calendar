@@ -1,8 +1,11 @@
 package calendar.drawing.layers;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.Color;
@@ -20,7 +23,7 @@ public class Month extends MultiBox {
     private Grid weekdays;
     private Grid month;
 
-    private GregorianCalendar calendar;
+    private LocalDate calendar;
 
     private static final int WEEKS = 5;
 
@@ -33,7 +36,7 @@ public class Month extends MultiBox {
 
     private static final HashMap<Integer, String> monthNames = new HashMap<>();
 
-    public Month(int cellWidth, int cellHeight, GregorianCalendar calendar) {
+    public Month(int cellWidth, int cellHeight, LocalDate calendar) {
         super(
             new Drawable[3],
             // the first box is the title, in the middle of the third day
@@ -60,7 +63,7 @@ public class Month extends MultiBox {
         int width = cellWidth * 2 + 3;
         int height = 3;
 
-        String name = monthNames.get(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
+        String name = calendar.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + calendar.getYear();
 
         this.boxes[0] = title = new Box(width, height, name, false, Justification.Middle);
     }
@@ -104,15 +107,14 @@ public class Month extends MultiBox {
     }
 
     private void initDays() {
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        int length = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int startDay = calendar.get(Calendar.DAY_OF_WEEK) - 1; // Sunday is 1 so subtract
+        // current month
+        LocalDate current = calendar.withDayOfMonth(1);
+        int length = current.lengthOfMonth();
+        int startDay = current.getDayOfWeek().getValue(); // Sunday is 1 so subtract
 
         // previous month
-        Calendar previousMonth = (Calendar) calendar.clone();
-        previousMonth.add(Calendar.MONTH, -1);
-        int previousLength = previousMonth.getActualMaximum(Calendar.DAY_OF_MONTH);
+        LocalDate previous = calendar.minusMonths(1);
+        int previousLength = previous.lengthOfMonth();
 
         // this is wacky, it's the offset from the start day of the month going in the past
         for(int offset = 1; startDay - offset >= 0; offset++) {

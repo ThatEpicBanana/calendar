@@ -1,7 +1,6 @@
 package calendar;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.LocalDate;
 
 import calendar.drawing.BoxChars;
 import calendar.drawing.layers.Month;
@@ -48,9 +47,9 @@ public class Main {
         // System.out.print(reset);
 
 
-        GregorianCalendar calendar = new GregorianCalendar(2023, Calendar.MAY, 1);
+        LocalDate date = LocalDate.now();
 
-        Month month = new Month(11, 4, calendar);
+        Month month = new Month(11, 4, date);
         month.print();
     }
 }

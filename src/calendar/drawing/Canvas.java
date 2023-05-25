@@ -80,7 +80,9 @@ public class Canvas {
             builder.append('\n');
         }
 
-        System.out.println(builder.toString());
+        builder.append(Ansi.RESET);
+
+        System.out.print(builder.toString());
     }
     
     private String print(int x, int y) {
