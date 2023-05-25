@@ -7,8 +7,8 @@ public class MultiBox implements Drawable {
     public final Drawable[] boxes;
 
     // separated from the grids because it's easier
-    private final int[] boxx;
-    private final int[] boxy;
+    public final int[] boxx;
+    public final int[] boxy;
 
     private final int width;
     private final int height;

@@ -12,10 +12,16 @@ import calendar.drawing.components.Grid;
 import calendar.drawing.components.MultiBox;
 
 public class Month extends MultiBox {
+    private int cellWidth;
+    private int cellHeight;
+
     private Box title;
     private Grid weekdays;
     private Grid month;
+
     private GregorianCalendar calendar;
+
+    private static final int WEEKS = 5;
 
     private static final String[][] weekdaysFull = 
         { { "Sunday" }, { "Monday" }, { "Tuesday" }, { "Wednesday" }, { "Thursday" }, { "Friday" }, { "Saturday" } };
@@ -26,6 +32,53 @@ public class Month extends MultiBox {
 
     private static final HashMap<Integer, String> monthNames = new HashMap<>();
 
+    public Month(int cellWidth, int cellHeight, GregorianCalendar calendar) {
+        super(
+            new Drawable[3],
+            // the first box is the title, in the middle of the third day
+            new int[3],
+            new int[]{ 0, 2, 4 },
+            Canvas.cellDimToFull(cellWidth, 7), 
+            Canvas.cellDimToFull(cellHeight, WEEKS) + 4
+        );
+
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
+        this.calendar = calendar;
+
+        this.initTitle();
+        this.initWeek();
+        this.initMonth();
+    }
+
+    private void initTitle() {
+        // in the middle of the third day
+        int x = Canvas.cellDimToFull(cellWidth, 2) + cellWidth / 2;
+        this.boxx[0] = x;
+
+        int width = cellWidth * 2 + 3;
+        int height = 3;
+
+        String name = monthNames.get(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
+
+        this.boxes[0] = title = new Box(width, height, name, false, Justification.Middle);
+    }
+
+    private void initWeek() {
+        // far to the left
+        int x = 0;
+        this.boxx[1] = x;
+        
+        // 1-height single row
+        int weekCellHeight = 1;
+        int columns = 7, rows = 1;
+
+        this.boxes[1] = weekdays = new Grid(cellWidth, weekCellHeight, columns, rows, Justification.Middle);
+
+        // add the day names
+        weekdays.grid = sizedWeekdays(cellWidth);
+    }
+
     private String[][] sizedWeekdays(int width) {
         if(width >= 11)
             return weekdaysFull;
@@ -35,29 +88,18 @@ public class Month extends MultiBox {
             return weekdaysShort;
     }
 
-    private String getTitle() {
-        return monthNames.get(calendar.get(Calendar.MONTH)) + " " + calendar.get(Calendar.YEAR);
-    }
+    private void initMonth() {
+        // far to the left
+        int x = 0;
+        this.boxx[2] = x;
+        
+        // 1-height single row
+        int columns = 7, rows = WEEKS;
 
-    public Month(int cellWidth, int cellHeight, GregorianCalendar calendar) {
-        super(
-            new Drawable[3],
-            // the first box is the title, in the middle of the third day
-            new int[]{ (cellWidth + 1) * 2 + 1 + cellWidth / 2, 0, 0 },
-            new int[]{ 0, 2, 4 },
-            Canvas.cellDimToFull(cellWidth, 7), 
-            Canvas.cellDimToFull(cellHeight, 6) + 4
-        );
+        this.boxes[2] = month = new Grid(cellWidth, cellHeight, columns, rows, Justification.Right);
 
-        this.calendar = calendar;
-
-        title    = new  Box(cellWidth * 2 + 3,  3, getTitle(), false, Justification.Middle);
-        weekdays = new Grid(cellWidth,          1, 7, 1, Justification.Middle);
-        month    = new Grid(cellWidth, cellHeight, 7, 6, Justification.Right);
-        this.boxes[0] = title; this.boxes[1] = weekdays; this.boxes[2] = month;
-
-        weekdays.grid = sizedWeekdays(cellWidth);
-        initDays();
+        // add the day numbers
+        this.initDays();
     }
 
     private void initDays() {
@@ -90,7 +132,7 @@ public class Month extends MultiBox {
         int nextStartDay = startDay + length;
 
         // next month
-        for(int day = 0; day + nextStartDay < 7 * 6; day++) {
+        for(int day = 0; day + nextStartDay < 7 * WEEKS; day++) {
             int dayAdjusted = day + nextStartDay;
             int week = dayAdjusted / 7;
             int dayOfWeek = dayAdjusted % 7;
