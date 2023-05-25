@@ -1,8 +1,6 @@
 package calendar.drawing;
 
-import calendar.drawing.Canvas;
-
-// this is a bit of a complex class, but just cope
+// this is a bit of a wacky class, but just cope
 public enum Justification {
     Middle {
         public void write(Canvas canvas, String string, int x, int y, int width, int height, int yoffset) {
@@ -18,6 +16,12 @@ public enum Justification {
             int right = width - length - 1;
 
             canvas.drawText(string, x + right, y + yoffset);
+        }       
+    },
+    Left {
+        public void write(Canvas canvas, String string, int x, int y, int width, int height, int yoffset) {
+            int left = 1;
+            canvas.drawText(string, x + left, y + yoffset);
         }       
     };
 

@@ -1,6 +1,7 @@
 package calendar;
 
 import calendar.drawing.BoxChars;
+import calendar.drawing.Canvas;
 import calendar.drawing.components.Grid;
 import calendar.drawing.Justification;
 import calendar.drawing.layers.Layer;
@@ -66,7 +67,9 @@ public class Main {
         // System.out.print(background + foreground);
         Grid grid = new Grid(11, 4, 5, 5, Justification.Middle);
         grid.setValue(1, 1, "Bello");
-        grid.print();
+        grid.draw()
+            .overlay(30, 7, Canvas.rectangle(13, 7, false))
+            .print();
         // System.out.print(reset);
     }
 }

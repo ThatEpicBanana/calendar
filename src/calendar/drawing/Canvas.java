@@ -27,14 +27,43 @@ public class Canvas {
     public int height() { return height; }
     public int width() { return width; }
 
+
+    public void print() {
+        for(int y = 0; y < height; y++) {
+            for(int x = 0; x < width; x++)
+                System.out.print(this.text[x][y]);
+            System.out.println();
+        }
+    }
+
+
     public Canvas drawText(String string, int x, int y) {
         int length = string.length();
 
         for(int i = 0; i < length; i++)
             text[x + i][y] = string.charAt(i);
 
+        // return self for chaining
         return this;
     }
+
+
+    public Canvas overlay(int offx, int offy, Canvas other) {
+        // get bounds of the inserted canvas
+        int xmin = Math.max(0, offx);
+        int ymin = Math.max(0, offy);
+        int xmax = Math.min(width, offx + other.width) - 1;
+        int ymax = Math.min(width, offy + other.height) - 1;
+
+        // overwrite the chars on this canvas with the ones on the inserted canvas
+        for(int x = xmin; x <= xmax; x++)
+            for(int y = ymin; y <= ymax; y++)
+                this.text[x][y] = other.text[x - offx][y - offy];
+
+        // return self for chaining
+        return this;
+    }
+
 
     public Canvas drawVertical(int x, int start, int end, boolean heavy)
         { return this.drawVertical(x, start, end, heavy ? BoxChars.heavy : BoxChars.light); }
@@ -46,6 +75,7 @@ public class Canvas {
         for(int y = start; y <= end; y++)
             text[x][y] = vertical;
 
+        // return self for chaining
         return this;
     }
 
@@ -59,8 +89,10 @@ public class Canvas {
         for(int x = start; x <= end; x++)
             text[x][y] = horizontal;
 
+        // return self for chaining
         return this;
     }
+
 
     // returns a Canvas with the specified rectangle to its edges
     public static Canvas rectangle(int width, int height, boolean heavy) {
