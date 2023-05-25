@@ -3,8 +3,11 @@ package calendar;
 import java.time.LocalDate;
 
 import calendar.drawing.BoxChars;
+import calendar.drawing.Color;
 import calendar.drawing.layers.Month;
 import calendar.state.State;
+import calendar.storage.Calendar;
+import calendar.storage.Section;
 
 public class Main {
     public static void main(String[] args) {
@@ -51,6 +54,11 @@ public class Main {
         LocalDate date = LocalDate.now();
 
         State state = new State(date);
+
+        Calendar calendar = state.calendar;
+        Section section = calendar.addSection("Birthdays", new Color(136, 57, 239));
+
+        calendar.addEvent(section, "Billey's Birthday", date.atTime(6, 30), date.atTime(7, 30));
 
         Month month = new Month(state, 11, 4);
         month.print();
