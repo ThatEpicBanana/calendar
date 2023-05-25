@@ -13,7 +13,7 @@ public class Grid implements Drawable {
     private int rows;
     private int columns;
 
-    private String[][] grid;
+    public String[][] grid;
     private Justification justification;
 
     public Grid(int cellWidth, int cellHeight, int columns, int rows, Justification justification) {
@@ -28,28 +28,6 @@ public class Grid implements Drawable {
 
         this.grid = new String[columns][rows];
         this.justification = justification;
-    }
-
-
-    public void setValue(int x, int y, String value) {
-        if (isValidPosition(x, y)) {
-            grid[x][y] = value;
-        } else {
-            System.out.println("Invalid position!");
-        }
-    }
-
-    public String getValue(int x, int y) {
-        if (isValidPosition(x, y)) {
-            return grid[x][y];
-        } else {
-            System.out.println("Invalid position!");
-            return null; // or any other suitable default value
-        }
-    }
-
-    private boolean isValidPosition(int x, int y) {
-        return y >= 0 && y < rows && x >= 0 && x < columns;
     }
     
     public int width() { return width; }

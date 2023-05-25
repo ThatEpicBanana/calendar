@@ -1,12 +1,7 @@
 package calendar;
 
 import calendar.drawing.BoxChars;
-import calendar.drawing.Canvas;
-import calendar.drawing.components.Grid;
-import calendar.drawing.Justification;
-import calendar.drawing.layers.Layer;
-import calendar.drawing.layers.Popup;
-import calendar.drawing.screens.Month;
+import calendar.drawing.layers.Month;
 
 public class Main {
     public static void main(String[] args) {
@@ -74,7 +69,7 @@ public class Main {
         // System.out.print(reset);
 
 
-        Month month = new Month(11, 4);
+        Month month = new Month(11, 4, "August 2023");
         month.print();
     }
 }

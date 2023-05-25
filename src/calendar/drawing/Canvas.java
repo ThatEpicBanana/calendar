@@ -39,8 +39,10 @@ public class Canvas {
 
     public Canvas drawText(String string, int x, int y) {
         int length = string.length();
+        int minchar = x < 0 ? -x : 0;
+        int maxchar = Math.min(width - x, length);
 
-        for(int i = 0; i < length; i++)
+        for(int i = minchar; i < maxchar; i++)
             text[x + i][y] = string.charAt(i);
 
         // return self for chaining
