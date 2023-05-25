@@ -48,6 +48,7 @@ public class Canvas {
     }
 
 
+    // overlays another canvas on top of this one, offset by offx and offy
     public Canvas overlay(int offx, int offy, Canvas other) {
         // get bounds of the inserted canvas
         int xmin = Math.max(0, offx);
@@ -59,6 +60,23 @@ public class Canvas {
         for(int x = xmin; x <= xmax; x++)
             for(int y = ymin; y <= ymax; y++)
                 this.text[x][y] = other.text[x - offx][y - offy];
+
+        // return self for chaining
+        return this;
+    }
+
+    // merges box chars between the two canvases, and otherwise uses the other canvas's chars
+    public Canvas merge(int offx, int offy, Canvas other) {
+        // get bounds of the inserted canvas
+        int xmin = Math.max(0, offx);
+        int ymin = Math.max(0, offy);
+        int xmax = Math.min(width, offx + other.width) - 1;
+        int ymax = Math.min(width, offy + other.height) - 1;
+
+        // merge the chars on this canvas with the ones on the inserted canvas
+        for(int x = xmin; x <= xmax; x++)
+            for(int y = ymin; y <= ymax; y++)
+                this.text[x][y] = BoxChars.combine(other.text[x - offx][y - offy], this.text[x][y]);
 
         // return self for chaining
         return this;

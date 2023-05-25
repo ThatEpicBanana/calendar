@@ -19,6 +19,7 @@ public class BoxChars {
 
     // map between characters and their directions
     private static HashMap<Character, int[]> map;
+    private static HashMap<Character, Boolean> isHeavy;
 
     // associates a set of directions with a given light and dark box character
     private static void add(
@@ -32,13 +33,22 @@ public class BoxChars {
         int[] array = { up, down, left, right };
         map.put(newlight, array);
         map.put(newheavy, array);
+
+        isHeavy.put(newlight, false);
+        isHeavy.put(newheavy, true);
     }
 
     // combines the directions of two seperate characters
-    // and outputs the corresponding character with the given darkness
-    public static char combine(char a, char b, boolean make_heavy) {
+    // and outputs the corresponding character
+    // darkness is first determined by a, or b if a is empty
+    // if one of the characters is not a box character, then it returns a
+    public static char combine(char a, char b) {
         int[] a_dirs = map.get(a);
         int[] b_dirs = map.get(b);
+
+        if(a_dirs == null || b_dirs == null) return a;
+
+        boolean make_heavy = a != ' ' ? isHeavy.get(a) : isHeavy.get(b);
 
         int up    = Math.min(a_dirs[0] + b_dirs[0], 1); // kinda goofy but it works
         int down  = Math.min(a_dirs[1] + b_dirs[1], 1);
@@ -55,6 +65,7 @@ public class BoxChars {
         light = new char[2][2][2][2];
         heavy = new char[2][2][2][2];
         map = new HashMap<Character, int[]>();
+        isHeavy = new HashMap<Character, Boolean>();
 
         add(0,0,0,0, ' ', ' ');
         add(0,0,0,1, '╶', '╺');

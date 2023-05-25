@@ -57,7 +57,7 @@ public class Main {
         char right = BoxChars.light[0][0][0][1];
 
         System.out.println("up char: '" + up + "', right char: '" + right + "'");
-        System.out.println("combined: '" + BoxChars.combine(up, right, false) + "'");
+        System.out.println("combined: '" + BoxChars.combine(up, right) + "'");
 
         // Popup popup = new Popup(10, 5);
         // System.out.print(background + foreground);
@@ -68,7 +68,7 @@ public class Main {
         Grid grid = new Grid(11, 4, 5, 5, Justification.Middle);
         grid.setValue(1, 1, "Bello");
         grid.draw()
-            .overlay(30, 7, Canvas.rectangle(13, 7, false))
+            .merge(30, 7, Canvas.rectangle(13, 7, false).drawText("Bello", 4, 3))
             .print();
         // System.out.print(reset);
     }
