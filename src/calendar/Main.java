@@ -6,6 +6,7 @@ import calendar.drawing.components.Grid;
 import calendar.drawing.Justification;
 import calendar.drawing.layers.Layer;
 import calendar.drawing.layers.Popup;
+import calendar.drawing.screens.Month;
 
 public class Main {
     public static void main(String[] args) {
@@ -65,11 +66,15 @@ public class Main {
         // System.out.print(reset);
         
         // System.out.print(background + foreground);
-        Grid grid = new Grid(11, 4, 5, 5, Justification.Middle);
-        grid.setValue(1, 1, "Bello");
-        grid.draw()
-            .merge(30, 7, Canvas.rectangle(13, 7, false).drawText("Bello", 4, 3))
-            .print();
+        // Grid grid = new Grid(11, 4, 5, 5, Justification.Middle);
+        // grid.setValue(1, 1, "Bello");
+        // grid.draw()
+        //     .merge(30, 7, Canvas.rectangle(13, 7, false).drawText("Bello", 4, 3))
+        //     .print();
         // System.out.print(reset);
+
+
+        Month month = new Month(11, 4);
+        month.print();
     }
 }
