@@ -1,6 +1,7 @@
 package calendar.drawing.components;
 
 import calendar.drawing.Canvas;
+import calendar.drawing.Color;
 import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 
@@ -14,6 +15,8 @@ public class Grid implements Drawable {
     private int columns;
 
     public String[][] grid;
+    public Color[][] foreground;
+    public Color[][] background;
     private Justification justification;
 
     public Grid(int cellWidth, int cellHeight, int columns, int rows, Justification justification) {
@@ -28,6 +31,9 @@ public class Grid implements Drawable {
 
         this.grid = new String[columns][rows];
         this.justification = justification;
+
+        this.foreground = new Color[columns][rows];
+        this.background = new Color[columns][rows];
     }
     
     public int width() { return width; }
@@ -58,5 +64,7 @@ public class Grid implements Drawable {
             cellWidth, cellHeight, 
             top
         );
+
+        canvas.highlightBox(x, y, cellWidth, cellHeight, foreground[column][row], background[column][row]);
     }
 }

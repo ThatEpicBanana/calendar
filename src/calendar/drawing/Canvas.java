@@ -6,17 +6,34 @@ public class Canvas {
     private int width;
     private int height;
 
-    private int[][] r;
-    private int[][] g;
-    private int[][] b;
+    public Color[][] foreground;
+    public Color[][] background;
+    
+    // constructors //
+
+    public Canvas(int width, int height, Color foreground, Color background) {
+        this(width, height);
+
+        this.fillColor(foreground, background);
+    }
 
     public Canvas(int width, int height) {
         this.width = width;
         this.height = height;
 
         text = new char[width][height];
+        foreground = new Color[width][height];
+        background = new Color[width][height];
         this.fillWith(' ');
     }
+
+    // getters //
+
+    public int height() { return height; }
+    public int width() { return width; }
+
+
+    // colors //
 
     public void fillWith(char val) {
         for(int x = 0; x < width; x++)
@@ -24,11 +41,29 @@ public class Canvas {
                 this.text[x][y] = ' ';
     }
 
-    public int height() { return height; }
-    public int width() { return width; }
+    public void fillColor(Color foreground, Color background) {
+        for(int x = 0; x < width; x++)
+            for(int y = 0; y < height; y++)
+                this.highlight(x, y, foreground, background);
+    }
 
+    public void highlight(int x, int y, Color foreground, Color background) {
+        if(foreground != null)
+            this.foreground[x][y] = foreground;
+        if(background != null)
+            this.background[x][y] = background;
+    }
 
-    public void print() {
+    public Canvas highlightBox(int startx, int starty, int width, int height, Color foreground, Color background) {
+        for(int x = 0; x < width; x++)
+            for(int y = 0; y < height; y++)
+                this.highlight(x + startx, y + starty, foreground, background);
+        return this;
+    }
+
+    // printing //
+
+    public void print_monochrome() {
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++)
                 System.out.print(this.text[x][y]);
@@ -36,6 +71,30 @@ public class Canvas {
         }
     }
 
+    public void print() {
+        StringBuilder builder = new StringBuilder();
+
+        for(int y = 0; y < height; y++) {
+            for(int x = 0; x < width; x++)
+                builder.append(print(x, y));
+            builder.append('\n');
+        }
+
+        System.out.println(builder.toString());
+    }
+    
+    private String print(int x, int y) {
+        return Ansi.color(this.text[x][y], this.foreground[x][y], this.background[x][y]);
+    }
+
+
+    // text //
+
+    public Canvas drawText(String string, int x, int y, Color foreground, Color background) {
+        return this
+            .drawText(string, x, y)
+            .highlightBox(x, y, string.length(), 1, foreground, background);
+    }
 
     public Canvas drawText(String string, int x, int y) {
         int length = string.length();
@@ -50,8 +109,22 @@ public class Canvas {
     }
 
 
-    // overlays another canvas on top of this one, offset by offx and offy
-    public Canvas overlay(int offx, int offy, Canvas other) {
+    // overlaying //
+
+    private void copyColors(int x, int y, Canvas other, int otherx, int othery) {
+        Color otherForeground = other.foreground[otherx][othery];
+        if(otherForeground != null) this.foreground[x][y] = otherForeground;
+
+        Color otherBackground = other.background[otherx][othery];
+        if(otherBackground != null) this.background[x][y] = otherBackground;
+    }
+
+    interface Overlayer {
+        void overlay(int x, int y, int otherx, int othery);
+    }
+
+    // overlays another canvas with the given function
+    private Canvas overlayWith(int offx, int offy, Canvas other, Overlayer overlayer) {
         // get bounds of the inserted canvas
         int xmin = Math.max(0, offx);
         int ymin = Math.max(0, offy);
@@ -59,31 +132,39 @@ public class Canvas {
         int ymax = Math.min(width, offy + other.height) - 1;
 
         // overwrite the chars on this canvas with the ones on the inserted canvas
-        for(int x = xmin; x <= xmax; x++)
-            for(int y = ymin; y <= ymax; y++)
-                this.text[x][y] = other.text[x - offx][y - offy];
+        for(int x = xmin; x <= xmax; x++) {
+            for(int y = ymin; y <= ymax; y++) {
+                int otherx = x - offx, othery = y - offy;
+
+                overlayer.overlay(x, y, otherx, othery);
+                copyColors(x, y, other, otherx, othery);
+            }
+        }
 
         // return self for chaining
         return this;
+
+    }
+
+    // overlays another canvas on top of this one, offset by offx and offy
+    public Canvas overlay(int offx, int offy, Canvas other) {
+        return this.overlayWith(offx, offy, other, 
+            (x, y, otherx, othery) -> {
+                this.text[x][y] = other.text[otherx][othery];
+            }
+        );
     }
 
     // merges box chars between the two canvases, and otherwise uses the other canvas's chars
     public Canvas merge(int offx, int offy, Canvas other) {
-        // get bounds of the inserted canvas
-        int xmin = Math.max(0, offx);
-        int ymin = Math.max(0, offy);
-        int xmax = Math.min(width, offx + other.width) - 1;
-        int ymax = Math.min(width, offy + other.height) - 1;
-
-        // merge the chars on this canvas with the ones on the inserted canvas
-        for(int x = xmin; x <= xmax; x++)
-            for(int y = ymin; y <= ymax; y++)
-                this.text[x][y] = BoxChars.combine(other.text[x - offx][y - offy], this.text[x][y]);
-
-        // return self for chaining
-        return this;
+        return this.overlayWith(offx, offy, other, 
+            (x, y, otherx, othery) -> {
+                this.text[x][y] = BoxChars.combine(other.text[otherx][othery], this.text[x][y]);
+            }
+        );
     }
 
+    // line drawing //
 
     public Canvas drawVertical(int x, int start, int end, boolean heavy)
         { return this.drawVertical(x, start, end, heavy ? BoxChars.heavy : BoxChars.light); }
@@ -113,6 +194,8 @@ public class Canvas {
         return this;
     }
 
+
+    // box drawing //
 
     // returns a Canvas with the specified rectangle to its edges
     public static Canvas rectangle(int width, int height, boolean heavy) {

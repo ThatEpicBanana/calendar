@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import calendar.drawing.Canvas;
+import calendar.drawing.Color;
 import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 import calendar.drawing.components.Box;
@@ -113,20 +114,17 @@ public class Month extends MultiBox {
         previousMonth.add(Calendar.MONTH, -1);
         int previousLength = previousMonth.getActualMaximum(Calendar.DAY_OF_MONTH);
 
+        // this is wacky, it's the offset from the start day of the month going in the past
         for(int offset = 1; startDay - offset >= 0; offset++) {
-            int day = previousLength - (offset - 1);
-            int dayOfWeek = startDay - offset;
-
-            this.month.grid[dayOfWeek][0] = day + "";
+            int day = previousLength - (offset - 1) - 1;
+            int gridDay = startDay - offset;
+            setOffDay(day, gridDay);
         }
 
         // current month
         for(int day = 0; day < length; day++) {
             int dayAdjusted = day + startDay;
-            int week = dayAdjusted / 7;
-            int dayOfWeek = dayAdjusted % 7;
-
-            this.month.grid[dayOfWeek][week] = day + 1 + "";
+            setDay(day, dayAdjusted);
         }
 
         int nextStartDay = startDay + length;
@@ -134,17 +132,31 @@ public class Month extends MultiBox {
         // next month
         for(int day = 0; day + nextStartDay < 7 * WEEKS; day++) {
             int dayAdjusted = day + nextStartDay;
-            int week = dayAdjusted / 7;
-            int dayOfWeek = dayAdjusted % 7;
-
-            this.month.grid[dayOfWeek][week] = day + 1 + "";
+            setOffDay(day, dayAdjusted);
         }
     }
 
-    public Canvas draw() {
-        Canvas canvas = super.draw();
+    private void setDay(int day, int gridDay) {
+        int week = gridDay / 7;
+        int dayOfWeek = gridDay % 7;
 
-        // TODO: tasks
+        this.month.grid[dayOfWeek][week] = day + 1 + "";
+    }
+
+    private void setOffDay(int day, int gridDay) {
+        int week = gridDay / 7;
+        int dayOfWeek = gridDay % 7;
+
+        this.month.grid[dayOfWeek][week] = day + 1 + "";
+        this.month.foreground[dayOfWeek][week] = new Color(108, 111, 133); 
+        this.month.background[dayOfWeek][week] = new Color(220, 224, 232);
+    }
+
+
+    public Canvas draw() {
+        Canvas canvas = new Canvas(width(), height(), new Color(76, 79, 105), new Color(239, 241, 245));
+
+        canvas.overlay(0, 0, super.draw());
 
         return canvas;
     }
