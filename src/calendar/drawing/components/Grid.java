@@ -1,7 +1,8 @@
 package calendar.drawing.components;
 
+import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
-import calendar.drawing.Shapes;
+import calendar.drawing.Justification;
 
 public class Grid implements Drawable {
     private int width;
@@ -19,8 +20,8 @@ public class Grid implements Drawable {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
 
-        this.width = Shapes.cellLengthToGrid(cellWidth, columns);
-        this.height = Shapes.cellLengthToGrid(cellHeight, columns);
+        this.width = Canvas.cellDimToFull(cellWidth, columns);
+        this.height = Canvas.cellDimToFull(cellHeight, rows);
 
         this.rows = rows;
         this.columns = columns;
@@ -54,52 +55,28 @@ public class Grid implements Drawable {
     public int width() { return width; }
     public int height() { return height; }
 
-    public char[][] draw() {
-        return Shapes.grid(cellWidth, cellHeight, columns, rows, false);
+    public Canvas draw() {
+        Canvas canvas = Canvas.grid(cellWidth, cellHeight, columns, rows, false);
+
+        for(int column = 0; column < columns; column++)
+            for(int row = 0; row < rows; row++)
+                if(grid[column][row] != null)
+                    drawCell(canvas, column, row);
+
+        return canvas;
     }
 
-    // TODO: replace in Canvas
-    public static enum Justification {
-        BottomRight,
-        Middle;
+    private void drawCell(Canvas canvas, int column, int row) {
+        int x = Canvas.cellToChar(column, cellWidth);
+        int y = Canvas.cellToChar(row, cellHeight);
 
-        public char[][] write(String string, int width, int height) {
-            switch(this) {
-                case BottomRight:
-                    return bottomRight(string, width, height);
-                case Middle:
-                    return middle(string, width, height);
-                default:
-                    // wtf how
-                    return null;
-            }
-        }
+        int top = cellHeight - 1;
 
-        private char[][] bottomRight(String string, int width, int height) {
-            char[][] canvas = Shapes.empty(width, height);
-
-            int length = string.length();
-            int bottom = height - 1;
-            int right = width - 1;
-
-            if(length < width - 2) {
-                for(int i = 0; i < length; i++) {
-                    char letter = string.charAt(i);
-                    int offset = length - i;
-
-                    canvas[right - 1 - offset][bottom] = letter;
-                }
-            } else {
-                // TODO: implement
-            }
-
-            return canvas;
-        }
-
-        private char[][] middle(String string, int width, int height) {
-            char[][] canvas = Shapes.empty(width, height);
-
-            return canvas;
-        }
+        this.justification.write(canvas, 
+            grid[column][row], 
+            x, y, 
+            cellWidth, cellHeight, 
+            top
+        );
     }
 }

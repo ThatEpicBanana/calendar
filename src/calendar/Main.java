@@ -2,7 +2,7 @@ package calendar;
 
 import calendar.drawing.BoxChars;
 import calendar.drawing.components.Grid;
-import calendar.drawing.components.Grid.Justification;
+import calendar.drawing.Justification;
 import calendar.drawing.layers.Layer;
 import calendar.drawing.layers.Popup;
 
@@ -65,6 +65,7 @@ public class Main {
         
         // System.out.print(background + foreground);
         Grid grid = new Grid(11, 4, 5, 5, Justification.Middle);
+        grid.setValue(1, 1, "Bello");
         grid.print();
         // System.out.print(reset);
     }

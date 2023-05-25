@@ -1,7 +1,7 @@
 package calendar.drawing.layers;
 
+import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
-import calendar.drawing.Shapes;
 
 public class Popup implements Drawable {
     private final int width;
@@ -12,8 +12,8 @@ public class Popup implements Drawable {
         this.height = height;
     }
 
-    public char[][] draw() {
-        return Shapes.rectangle(width, height, true);
+    public Canvas draw() {
+        return Canvas.rectangle(width, height, true);
     }
 
     public int width() { return this.width; }
