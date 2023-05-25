@@ -32,6 +32,8 @@ public class Grid implements Drawable {
     
     public int width() { return width; }
     public int height() { return height; }
+    public int columns() { return columns; }
+    public int rows() { return rows; }
 
     public Canvas draw() {
         Canvas canvas = Canvas.grid(cellWidth, cellHeight, columns, rows, false);
