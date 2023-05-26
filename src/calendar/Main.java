@@ -2,6 +2,7 @@ package calendar;
 
 import java.time.LocalDate;
 
+import calendar.drawing.Screen;
 import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
@@ -9,6 +10,7 @@ import calendar.drawing.layers.Month;
 import calendar.state.State;
 import calendar.storage.Calendar;
 import calendar.storage.Section;
+import calendar.util.Coord;
 
 public class Main {
     public static void main(String[] args) {
@@ -53,7 +55,7 @@ public class Main {
 
 
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Latte;
+        Theme theme = Theme.Frappe;
 
         State state = new State(date, theme);
 
@@ -74,9 +76,13 @@ public class Main {
         LocalDate finals = date.withDayOfMonth(23);
         calendar.addEvent(school, "Study for Finals", finals.atTime(6, 30), finals.plusDays(2).atTime(7, 30));
 
+        Coord coords = Ansi.getDimensions();
+        Screen screen = new Screen(coords.x, coords.y, 11, 4, state);
+        screen.print();
+
+        try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }
+
         // Month month = new Month(state, 11, 4);
         // month.print();
-        
-        System.out.println(Ansi.getDimensions());
     }
 }

@@ -84,6 +84,9 @@ public class Canvas {
             builder.append('\n');
         }
 
+        // remove last newline
+        builder.deleteCharAt(builder.length() - 1);
+
         builder.append(Ansi.RESET);
 
         System.out.print(builder.toString());
@@ -135,7 +138,7 @@ public class Canvas {
         int xmin = Math.max(0, offx);
         int ymin = Math.max(0, offy);
         int xmax = Math.min(width, offx + other.width) - 1;
-        int ymax = Math.min(width, offy + other.height) - 1;
+        int ymax = Math.min(height, offy + other.height) - 1;
 
         // overwrite the chars on this canvas with the ones on the inserted canvas
         for(int x = xmin; x <= xmax; x++) {
