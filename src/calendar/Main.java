@@ -51,14 +51,29 @@ public class Main {
         // System.out.print(reset);
 
 
-        LocalDate date = LocalDate.now();
+        LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue());
 
         State state = new State(date);
 
         Calendar calendar = state.calendar;
-        Section section = calendar.addSection("Birthdays", new Color(136, 57, 239));
+        Section school = calendar.addSection("school", new Color(220, 138, 120));
+        Section birthdays = calendar.addSection("birthdays", new Color(136, 57, 239));
+        Section holidays = calendar.addSection("holidays", new Color(23, 146, 153));
 
-        calendar.addEvent(section, "Billey's Birthday", date.atTime(6, 30), date.atTime(7, 30));
+        LocalDate july4 = date.withDayOfMonth(10);
+        calendar.addEvent(holidays, "4th of July", july4.atTime(6, 30), july4.atTime(7, 30));
+
+        LocalDate billey = date.withDayOfMonth(14);
+        calendar.addEvent(birthdays, "Billey Birthday", billey.atTime(6, 30), billey.atTime(7, 30));
+
+        LocalDate newYears = date.withDayOfMonth(14);
+        calendar.addEvent(holidays, "New Years", newYears.atTime(12, 30), newYears.atTime(13, 30));
+
+        LocalDate placeholder = date.withDayOfMonth(14);
+        calendar.addEvent(holidays, "Placeholder", placeholder.atTime(12, 30), placeholder.atTime(13, 30));
+
+        LocalDate finals = date.withDayOfMonth(23);
+        calendar.addEvent(school, "Study for Finals", finals.atTime(6, 30), finals.plusDays(2).atTime(7, 30));
 
         Month month = new Month(state, 11, 4);
         month.print();

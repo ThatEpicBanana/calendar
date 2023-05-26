@@ -3,6 +3,9 @@ package calendar.drawing.layers;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import calendar.drawing.Canvas;
@@ -13,6 +16,7 @@ import calendar.drawing.components.Box;
 import calendar.drawing.components.Grid;
 import calendar.drawing.components.MultiBox;
 import calendar.state.State;
+import calendar.storage.Event;
 
 public class Month extends MultiBox {
     private int cellWidth;
@@ -24,7 +28,16 @@ public class Month extends MultiBox {
     private Grid weekdays;
     private Grid month;
 
+    private LocalDate monthStartDate;
+    // which weekday the month starts on
+    private int monthStart;
+    // length of the month
+    private int monthLength;
+
     private static final int WEEKS = 5;
+    private static final int MAX_EVENT_HEIGHT = 2;
+
+    // constructors //
 
     public Month(State state, int cellWidth, int cellHeight) {
         super(
@@ -41,12 +54,22 @@ public class Month extends MultiBox {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
 
+        // current month
+        monthStartDate = date().withDayOfMonth(1);
+        monthLength = monthStartDate.lengthOfMonth();
+        monthStart = monthStartDate.getDayOfWeek().getValue();
+
+
         this.initTitle();
         this.initWeek();
         this.initMonth();
     }
 
+    // getters //
+
     private LocalDate date() { return state.date(); }
+
+    // initializing grids //
 
     private void initTitle() {
         // in the middle of the third day
@@ -92,29 +115,24 @@ public class Month extends MultiBox {
     }
 
     private void initDays() {
-        // current month
-        LocalDate current = date().withDayOfMonth(1);
-        int length = current.lengthOfMonth();
-        int startDay = current.getDayOfWeek().getValue(); // Sunday is 1 so subtract
-
         // previous month
-        LocalDate previous = current.minusMonths(1);
+        LocalDate previous = monthStartDate.minusMonths(1);
         int previousLength = previous.lengthOfMonth();
 
         // this is wacky, it's the offset from the start day of the month going in the past
-        for(int offset = 1; startDay - offset >= 0; offset++) {
+        for(int offset = 1; monthStart - offset >= 0; offset++) {
             int day = previousLength - (offset - 1) - 1;
-            int gridDay = startDay - offset;
+            int gridDay = monthStart - offset;
             setOffDay(day, gridDay);
         }
 
         // current month
-        for(int day = 0; day < length; day++) {
-            int dayAdjusted = day + startDay;
+        for(int day = 0; day < monthLength; day++) {
+            int dayAdjusted = day + monthStart;
             setDay(day, dayAdjusted);
         }
 
-        int nextStartDay = startDay + length;
+        int nextStartDay = monthStart + monthLength;
 
         // next month
         for(int day = 0; day + nextStartDay < 7 * WEEKS; day++) {
@@ -139,12 +157,179 @@ public class Month extends MultiBox {
         this.month.background[dayOfWeek][week] = new Color(220, 224, 232);
     }
 
+    // drawing //
 
     public Canvas draw() {
         Canvas canvas = new Canvas(width(), height(), new Color(76, 79, 105), new Color(239, 241, 245));
 
+        // basic grid
         canvas.overlay(0, 0, super.draw());
 
+        // events
+        // notice that these are sorted
+        List<Event> events = state.calendar.eventsInCurrentMonth();
+
+        boolean[][][] alreadyDrawn = new boolean[7][WEEKS][cellHeight];
+        int[][] overflow = new int[7][WEEKS];
+
+        for(Event event : events)
+            drawEvent(canvas, event, alreadyDrawn, overflow);
+         
+        for(int day = 0; day < 7; day++)
+            for(int week = 0; week < WEEKS; week++)
+                if(overflow[day][week] > 0)
+                    drawOverflow(canvas, day, week, overflow[day][week]);
+
         return canvas;
+    } 
+
+    private void drawOverflow(Canvas canvas, int day, int week, int amount) {
+        int x = Canvas.cellDimToFull(cellWidth, day);
+        int y = Canvas.cellDimToFull(cellHeight, week) + 4 + cellHeight - 1;
+
+        canvas.drawText(String.format(" +%d ", amount), x, y, new Color(76, 79, 105), new Color(204, 208, 218));
+    }
+
+    // precondition: no events can have already been drawn in front of the currently drawing event
+    private void drawEvent(Canvas canvas, Event event, boolean[][][] alreadyDrawn, int[][] overflow) {
+        List<String> text = splitBounded(event.title(), cellWidth - 2);
+        int rows = text.size();
+
+        int start = event.start().getDayOfMonth() - 1 + monthStart;
+        int end = event.end().getDayOfMonth() - 1 + monthStart;
+
+        int startDay = start % 7;
+        int startWeek = start / 7;
+
+        // if it would take too much room, abort
+        // it is fine to just check this cell 
+        // because nothing else can be ahead that's not already in this cell
+        int rowOffset = findSpace(alreadyDrawn[startDay][startWeek], text.size());
+        if(rowOffset == -1) 
+            { overflow[startDay][startWeek]++; return; }
+
+        // text
+        for(int i = 0; i < rows; i++) {
+            canvas.drawText(
+                text.get(i),
+                Canvas.cellDimToFull(cellWidth, startDay) + 1,
+                Canvas.cellDimToFull(cellHeight, startWeek) + 4 + rowOffset + i
+            );
+        }
+
+        // color
+        // it's done one by one to handle going across weeks
+        for(int gridDay = start; gridDay <= end; gridDay++) {
+            int day = gridDay % 7;
+            int week = gridDay / 7;
+
+            int x = Canvas.cellDimToFull(cellWidth, day);
+            int y = Canvas.cellDimToFull(cellHeight, week) + 4 + rowOffset;
+
+            int width = cellWidth;
+
+            if(gridDay < end) {
+                // extend coloring
+                width++;
+                // remove gridlines
+                for(int i = 0; i < rows; i++) canvas.text[x + cellWidth][y + i] = ' ';
+            }
+
+            canvas.highlightBox(x, y, width, rows, new Color(255, 255, 255), event.section().color());
+
+            // update already drawn
+            for(int i = 0; i < rows; i++) 
+                alreadyDrawn[day][week][rowOffset + i] = true;
+        }
+    }
+
+    private int findSpace(boolean[] taken, int length) {
+        int runStart = 0;
+        int runLength = 0;
+
+        for(int i = 0; i < taken.length; i++) {
+            boolean available = !taken[i];
+            if(available) {
+                runLength++;
+                if(runLength >= length) 
+                    return runStart;
+            } else {
+                runLength = 0;
+                runStart = i + 1;
+            }
+        }
+
+        return -1;
+    }
+
+    // splits the string preferably between words to the specified width
+    // if the height of the string is more than MAX_EVENT_HEIGHT, 
+    //   the event's name is cut off by a "..." to make it that height
+    private List<String> splitBounded(String string, int width) {
+        ArrayList<String> split = split(string, width);
+
+        if(split.size() <= MAX_EVENT_HEIGHT) return split;
+
+        // get last string
+        int last = MAX_EVENT_HEIGHT - 1;
+        String lastString = split.get(last);
+        
+        // append ...
+        int newWidth = Math.min(lastString.length(), width - 3);
+        String newString = lastString.substring(0, newWidth) + "...";
+        split.set(last, newString);
+
+        return split.subList(0, MAX_EVENT_HEIGHT);
+    }
+
+    // splits the string preferably between words to the specified width
+    private ArrayList<String> split(String string, int width) {
+        ArrayList<String> list = new ArrayList<>();
+
+        ArrayList<String> words = new ArrayList<>(Arrays.asList(string.split(" ")));
+
+        int left = width;
+        ArrayList<String> current = new ArrayList<>();
+
+        // this is probably the single worst thing i've ever written
+        // i profusely apologize
+        while(words.size() > 0) {
+            String word = words.remove(0);
+            int length = word.length();
+
+            // keep trying to fit word until it does
+            while(true) {
+                // the word is too big for a single row
+                // print the rest and keep going
+                if(length > width) {
+                    // add substring of word to current
+                    current.add(word.substring(0, left));
+                    // start a new row
+                    list.add(String.join(" ", current));
+                    current.clear();
+                    left = width;
+                    // replace word
+                    word = word.substring(left);
+                    length = word.length();
+                // the word is too big for this row, but big enough for a single one
+                // start a new row
+                } else if(length > left) {
+                    // start a new row
+                    list.add(String.join(" ", current));
+                    current.clear();
+                    left = width;
+                // the word isn't too big for the row
+                // add it
+                } else {
+                    current.add(word);
+                    left -= length + 1;
+                    break;
+                }
+            }
+        }
+
+        if(current.size() > 0) list.add(String.join(" ", current));
+
+        return list;
     }
 }

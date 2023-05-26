@@ -54,7 +54,8 @@ public class Calendar {
         // thought i'd never see it
         return sections.stream()
             .map(section -> section.events())
-            .flatMap(Collection::stream);
+            .flatMap(Collection::stream)
+            .sorted();
     }
 
     public List<Event> events() {

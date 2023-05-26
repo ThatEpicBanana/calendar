@@ -3,7 +3,7 @@ package calendar.storage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Event {
+public class Event implements Comparable<Event> {
     private String title;
 
     private LocalDateTime start;
@@ -35,6 +35,9 @@ public class Event {
     // screen will get updated elsewhere
     protected void moveTo(Section section) { this.section = section; }
 
+
+    // comparing is done through the starts
+    public int compareTo(Event other) { return this.start.compareTo(other.start); }
 
     private boolean sameMonth(LocalDateTime a, LocalDate b) { return a.getYear() == b.getYear() && a.getMonth() == b.getMonth(); }
 
