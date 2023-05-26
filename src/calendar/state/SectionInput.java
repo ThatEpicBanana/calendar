@@ -1,11 +1,11 @@
 import java.awt.event.KeyEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import calendar.storage.Section;
 
-public class SectionInput implements InputLayer { //use state.java to use Localdate to return what day it's on.
-    // find some way to implement the 14 colours here, make sure that when you go past 14 it goes back to 1.
+public class SectionInput implements InputLayer {
     private ArrayList<String> sections;
     private int currentIndex;
     private State state;
@@ -16,8 +16,9 @@ public class SectionInput implements InputLayer { //use state.java to use Locald
         this.state = state;
     }
 
-    private List<Section> sections() { return this.state.calendar.sections(); } //make a popup that allows you to edit text. you will use
-    // just finish, actually edit sections. (popup time) (when you add a section it gives you back a section feat. calendar.java, when you hit enter make a text input layer), use popup selection you idiot
+    private List<Section> sections() {
+        return this.state.calendar.sections();
+    }
 
     public InputLayer handleInput(KeyEvent event) {
         int keyCode = event.getKeyCode();
@@ -58,7 +59,7 @@ public class SectionInput implements InputLayer { //use state.java to use Locald
     private void moveLeft() {
         currentIndex--;
         if (currentIndex < 0) {
-            currentIndex = 0;
+            currentIndex = sections.size() - 1;
         }
     }
 
@@ -75,5 +76,9 @@ public class SectionInput implements InputLayer { //use state.java to use Locald
 
     public int getCurrentIndex() {
         return currentIndex;
+    }
+
+    public LocalDate getCurrentDate() {
+        return state.calendar.getCurrentDate();
     }
 }
