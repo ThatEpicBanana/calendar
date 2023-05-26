@@ -52,7 +52,7 @@ public class Main {
 
 
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Macchiato;
+        Theme theme = Theme.Latte;
 
         State state = new State(date, theme);
 

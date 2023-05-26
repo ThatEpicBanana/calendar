@@ -19,6 +19,7 @@ import calendar.drawing.components.Grid;
 import calendar.drawing.components.MultiBox;
 import calendar.state.State;
 import calendar.storage.Event;
+import calendar.storage.Section;
 import calendar.util.Coord;
 
 public class Month extends MultiBox {
@@ -193,9 +194,12 @@ public class Month extends MultiBox {
                     drawOverflow(canvas, day, week, overflow[day][week]);
 
         drawSelected(canvas);
+        drawInfoLine(canvas);
 
         return canvas;
     }
+
+    public int height() { return super.height() + 1; }
 
     private Coord dayToCoords(int day) {
         return gridDayToCoords(day - 1 + monthStart);
@@ -213,6 +217,23 @@ public class Month extends MultiBox {
         int y = Canvas.cellDimToFull(cellHeight, week) + WEEKDAY_BOTTOM;
 
         return new Coord(x, y);
+    }
+
+    private void drawInfoLine(Canvas canvas) {
+        int y = height() - 1;
+
+        canvas.highlightBox(0, y, width(), 1, null, colors().infoLine());
+
+        int x = 2;
+
+        for(Section section : state.calendar.sections()) {
+            String text = " " + section.title() + " ";
+            canvas.drawText(text, x, y, colors().highlightText(), section.color());
+            x += text.length() + 1;
+        }
+
+        String helpText = "(?) for help";
+        canvas.drawText(helpText, width() - helpText.length() - 4, y, colors().helpText(), null);
     }
 
     private void drawSelected(Canvas canvas) {
