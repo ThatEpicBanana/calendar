@@ -25,7 +25,16 @@ public class Ansi {
     public static final String BACKGROUND_RESET = ESC + "[49m";
 
     public static final String CLEAR_SCREEN = ESC + "[2J" + ESC + "[H";
-    public static final String MOVE = ESC + "[%d;%dH";
+
+    private static final String MOVE = ESC + "[%d;%dH";
+    public static String move(int x, int y) { return String.format(MOVE, x, y); }
+
+    private static final String UP = ESC + "[%dA";
+    public static String up(int amt) { return String.format(UP, amt); }
+
+    private static final String COLUMN = ESC + "[%dG";
+    public static final String TO_LEFT = ESC + "[0G";
+    public static String column(int x) { return String.format(COLUMN, x); }
 
     public static void color(StringBuilder builder, char character, Color foreground, Color background) {
         if(foreground != null)
@@ -43,6 +52,8 @@ public class Ansi {
 
     // you gotta do some cursed stuff for this
     public static Coord getDimensions() {
+        boolean askForInput = true;
+
         // turn off canonical mode on unix
         File f = new File("/bin/stty");
         if(f.exists() && f.canExecute()) {
@@ -50,14 +61,23 @@ public class Ansi {
             pb.redirectInput(Redirect.from(new File("/dev/tty")));
             try { 
                 pb.start(); 
+                askForInput = false;
             } catch(IOException e) { e.printStackTrace(); }
         }
 
         // move the furthest possible and ask for cursor position
-        System.out.print(String.format(MOVE, 1000, 1000) + GET_CURSOR);
+        System.out.print(move(1000, 1000) + GET_CURSOR);
 
         // read the output position
         Scanner scanner = new Scanner(System.in).useDelimiter("R");
+
+        try { Thread.sleep(10); } catch(Exception e) {}
+
+        // prompt the user to press enter if needed
+        // this is definitely a feature, not a bug 
+        if(askForInput) {
+            System.out.print(TO_LEFT + "Press Enter to Start...");
+        }
 
         // will output like ESC[row;columnR
         String pos = scanner.next();
