@@ -19,6 +19,7 @@ import calendar.drawing.components.Grid;
 import calendar.drawing.components.MultiBox;
 import calendar.state.State;
 import calendar.storage.Event;
+import calendar.util.Coord;
 
 public class Month extends MultiBox {
     private int cellWidth;
@@ -39,6 +40,9 @@ public class Month extends MultiBox {
     private static final int WEEKS = 5;
     private static final int MAX_EVENT_HEIGHT = 2;
 
+    private static final int TITLE_BOTTOM = 2;
+    private static final int WEEKDAY_BOTTOM = 4;
+
     // constructors //
 
     public Month(State state, int cellWidth, int cellHeight) {
@@ -46,9 +50,9 @@ public class Month extends MultiBox {
             new Drawable[3],
             // the first box is the title, in the middle of the third day
             new int[3],
-            new int[]{ 0, 2, 4 },
+            new int[]{ 0, TITLE_BOTTOM, WEEKDAY_BOTTOM },
             Canvas.cellDimToFull(cellWidth, 7), 
-            Canvas.cellDimToFull(cellHeight, WEEKS) + 4
+            Canvas.cellDimToFull(cellHeight, WEEKS) + WEEKDAY_BOTTOM
         );
 
         this.state = state;
@@ -191,22 +195,36 @@ public class Month extends MultiBox {
         drawSelected(canvas);
 
         return canvas;
-    } 
+    }
 
-    private void drawSelected(Canvas canvas) {
-        int gridDay = date().getDayOfMonth() - 1 + monthStart;
+    private Coord dayToCoords(int day) {
+        return gridDayToCoords(day - 1 + monthStart);
+    }
+
+    private Coord gridDayToCoords(int gridDay) {
         int day = gridDay % 7;
         int week = gridDay / 7;
 
-        int x = Canvas.cellDimToFull(cellWidth, day);
-        int y = Canvas.cellDimToFull(cellHeight, week) + 4;
+        return gridToCoords(day, week);
+    }
 
-        canvas.highlightBox(x, y, cellWidth, cellHeight, colors().selectedDayFore(), colors().selectedDayBack());
+    private Coord gridToCoords(int day, int week) {
+        int x = Canvas.cellDimToFull(cellWidth, day);
+        int y = Canvas.cellDimToFull(cellHeight, week) + WEEKDAY_BOTTOM;
+
+        return new Coord(x, y);
+    }
+
+    private void drawSelected(Canvas canvas) {
+        Coord selected = dayToCoords(date().getDayOfMonth());
+
+        canvas.highlightBox(selected.x, selected.y, cellWidth, cellHeight, colors().selectedDayFore(), colors().selectedDayBack());
     }
 
     private void drawOverflow(Canvas canvas, int day, int week, int amount) {
-        int x = Canvas.cellDimToFull(cellWidth, day);
-        int y = Canvas.cellDimToFull(cellHeight, week) + 4 + cellHeight - 1;
+        Coord cell = gridToCoords(day, week);
+        int x = cell.x;
+        int y = cell.y + cellHeight - 1;
 
         canvas.drawText(String.format(" +%d ", amount), x, y, colors().overflowText(), colors().overflowHighlight());
     }
@@ -230,10 +248,11 @@ public class Month extends MultiBox {
 
         // text
         for(int i = 0; i < rows; i++) {
+            Coord cell = gridToCoords(startDay, startWeek);
             canvas.drawText(
                 text.get(i),
-                Canvas.cellDimToFull(cellWidth, startDay) + 1,
-                Canvas.cellDimToFull(cellHeight, startWeek) + 4 + rowOffset + i
+                cell.x + 1,
+                cell.y + rowOffset + i
             );
         }
 
@@ -254,8 +273,9 @@ public class Month extends MultiBox {
             int day = gridDay % 7;
             int week = gridDay / 7;
 
-            int x = Canvas.cellDimToFull(cellWidth, day);
-            int y = Canvas.cellDimToFull(cellHeight, week) + 4 + rowOffset;
+            Coord cell = gridToCoords(day, week);
+            int x = cell.x;
+            int y = cell.y + rowOffset;
 
             int width = cellWidth;
 
