@@ -3,7 +3,6 @@ package calendar.drawing.layers;
 import java.util.List;
 
 import calendar.drawing.Canvas;
-import calendar.drawing.color.Color;
 import calendar.state.State;
 import calendar.storage.Section;
 
@@ -11,28 +10,6 @@ import calendar.storage.Section;
 public class SectionPopup extends Popup {
     public SectionPopup(int width, State state) {
         super(width, state);
-    }
-
-    private int line(int y) { return y + 2; }
-    private int maxLines() { return height() - 4; }
-
-    private void drawText(Canvas canvas, String text, int textline, Color foreground, Color background) {
-        int x = (width() - text.length()) / 2;
-        int y = line(textline);
-
-        canvas.drawText(text, x, y, foreground, background);
-    }
-
-    private void drawTextLeft(Canvas canvas, String text, int textline, int margin) {
-        int x = margin;
-        int y = line(textline);
-        canvas.drawText(text, x, y);
-    }
-
-    private void drawTextRight(Canvas canvas, String text, int textline, int margin) {
-        int x = width() - text.length() - margin;
-        int y = line(textline);
-        canvas.drawText(text, x, y);
     }
 
     private List<Section> sections() { return state.calendar.sections(); }
@@ -65,7 +42,7 @@ public class SectionPopup extends Popup {
 
         // info line
         int infoy = 2 + boxheight + 1;
-        canvas.highlightBox(margin, line(infoy), boxwidth,         1, colors().helpText2(), colors().textBackground());
+        canvas.highlightBox(margin, line(infoy), boxwidth, 1, colors().helpText2(), colors().textBackground());
 
          drawTextLeft(canvas, "(a) add", infoy, margin + 1);
         drawTextRight(canvas, "remove (r)", infoy, margin + 1);
