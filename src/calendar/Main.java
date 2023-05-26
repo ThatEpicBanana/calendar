@@ -55,14 +55,14 @@ public class Main {
 
 
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Frappe;
+        Theme theme = Theme.Latte;
 
         State state = new State(date, theme);
 
         Calendar calendar = state.calendar;
-        Section school = calendar.addSection("school", theme.highlights()[0]);
-        Section birthdays = calendar.addSection("birthdays", theme.highlights()[3]);
-        Section holidays = calendar.addSection("holidays", theme.highlights()[9]);
+        Section school = calendar.addSection("school", 0);
+        Section birthdays = calendar.addSection("birthdays", 3);
+        Section holidays = calendar.addSection("holidays", 9);
 
         LocalDate july4 = date.withDayOfMonth(10);
         calendar.addEvent(holidays, "4th of July", july4.atTime(6, 30), july4.atTime(7, 30));
@@ -76,13 +76,17 @@ public class Main {
         LocalDate finals = date.withDayOfMonth(23);
         calendar.addEvent(school, "Study for Finals", finals.atTime(6, 30), finals.plusDays(2).atTime(7, 30));
 
-        Coord coords = Ansi.getDimensions();
-        Screen screen = new Screen(coords.x, coords.y, 11, 4, state);
+        // Month month = new Month(state, 11, 4);
+        // month.print();
+        
+        // System.out.println(Ansi.getDimensions());
+
+        Coord dimensions = Ansi.getDimensions();
+
+        Screen screen = new Screen(dimensions.x, dimensions.y, 11, 4, state);
+        screen.addSectionPopup();
         screen.print();
 
         try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }
-
-        // Month month = new Month(state, 11, 4);
-        // month.print();
     }
 }

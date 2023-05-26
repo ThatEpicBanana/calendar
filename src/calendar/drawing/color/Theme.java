@@ -19,7 +19,7 @@ public enum Theme {
         public Color text()      { return new Color(76, 79, 105); }
         public Color subtext1()  { return new Color(92, 95, 119); }
         public Color subtext0()  { return new Color(108, 111, 133); }
-        public Color Overlay2()  { return new Color(124, 127, 147); }
+        public Color overlay2()  { return new Color(124, 127, 147); }
         public Color overlay1()  { return new Color(140, 143, 161); }
         public Color overlay0()  { return new Color(156, 160, 176); }
         public Color surface2()  { return new Color(172, 176, 190); }
@@ -49,8 +49,10 @@ public enum Theme {
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
 
+        public Color textBackground() { return mantle(); }
         public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
+        public Color helpText2() { return overlay2(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }
@@ -100,8 +102,10 @@ public enum Theme {
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
 
-        public Color infoLine() { return mantle(); }
+        public Color textBackground() { return mantle(); }
+        public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
+        public Color helpText2() { return overlay2(); }
     },
     Macchiato {
         public Color rosewater() { return new Color(244, 219, 214); }
@@ -151,8 +155,10 @@ public enum Theme {
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
 
-        public Color infoLine() { return mantle(); }
+        public Color textBackground() { return mantle(); }
+        public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
+        public Color helpText2() { return overlay2(); }
     },
     Mocha {
  	    public Color rosewater() { return new Color(245, 224, 220); }
@@ -202,8 +208,10 @@ public enum Theme {
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
 
-        public Color infoLine() { return mantle(); }
+        public Color textBackground() { return mantle(); }
+        public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
+        public Color helpText2() { return overlay2(); }
     },
     Transparent {
         public Color text() { return Frappe.text(); }
@@ -224,9 +232,13 @@ public enum Theme {
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return Frappe.overflowHighlight(); }
 
+        public Color textBackground() { return Frappe.textBackground(); }
         public Color infoLine() { return Frappe.infoLine(); }
         public Color helpText() { return Frappe.helpText(); }
+        public Color helpText2() { return Frappe.helpText2(); }
     };
+
+    public static final int HIGHLIGHT_COUNT = 14;
 
     public abstract Color text();
     public abstract Color background();
@@ -243,6 +255,8 @@ public enum Theme {
     public abstract Color overflowText();
     public abstract Color overflowHighlight();
 
+    public abstract Color textBackground();
     public abstract Color infoLine();
     public abstract Color helpText();
+    public abstract Color helpText2();
 }

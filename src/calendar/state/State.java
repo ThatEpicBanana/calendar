@@ -13,6 +13,7 @@ public class State {
     public Calendar calendar;
     private LocalDate date;
     private Theme colors;
+    public int popupSelection;
 
     public State(LocalDate date, Theme colors) {
         this.calendar = new Calendar(this);
