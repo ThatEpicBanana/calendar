@@ -55,7 +55,7 @@ public class Main {
 
 
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Mocha;
+        Theme theme = Theme.Latte;
 
         State state = new State(date, theme);
 
@@ -84,7 +84,7 @@ public class Main {
         Coord dimensions = Ansi.getDimensions();
 
         Screen screen = new Screen(dimensions.x, dimensions.y, 11, 4, state);
-        // screen.addGenericPopup();
+        screen.addSectionPopup();
         screen.print();
 
         try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }

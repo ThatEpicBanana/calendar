@@ -84,6 +84,8 @@ public class Canvas {
             builder.append('\n');
         }
 
+        builder.deleteCharAt(builder.length() - 1);
+
         builder.append(Ansi.RESET);
 
         System.out.print(builder.toString());
@@ -204,9 +206,10 @@ public class Canvas {
     // box drawing //
 
     // returns a Canvas with the specified rectangle to its edges
-    public static Canvas rectangle(int width, int height, boolean heavy) {
-        return new Canvas(width, height).drawRectangle(width, height, heavy);
-    }
+    public static Canvas rectangle(int width, int height, boolean heavy, Color foreground, Color background) 
+        { return new Canvas(width, height, foreground, background).drawRectangle(width, height, heavy); }
+    public static Canvas rectangle(int width, int height, boolean heavy) 
+        { return rectangle(width, height, heavy, null, null); }
 
     // creates a rectangle filling a canvas of width and height
     public Canvas drawRectangle(int width, int height, boolean heavy) {
