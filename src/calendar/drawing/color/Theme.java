@@ -43,63 +43,14 @@ public enum Theme {
         public Color offDayBack() { return crust(); }
         public Color offDayNum() { return subtext0(); }
 
-        public Color selectedDayBack() { return mantle(); };
-        public Color selectedDayFore() { return teal(); };
+        public Color selectedDayBack() { return mantle(); }
+        public Color selectedDayFore() { return teal(); }
 
-        public Color overflowText() { return text(); };
-        public Color overflowHighlight() { return surface0(); };
+        public Color overflowText() { return text(); }
+        public Color overflowHighlight() { return surface0(); }
 
-        public Color infoLine() { return crust(); };
-    },
-    Mocha {
- 	    public Color rosewater() { return new Color(245, 224, 220); }
-	    public Color flamingo()  { return new Color(242, 205, 205); }
-	    public Color pink()      { return new Color(245, 194, 231); }
-	    public Color mauve()     { return new Color(203, 166, 247); }
-	    public Color red()       { return new Color(243, 139, 168); }
-	    public Color maroon()    { return new Color(235, 160, 172); }
-	    public Color peach()     { return new Color(250, 179, 135); }
-	    public Color yellow()    { return new Color(249, 226, 175); }
-	    public Color green()     { return new Color(166, 227, 161); }
-	    public Color teal()      { return new Color(148, 226, 213); }
-	    public Color sky()       { return new Color(137, 220, 235); }
-	    public Color sapphire()  { return new Color(116, 199, 236); }
-	    public Color blue()      { return new Color(137, 180, 250); }
-	    public Color lavender()  { return new Color(180, 190, 254); }
-	    public Color text()      { return new Color(205, 214, 244); }
-	    public Color subtext1()  { return new Color(186, 194, 222); }
-	    public Color subtext0()  { return new Color(166, 173, 200); }
-	    public Color overlay2()  { return new Color(147, 153, 178); }
-	    public Color overlay1()  { return new Color(127, 132, 156); }
-	    public Color overlay0()  { return new Color(108, 112, 134); }
-	    public Color surface2()  { return new Color(88, 91, 112); }
-	    public Color surface1()  { return new Color(69, 71, 90); }
-	    public Color surface0()  { return new Color(49, 50, 68); }
-	    public Color base()      { return new Color(30, 30, 46); }
-	    public Color mantle()    { return new Color(24, 24, 37); }
-	    public Color crust()     { return new Color(17, 17, 27); }
-
-        public Color background() { return base(); }
-
-        public Color[] highlights() {
-            return new Color[]{
-                rosewater(), flamingo(), pink(), mauve(), red(), maroon(), peach(), 
-                yellow(), green(), teal(), sky(), sapphire(), blue(), lavender()
-            };
-        }
-
-        public Color highlightText() { return base(); }
-
-        public Color offDayBack() { return mantle(); } // crust is wayyy to dark
-        public Color offDayNum() { return subtext0(); }
-
-        public Color selectedDayBack() { return mantle(); };
-        public Color selectedDayFore() { return teal(); };
-
-        public Color overflowText() { return text(); };
-        public Color overflowHighlight() { return surface0(); };
-
-        public Color infoLine() { return crust(); };
+        public Color infoLine() { return crust(); }
+        public Color helpText() { return subtext0(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }
@@ -143,13 +94,14 @@ public enum Theme {
         public Color offDayBack() { return mantle(); } // crust is wayyy to dark
         public Color offDayNum() { return subtext0(); }
 
-        public Color selectedDayBack() { return mantle(); };
-        public Color selectedDayFore() { return teal(); };
+        public Color selectedDayBack() { return mantle(); }
+        public Color selectedDayFore() { return teal(); }
 
-        public Color overflowText() { return text(); };
-        public Color overflowHighlight() { return surface0(); };
+        public Color overflowText() { return text(); }
+        public Color overflowHighlight() { return surface0(); }
 
-        public Color infoLine() { return crust(); };
+        public Color infoLine() { return mantle(); }
+        public Color helpText() { return subtext0(); }
     },
     Macchiato {
         public Color rosewater() { return new Color(244, 219, 214); }
@@ -193,13 +145,65 @@ public enum Theme {
         public Color offDayBack() { return mantle(); } // crust is wayyy to dark
         public Color offDayNum() { return subtext0(); }
 
-        public Color selectedDayBack() { return mantle(); };
-        public Color selectedDayFore() { return teal(); };
+        public Color selectedDayBack() { return mantle(); }
+        public Color selectedDayFore() { return teal(); }
 
-        public Color overflowText() { return text(); };
-        public Color overflowHighlight() { return surface0(); };
+        public Color overflowText() { return text(); }
+        public Color overflowHighlight() { return surface0(); }
 
-        public Color infoLine() { return crust(); };
+        public Color infoLine() { return mantle(); }
+        public Color helpText() { return subtext0(); }
+    },
+    Mocha {
+ 	    public Color rosewater() { return new Color(245, 224, 220); }
+	    public Color flamingo()  { return new Color(242, 205, 205); }
+	    public Color pink()      { return new Color(245, 194, 231); }
+	    public Color mauve()     { return new Color(203, 166, 247); }
+	    public Color red()       { return new Color(243, 139, 168); }
+	    public Color maroon()    { return new Color(235, 160, 172); }
+	    public Color peach()     { return new Color(250, 179, 135); }
+	    public Color yellow()    { return new Color(249, 226, 175); }
+	    public Color green()     { return new Color(166, 227, 161); }
+	    public Color teal()      { return new Color(148, 226, 213); }
+	    public Color sky()       { return new Color(137, 220, 235); }
+	    public Color sapphire()  { return new Color(116, 199, 236); }
+	    public Color blue()      { return new Color(137, 180, 250); }
+	    public Color lavender()  { return new Color(180, 190, 254); }
+	    public Color text()      { return new Color(205, 214, 244); }
+	    public Color subtext1()  { return new Color(186, 194, 222); }
+	    public Color subtext0()  { return new Color(166, 173, 200); }
+	    public Color overlay2()  { return new Color(147, 153, 178); }
+	    public Color overlay1()  { return new Color(127, 132, 156); }
+	    public Color overlay0()  { return new Color(108, 112, 134); }
+	    public Color surface2()  { return new Color(88, 91, 112); }
+	    public Color surface1()  { return new Color(69, 71, 90); }
+	    public Color surface0()  { return new Color(49, 50, 68); }
+	    public Color base()      { return new Color(30, 30, 46); }
+	    public Color mantle()    { return new Color(24, 24, 37); }
+	    public Color crust()     { return new Color(17, 17, 27); }
+
+        public Color background() { return base(); }
+
+        public Color[] highlights() {
+            return new Color[]{
+                rosewater(), flamingo(), pink(), mauve(), red(), maroon(), peach(), 
+                yellow(), green(), teal(), sky(), sapphire(), blue(), lavender()
+            };
+        }
+
+        public Color highlightText() { return base(); }
+
+        public Color offDayBack() { return mantle(); } // crust is wayyy to dark
+        public Color offDayNum() { return subtext0(); }
+
+        public Color selectedDayBack() { return mantle(); }
+        public Color selectedDayFore() { return teal(); }
+
+        public Color overflowText() { return text(); }
+        public Color overflowHighlight() { return surface0(); }
+
+        public Color infoLine() { return mantle(); }
+        public Color helpText() { return subtext0(); }
     },
     Transparent {
         public Color text() { return Frappe.text(); }
@@ -214,13 +218,14 @@ public enum Theme {
         public Color offDayBack() { return Frappe.offDayBack(); } // crust is wayyy to dark
         public Color offDayNum() { return Frappe.offDayNum(); }
 
-        public Color selectedDayBack() { return Frappe.selectedDayBack(); };
-        public Color selectedDayFore() { return Frappe.selectedDayFore(); };
+        public Color selectedDayBack() { return Frappe.selectedDayBack(); }
+        public Color selectedDayFore() { return Frappe.selectedDayFore(); }
 
-        public Color overflowText() { return text(); };
-        public Color overflowHighlight() { return Frappe.overflowHighlight(); };
+        public Color overflowText() { return text(); }
+        public Color overflowHighlight() { return Frappe.overflowHighlight(); }
 
-        public Color infoLine() { return Frappe.infoLine(); };
+        public Color infoLine() { return Frappe.infoLine(); }
+        public Color helpText() { return Frappe.helpText(); }
     };
 
     public abstract Color text();
@@ -239,4 +244,5 @@ public enum Theme {
     public abstract Color overflowHighlight();
 
     public abstract Color infoLine();
+    public abstract Color helpText();
 }
