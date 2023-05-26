@@ -2,6 +2,7 @@ package calendar;
 
 import java.time.LocalDate;
 
+import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.drawing.layers.Month;
@@ -73,7 +74,9 @@ public class Main {
         LocalDate finals = date.withDayOfMonth(23);
         calendar.addEvent(school, "Study for Finals", finals.atTime(6, 30), finals.plusDays(2).atTime(7, 30));
 
-        Month month = new Month(state, 11, 4);
-        month.print();
+        // Month month = new Month(state, 11, 4);
+        // month.print();
+        
+        System.out.println(Ansi.getDimensions());
     }
 }

@@ -3,7 +3,7 @@ package calendar.state;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class InputClass {
+public class Input {
     private ArrayList<String> baseLayer;
     private ArrayList<String> popupLayer;
     private ArrayList<String> inputLayer;
@@ -15,7 +15,7 @@ public class InputClass {
     private int sectionPopupIndex;
     private boolean isTextEditable;
 
-    public InputClass() {
+    public Input() {
         baseLayer = new ArrayList<>();
         popupLayer = new ArrayList<>();
         inputLayer = new ArrayList<>();
@@ -137,7 +137,7 @@ public class InputClass {
     
 
     public static void main(String[] args) {
-        InputClass inputClass = new InputClass();
+        Input inputClass = new Input();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
