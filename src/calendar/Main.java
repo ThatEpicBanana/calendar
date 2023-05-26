@@ -2,7 +2,8 @@ package calendar;
 
 import java.time.LocalDate;
 
-import calendar.drawing.Color;
+import calendar.drawing.color.Color;
+import calendar.drawing.color.Theme;
 import calendar.drawing.layers.Month;
 import calendar.state.State;
 import calendar.storage.Calendar;
@@ -50,14 +51,15 @@ public class Main {
         // System.out.print(reset);
 
 
-        LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue());
+        LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
+        Theme theme = Theme.Transparent;
 
-        State state = new State(date);
+        State state = new State(date, theme);
 
         Calendar calendar = state.calendar;
-        Section school = calendar.addSection("school", new Color(220, 138, 120));
-        Section birthdays = calendar.addSection("birthdays", new Color(136, 57, 239));
-        Section holidays = calendar.addSection("holidays", new Color(23, 146, 153));
+        Section school = calendar.addSection("school", theme.highlights()[0]);
+        Section birthdays = calendar.addSection("birthdays", theme.highlights()[3]);
+        Section holidays = calendar.addSection("holidays", theme.highlights()[9]);
 
         LocalDate july4 = date.withDayOfMonth(10);
         calendar.addEvent(holidays, "4th of July", july4.atTime(6, 30), july4.atTime(7, 30));

@@ -1,5 +1,8 @@
 package calendar.drawing;
 
+import calendar.drawing.color.Ansi;
+import calendar.drawing.color.Color;
+
 public class Canvas {
     public final char[][] text;
 
@@ -77,7 +80,7 @@ public class Canvas {
 
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++)
-                builder.append(print(x, y));
+                print(builder, x, y);
             builder.append('\n');
         }
 
@@ -86,8 +89,8 @@ public class Canvas {
         System.out.print(builder.toString());
     }
     
-    private String print(int x, int y) {
-        return Ansi.color(this.text[x][y], this.foreground[x][y], this.background[x][y]);
+    private void print(StringBuilder builder, int x, int y) {
+        Ansi.color(builder, this.text[x][y], this.foreground[x][y], this.background[x][y]);
     }
 
 

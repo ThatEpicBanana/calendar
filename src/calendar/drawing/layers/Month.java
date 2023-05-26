@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 import calendar.drawing.Canvas;
-import calendar.drawing.Color;
+import calendar.drawing.color.Color;
+import calendar.drawing.color.Theme;
 import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 import calendar.drawing.components.Box;
@@ -73,6 +74,8 @@ public class Month extends MultiBox {
         LocalDate date = date();
         return date.withDayOfMonth(date.lengthOfMonth());
     }
+
+    private Theme colors() { return state.colors(); }
 
     // initializing grids //
 
@@ -158,14 +161,14 @@ public class Month extends MultiBox {
         int dayOfWeek = gridDay % 7;
 
         this.month.grid[dayOfWeek][week] = day + 1 + "";
-        this.month.foreground[dayOfWeek][week] = new Color(108, 111, 133); 
-        this.month.background[dayOfWeek][week] = new Color(220, 224, 232);
+        this.month.foreground[dayOfWeek][week] = colors().offDayNum(); 
+        this.month.background[dayOfWeek][week] = colors().offDayBack();
     }
 
     // drawing //
 
     public Canvas draw() {
-        Canvas canvas = new Canvas(width(), height(), new Color(76, 79, 105), new Color(239, 241, 245));
+        Canvas canvas = new Canvas(width(), height(), colors().text(), colors().background());
 
         // basic grid
         canvas.overlay(0, 0, super.draw());
@@ -185,14 +188,27 @@ public class Month extends MultiBox {
                 if(overflow[day][week] > 0)
                     drawOverflow(canvas, day, week, overflow[day][week]);
 
+        drawSelected(canvas);
+
         return canvas;
     } 
+
+    private void drawSelected(Canvas canvas) {
+        int gridDay = date().getDayOfMonth() - 1 + monthStart;
+        int day = gridDay % 7;
+        int week = gridDay / 7;
+
+        int x = Canvas.cellDimToFull(cellWidth, day);
+        int y = Canvas.cellDimToFull(cellHeight, week) + 4;
+
+        canvas.highlightBox(x, y, cellWidth, cellHeight, colors().selectedDayFore(), colors().selectedDayBack());
+    }
 
     private void drawOverflow(Canvas canvas, int day, int week, int amount) {
         int x = Canvas.cellDimToFull(cellWidth, day);
         int y = Canvas.cellDimToFull(cellHeight, week) + 4 + cellHeight - 1;
 
-        canvas.drawText(String.format(" +%d ", amount), x, y, new Color(76, 79, 105), new Color(204, 208, 218));
+        canvas.drawText(String.format(" +%d ", amount), x, y, colors().overflowText(), colors().overflowHighlight());
     }
 
     // precondition: no events can have already been drawn in front of the currently drawing event
@@ -250,7 +266,7 @@ public class Month extends MultiBox {
                 for(int i = 0; i < rows; i++) canvas.text[x + cellWidth][y + i] = ' ';
             }
 
-            canvas.highlightBox(x, y, width, rows, new Color(255, 255, 255), event.section().color());
+            canvas.highlightBox(x, y, width, rows, colors().highlightText(), event.section().color());
 
             // update already drawn
             for(int i = 0; i < rows; i++) 

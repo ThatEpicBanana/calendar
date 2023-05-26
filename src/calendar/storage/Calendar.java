@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import calendar.state.State;
-import calendar.drawing.Color;
+import calendar.drawing.color.Color;
 
 public class Calendar {
     private ArrayList<Section> sections = new ArrayList<>();

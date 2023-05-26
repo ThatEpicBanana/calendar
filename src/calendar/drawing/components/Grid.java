@@ -1,7 +1,7 @@
 package calendar.drawing.components;
 
 import calendar.drawing.Canvas;
-import calendar.drawing.Color;
+import calendar.drawing.color.Color;
 import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 

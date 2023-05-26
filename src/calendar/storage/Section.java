@@ -3,7 +3,7 @@ package calendar.storage;
 import java.util.ArrayList;
 import java.util.List;
 
-import calendar.drawing.Color;
+import calendar.drawing.color.Color;
 
 public class Section {
     private Calendar calendar;
