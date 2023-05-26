@@ -228,6 +228,8 @@ public enum Theme {
         public Color helpText() { return Frappe.helpText(); }
     };
 
+    public static final int HIGHLIGHT_COUNT = 14;
+
     public abstract Color text();
     public abstract Color background();
 

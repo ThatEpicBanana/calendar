@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import calendar.state.State;
-import calendar.drawing.color.Color;
 
 public class Calendar {
     private ArrayList<Section> sections = new ArrayList<>();
@@ -23,8 +22,8 @@ public class Calendar {
     public State state() { return this.state; }
     public List<Section> sections() { return this.sections; }
 
-    public Section addSection(String title, Color color) {
-        Section section = new Section(this, title, color);
+    public Section addSection(String title, int color) {
+        Section section = new Section(this, title, color, state);
         sections.add(section);
         return section;
     }
