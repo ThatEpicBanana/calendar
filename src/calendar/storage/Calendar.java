@@ -28,6 +28,11 @@ public class Calendar {
         return section;
     }
 
+    public void removeSection(int index) {
+        this.sections.remove(index);
+        state.updateScreen();
+    }
+
 
     public Event addEvent(Section section, String name, LocalDateTime start, LocalDateTime end) {
         Event event = new Event(this, section, name, start, end);
