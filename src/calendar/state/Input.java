@@ -1,3 +1,5 @@
+package calendar.state;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -98,15 +100,13 @@ public class InputClass {
                 }
                 break;
             case 1:  // Popup (Event) Layer
-                System.out.println("Popup Layer:");
-                System.out.println("---");
+                System.out.println("Event Layer:");
                 System.out.println(title);
                 System.out.println(timeFrame);
                 System.out.println(sections.get(sectionPopupIndex));
-                System.out.println("---");
                 break;
             case 2:  // Popup (Section) Layer
-                System.out.println("Popup Layer:");
+                System.out.println("Section Layer:");
                 for (int i = 0; i < sectionPopupList.size(); i++) {
                     String section = sectionPopupList.get(i);
                     if (i == sectionPopupIndex) {
