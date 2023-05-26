@@ -2,7 +2,6 @@ package calendar;
 
 import java.time.LocalDate;
 
-import calendar.drawing.BoxChars;
 import calendar.drawing.Color;
 import calendar.drawing.layers.Month;
 import calendar.state.State;
@@ -63,14 +62,11 @@ public class Main {
         LocalDate july4 = date.withDayOfMonth(10);
         calendar.addEvent(holidays, "4th of July", july4.atTime(6, 30), july4.atTime(7, 30));
 
-        LocalDate billey = date.withDayOfMonth(14);
-        calendar.addEvent(birthdays, "Billey Birthday", billey.atTime(6, 30), billey.atTime(7, 30));
-
-        LocalDate newYears = date.withDayOfMonth(14);
-        calendar.addEvent(holidays, "New Years", newYears.atTime(12, 30), newYears.atTime(13, 30));
-
-        LocalDate placeholder = date.withDayOfMonth(14);
-        calendar.addEvent(holidays, "Placeholder", placeholder.atTime(12, 30), placeholder.atTime(13, 30));
+        LocalDate fourteenth = date.withDayOfMonth(14);
+        calendar.addEvent(birthdays, "Billey Birthday", fourteenth.atTime(6, 30), fourteenth.atTime(7, 30));
+        calendar.addEvent(holidays, "New Years", fourteenth.atTime(12, 30), fourteenth.atTime(13, 30));
+        // for overflow
+        calendar.addEvent(holidays, "Placeholder", fourteenth.atTime(13, 30), fourteenth.atTime(14, 30));
 
         LocalDate finals = date.withDayOfMonth(23);
         calendar.addEvent(school, "Study for Finals", finals.atTime(6, 30), finals.plusDays(2).atTime(7, 30));

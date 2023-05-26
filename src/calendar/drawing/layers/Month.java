@@ -2,6 +2,7 @@ package calendar.drawing.layers;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +69,10 @@ public class Month extends MultiBox {
     // getters //
 
     private LocalDate date() { return state.date(); }
+    private LocalDate endDate() {
+        LocalDate date = date();
+        return date.withDayOfMonth(date.lengthOfMonth());
+    }
 
     // initializing grids //
 
@@ -169,7 +174,7 @@ public class Month extends MultiBox {
         // notice that these are sorted
         List<Event> events = state.calendar.eventsInCurrentMonth();
 
-        boolean[][][] alreadyDrawn = new boolean[7][WEEKS][cellHeight];
+        boolean[][][] alreadyDrawn = new boolean[7][WEEKS][cellHeight - 1];
         int[][] overflow = new int[7][WEEKS];
 
         for(Event event : events)
@@ -196,7 +201,6 @@ public class Month extends MultiBox {
         int rows = text.size();
 
         int start = event.start().getDayOfMonth() - 1 + monthStart;
-        int end = event.end().getDayOfMonth() - 1 + monthStart;
 
         int startDay = start % 7;
         int startWeek = start / 7;
@@ -216,6 +220,17 @@ public class Month extends MultiBox {
                 Canvas.cellDimToFull(cellHeight, startWeek) + 4 + rowOffset + i
             );
         }
+
+        // clamp the end date at the end of the month
+        // FIX: this truncates events at the end
+        // which would normally be ok, but the drawer only 
+        // only takes into account the start date while drawing 
+        // so the end will never get drawn
+        LocalDateTime endDate = endDate().atTime(0, 0);
+        if(event.end().isBefore(endDate))
+            endDate = event.end();
+        int end = endDate.getDayOfMonth() - 1 + monthStart;
+
 
         // color
         // it's done one by one to handle going across weeks
