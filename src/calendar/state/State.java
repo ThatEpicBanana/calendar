@@ -2,8 +2,10 @@ package calendar.state;
 
 import java.time.LocalDate;
 
+import calendar.drawing.Screen;
 import calendar.drawing.color.Theme;
 import calendar.storage.Calendar;
+import calendar.util.Coord;
 
 // handles the state of the app
 // what screen is showing, actually storing a Calendar object, etc
@@ -11,18 +13,21 @@ import calendar.storage.Calendar;
 
 public class State {
     public Calendar calendar;
+    public Screen screen;
     private LocalDate date;
     private Theme colors;
     public int popupSelection;
 
-    public State(LocalDate date, Theme colors) {
-        this.calendar = new Calendar(this);
+    public State(LocalDate date, Theme colors, Coord dimensions, Coord cell) {
         this.date = date;
         this.colors = colors;
+
+        this.calendar = new Calendar(this);
+        this.screen = new Screen(dimensions.x, dimensions.y, cell.x, cell.y, this);
     }
 
     public void updateScreen() {
-        // TODO: implement later
+        screen.print();
     }
 
     public LocalDate date() { return date; }
