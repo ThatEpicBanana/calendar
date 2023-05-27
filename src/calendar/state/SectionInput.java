@@ -1,16 +1,21 @@
-package calendar.drawing; //whoever is looking at this i completely forgot how to code halfway through
+package calendar.drawing;
 
 import java.awt.Color;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
+import calendar.state.State;
+import calendar.state.InputState;
+import calendar.state.Event;
 
 public class SectionInput {
     private static Theme currentTheme;
     private static int currentIndex;
+    private static State state;
 
     public static void main(String[] args) {
         currentTheme = Theme.Latte; // set theme
         currentIndex = 0;
+        state = new State(null, currentTheme, new Coord(0, 0), new Coord(0, 0)); // Create an instance of State with desired parameters
 
         userInput();
     }
@@ -30,6 +35,8 @@ public class SectionInput {
                 moveLeft();
             } else if (userInput.equalsIgnoreCase("k") || userInput.equalsIgnoreCase("right")) {
                 moveRight();
+            } else if (userInput.equalsIgnoreCase("p")) {
+                createPopupAndInputState();
             }
         }
     }
@@ -66,6 +73,16 @@ public class SectionInput {
         showCurrentValue();
     }
 
+    private static void createPopupAndInputState() {
+        Event event = new Event(); // Create an instance of the Event class with desired details
+        InputState inputState = state.createPopupAndInputState(event);
+        // Perform any desired operations with the inputState and event
+        // ...
+
+        // Show the current value after creating the popup and input state
+        showCurrentValue();
+    }
+
     private static void showCurrentValue() {
         Color currentColor = currentTheme.highlights()[currentIndex];
         JOptionPane.showMessageDialog(null, "Current Color: " + currentColor.toString(), "Color Value", JOptionPane.INFORMATION_MESSAGE);
@@ -73,8 +90,8 @@ public class SectionInput {
 }
 
 enum Theme {
-    Latte(Color.WHITE, Color.BLACK), //i might have a very large skill issue and am struggling to pull from theme.java
-    Mocha(Color.BLACK, Color.WHITE); // i have a huge skill issue -- i have no idea what i cooked
+    Latte(Color.WHITE, Color.BLACK),
+    Mocha(Color.BLACK, Color.WHITE);
 
     private final Color[] highlights;
 
