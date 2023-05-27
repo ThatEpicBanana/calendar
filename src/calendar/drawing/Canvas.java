@@ -76,7 +76,7 @@ public class Canvas {
     }
 
     public void print() {
-        StringBuilder builder = new StringBuilder(Ansi.CLEAR_SCREEN);
+        StringBuilder builder = new StringBuilder();
 
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++)

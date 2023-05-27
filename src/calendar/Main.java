@@ -11,7 +11,6 @@ import calendar.storage.Calendar;
 import calendar.storage.Section;
 import calendar.util.Vec2;
 
-import org.fusesource.jansi.AnsiConsole;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -34,16 +33,20 @@ public class Main {
         // nah there'll probably be a seperate class that manages the month and all the popups
         // each screen is year-month-day (although the others may be too time-consuming)
 
-        // this is the only thing i'm using jline for
+
+        // these are the only things i'm using jline for
+        Vec2 dimensions = new Vec2(0, 0);
         try {
             Terminal terminal = TerminalBuilder.builder().system(true).jansi(true).build();
             terminal.enterRawMode();
+
+            dimensions = new Vec2(terminal.getWidth(), terminal.getHeight());
         } catch(Exception e) { e.printStackTrace(); }
-        
+
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
         Theme theme = Theme.Latte;
 
-        State state = new State(date, theme, Ansi.getDimensions(), new Vec2(11, 4));
+        State state = new State(date, theme, dimensions, new Vec2(11, 4));
 
         state.updating = false;
 
