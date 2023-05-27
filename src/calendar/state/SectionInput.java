@@ -1,84 +1,88 @@
-import java.awt.event.KeyEvent;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+package calendar.drawing; //whoever is looking at this i completely forgot how to code halfway through
 
-import calendar.storage.Section;
+import java.awt.Color;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
 
-public class SectionInput implements InputLayer {
-    private ArrayList<String> sections;
-    private int currentIndex;
-    private State state;
+public class SectionInput {
+    private static Theme currentTheme;
+    private static int currentIndex;
 
-    public SectionInput(State state) {
-        this.sections = new ArrayList<>();
-        this.currentIndex = 0;
-        this.state = state;
+    public static void main(String[] args) {
+        currentTheme = Theme.Latte; // set theme
+        currentIndex = 0;
+
+        userInput();
     }
 
-    private List<Section> sections() {
-        return this.state.calendar.sections();
-    }
+    private static void userInput() {
+        Scanner scanner = new Scanner(System.in);
 
-    public InputLayer handleInput(KeyEvent event) {
-        int keyCode = event.getKeyCode();
+        while (true) {
+            // Get input from the user
+            String userInput = scanner.nextLine();
 
-        switch (keyCode) {
-            case KeyEvent.VK_A:
-                addSection();
-                break;
-            case KeyEvent.VK_R:
-                removeSection();
-                break;
-            case KeyEvent.VK_J:
-            case KeyEvent.VK_LEFT:
+            if (userInput.equalsIgnoreCase("a")) {
+                addIndex();
+            } else if (userInput.equalsIgnoreCase("r")) {
+                removeIndex();
+            } else if (userInput.equalsIgnoreCase("j") || userInput.equalsIgnoreCase("left")) {
                 moveLeft();
-                break;
-            case KeyEvent.VK_K:
-            case KeyEvent.VK_RIGHT:
+            } else if (userInput.equalsIgnoreCase("k") || userInput.equalsIgnoreCase("right")) {
                 moveRight();
-                break;
-        }
-
-        return this;
-    }
-
-    private void addSection() {
-        sections.add("Section " + (sections.size() + 1));
-    }
-
-    private void removeSection() {
-        if (!sections.isEmpty()) {
-            sections.remove(currentIndex);
-            if (currentIndex >= sections.size()) {
-                currentIndex = sections.size() - 1;
             }
         }
     }
 
-    private void moveLeft() {
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = sections.size() - 1;
-        }
-    }
-
-    private void moveRight() {
+    private static void addIndex() {
         currentIndex++;
-        if (currentIndex >= sections.size()) {
+        if (currentIndex >= currentTheme.highlights().length) {
             currentIndex = 0;
         }
+        showCurrentValue();
     }
 
-    public ArrayList<String> getSections() {
-        return sections;
+    private static void removeIndex() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = currentTheme.highlights().length - 1;
+        }
+        showCurrentValue();
     }
 
-    public int getCurrentIndex() {
-        return currentIndex;
+    private static void moveLeft() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = currentTheme.highlights().length - 1;
+        }
+        showCurrentValue();
     }
 
-    public LocalDate getCurrentDate() {
-        return state.calendar.getCurrentDate();
+    private static void moveRight() {
+        currentIndex++;
+        if (currentIndex >= currentTheme.highlights().length) {
+            currentIndex = 0;
+        }
+        showCurrentValue();
+    }
+
+    private static void showCurrentValue() {
+        Color currentColor = currentTheme.highlights()[currentIndex];
+        JOptionPane.showMessageDialog(null, "Current Color: " + currentColor.toString(), "Color Value", JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+enum Theme {
+    Latte(Color.WHITE, Color.BLACK), //i might have a very large skill issue and am struggling to pull from theme.java
+    Mocha(Color.BLACK, Color.WHITE); // i have a huge skill issue -- i have no idea what i cooked
+
+    private final Color[] highlights;
+
+    Theme(Color... highlights) {
+        this.highlights = highlights;
+    }
+
+    public Color[] highlights() {
+        return highlights;
     }
 }
