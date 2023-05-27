@@ -7,10 +7,6 @@ import calendar.drawing.color.Theme;
 import calendar.storage.Calendar;
 import calendar.util.Vec2;
 
-// handles the state of the app
-// what screen is showing, actually storing a Calendar object, etc
-// plays nicely with Input
-
 public class State {
     public Calendar calendar;
     public Screen screen;
@@ -36,9 +32,31 @@ public class State {
             screen.print();
     }
 
-    public LocalDate date() { return date; }
-    public void setDate(LocalDate date) { this.date = date; updateScreen(); }
+    public LocalDate date() {
+        return date;
+    }
 
-    public Theme colors() { return colors; }
-    public void setColors(Theme colors) { this.colors = colors; updateScreen(); }
+    public void setDate(LocalDate date) {
+        this.date = date;
+        updateScreen();
+    }
+
+    public Theme colors() {
+        return colors;
+    }
+
+    public void setColors(Theme colors) {
+        this.colors = colors;
+        updateScreen();
+    }
+
+    public InputState createPopupAndInputState(Event event) {
+        Popup popup = new Popup(event);
+        InputState inputState = new InputState(event);
+
+        popup.setInputState(inputState);
+        inputState.setPopup(popup);
+
+        return inputState;
+    }
 }

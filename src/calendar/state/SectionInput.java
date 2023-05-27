@@ -1,84 +1,105 @@
-import java.awt.event.KeyEvent;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+package calendar.drawing;
 
-import calendar.storage.Section;
+import java.awt.Color;
+import java.util.Scanner;
+import javax.swing.JOptionPane;
+import calendar.state.State;
+import calendar.state.InputState;
+import calendar.state.Event;
 
-public class SectionInput implements InputLayer {
-    private ArrayList<String> sections;
-    private int currentIndex;
-    private State state;
+public class SectionInput {
+    private static Theme currentTheme;
+    private static int currentIndex;
+    private static State state;
 
-    public SectionInput(State state) {
-        this.sections = new ArrayList<>();
-        this.currentIndex = 0;
-        this.state = state;
+    public static void main(String[] args) {
+        currentTheme = Theme.Latte; // set theme
+        currentIndex = 0;
+        state = new State(null, currentTheme, new Coord(0, 0), new Coord(0, 0)); // Create an instance of State with desired parameters
+
+        userInput();
     }
 
-    private List<Section> sections() {
-        return this.state.calendar.sections();
-    }
+    private static void userInput() {
+        Scanner scanner = new Scanner(System.in);
 
-    public InputLayer handleInput(KeyEvent event) {
-        int keyCode = event.getKeyCode();
+        while (true) {
+            // Get input from the user
+            String userInput = scanner.nextLine();
 
-        switch (keyCode) {
-            case KeyEvent.VK_A:
-                addSection();
-                break;
-            case KeyEvent.VK_R:
-                removeSection();
-                break;
-            case KeyEvent.VK_J:
-            case KeyEvent.VK_LEFT:
+            if (userInput.equalsIgnoreCase("a")) {
+                addIndex();
+            } else if (userInput.equalsIgnoreCase("r")) {
+                removeIndex();
+            } else if (userInput.equalsIgnoreCase("j") || userInput.equalsIgnoreCase("left")) {
                 moveLeft();
-                break;
-            case KeyEvent.VK_K:
-            case KeyEvent.VK_RIGHT:
+            } else if (userInput.equalsIgnoreCase("k") || userInput.equalsIgnoreCase("right")) {
                 moveRight();
-                break;
-        }
-
-        return this;
-    }
-
-    private void addSection() {
-        sections.add("Section " + (sections.size() + 1));
-    }
-
-    private void removeSection() {
-        if (!sections.isEmpty()) {
-            sections.remove(currentIndex);
-            if (currentIndex >= sections.size()) {
-                currentIndex = sections.size() - 1;
+            } else if (userInput.equalsIgnoreCase("p")) {
+                createPopupAndInputState();
             }
         }
     }
 
-    private void moveLeft() {
-        currentIndex--;
-        if (currentIndex < 0) {
-            currentIndex = sections.size() - 1;
-        }
-    }
-
-    private void moveRight() {
+    private static void addIndex() {
         currentIndex++;
-        if (currentIndex >= sections.size()) {
+        if (currentIndex >= currentTheme.highlights().length) {
             currentIndex = 0;
         }
+        showCurrentValue();
     }
 
-    public ArrayList<String> getSections() {
-        return sections;
+    private static void removeIndex() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = currentTheme.highlights().length - 1;
+        }
+        showCurrentValue();
     }
 
-    public int getCurrentIndex() {
-        return currentIndex;
+    private static void moveLeft() {
+        currentIndex--;
+        if (currentIndex < 0) {
+            currentIndex = currentTheme.highlights().length - 1;
+        }
+        showCurrentValue();
     }
 
-    public LocalDate getCurrentDate() {
-        return state.calendar.getCurrentDate();
+    private static void moveRight() {
+        currentIndex++;
+        if (currentIndex >= currentTheme.highlights().length) {
+            currentIndex = 0;
+        }
+        showCurrentValue();
+    }
+
+    private static void createPopupAndInputState() {
+        Event event = new Event(); // Create an instance of the Event class with desired details
+        InputState inputState = state.createPopupAndInputState(event);
+        // Perform any desired operations with the inputState and event
+        // ...
+
+        // Show the current value after creating the popup and input state
+        showCurrentValue();
+    }
+
+    private static void showCurrentValue() {
+        Color currentColor = currentTheme.highlights()[currentIndex];
+        JOptionPane.showMessageDialog(null, "Current Color: " + currentColor.toString(), "Color Value", JOptionPane.INFORMATION_MESSAGE);
+    }
+}
+
+enum Theme {
+    Latte(Color.WHITE, Color.BLACK),
+    Mocha(Color.BLACK, Color.WHITE);
+
+    private final Color[] highlights;
+
+    Theme(Color... highlights) {
+        this.highlights = highlights;
+    }
+
+    public Color[] highlights() {
+        return highlights;
     }
 }
