@@ -1,16 +1,9 @@
 package calendar.drawing.color;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import calendar.util.Coord;
 
@@ -71,13 +64,18 @@ public class Ansi {
         // read the output position
         Scanner scanner = new Scanner(System.in).useDelimiter("R");
 
-        try { Thread.sleep(10); } catch(Exception e) {}
-
         // prompt the user to press enter if needed
         // this is definitely a feature, not a bug 
-        if(askForInput) {
-            System.out.print(TO_LEFT + "Press Enter to Start...");
-        }
+        try { Thread.sleep(10); } catch(Exception e) {}
+        if(askForInput)
+            // prompt the user to press enter
+            // windows seems to draw the input over everthing else, 
+            // so just put it in the top left
+            System.out.print(TO_LEFT + "Press Enter to Start..." + move(0, 0));
+        else
+            // linux, on the other hand, just writes the input to the terminal
+            // so just remove the lind
+            System.out.print(TO_LEFT + ESC + "[0K");
 
         // will output like ESC[row;columnR
         String pos = scanner.next();
