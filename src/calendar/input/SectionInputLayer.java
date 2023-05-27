@@ -10,7 +10,7 @@ public class SectionInputLayer implements InputLayer {
         this.state = state;
     }
 
-    public int line() { return state.popupLine; }
+    public int line() { return state.popupLine(); }
     public int maxSession() { return state.calendar.sections().size() - 1; }
     public Section section() { return state.calendar.sections().get(line()); }
 
@@ -30,11 +30,11 @@ public class SectionInputLayer implements InputLayer {
     }
 
     private void up() {
-        state.popupLine = Math.max(0, state.popupLine - 1);
+        state.movePopupLineBounded(-1, 0, maxSession());
     }
 
     private void down() {
-        state.popupLine = Math.min(maxSession(), state.popupLine + 1);
+        state.movePopupLineBounded(1, 0, maxSession());
     }
 
     private void nextHighlight() { section().addColor(1); }

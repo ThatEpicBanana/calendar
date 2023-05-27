@@ -15,7 +15,7 @@ public class State {
     public Screen screen;
     private LocalDate date;
     private Theme colors;
-    public int popupLine;
+    private int popupLine;
 
     public boolean updating = true;
 
@@ -35,21 +35,27 @@ public class State {
             screen.print();
     }
 
-    public LocalDate date() {
-        return date;
-    }
+    public LocalDate date() { return date; }
+    public Theme colors() { return colors; }
+    public int popupLine() { return popupLine; }
 
     public void setDate(LocalDate date) {
         this.date = date;
         updateScreen();
     }
 
-    public Theme colors() {
-        return colors;
-    }
-
     public void setColors(Theme colors) {
         this.colors = colors;
+        updateScreen();
+    }
+
+    // reset the popup line number
+    // note: doesn't update the screen
+    public void resetPopupLine() { this.popupLine = 0; }
+
+    public void movePopupLine(int i) { this.popupLine += i; updateScreen(); }
+    public void movePopupLineBounded(int i, int start, int end) { 
+        this.popupLine = Math.min(end, Math.max(this.popupLine + i, start));
         updateScreen();
     }
 

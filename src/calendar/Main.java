@@ -1,14 +1,13 @@
 package calendar;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Theme;
 import calendar.input.Input;
+import calendar.input.InputLayer;
 import calendar.state.State;
 import calendar.storage.Calendar;
-import calendar.storage.Event;
 import calendar.storage.Section;
 import calendar.util.Vec2;
 
@@ -57,8 +56,12 @@ public class Main {
 
         state.updating = true;
 
-        // state.screen.addSectionPopup();
-        state.screen.addAddEventPopup(state.calendar.createDefaultEvent());
+        Input input = new Input();
+        InputLayer layer = state.showSectionPopup();
+        input.push(layer);
+
+        input.inputLoop();
+        // state.screen.addAddEventPopup(state.calendar.createDefaultEvent());
 
         // Input input = new Input();
 

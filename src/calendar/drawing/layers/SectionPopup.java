@@ -37,8 +37,8 @@ public class SectionPopup extends Popup {
         }
 
         // current section
-         drawTextLeft(canvas, "←", 2 + state.popupLine, margin + 1);
-        drawTextRight(canvas, "→", 2 + state.popupLine, margin + 1);
+         drawTextLeft(canvas, "←", 2 + state.popupLine(), margin + 1);
+        drawTextRight(canvas, "→", 2 + state.popupLine(), margin + 1);
 
         // info line
         int infoy = 2 + boxheight + 1;

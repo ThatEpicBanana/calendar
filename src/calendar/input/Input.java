@@ -22,6 +22,10 @@ public class Input {
             layers.push(newLayer);
     }
 
+    public void push(InputLayer layer) {
+        layers.add(layer);
+    }
+
     public void inputLoop() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         
@@ -31,8 +35,6 @@ public class Input {
                 if(character == 'q') break;
                 handle(character);
             }
-
-            reader.close();
         } catch(IOException e) { e.printStackTrace(); }
     }
 }

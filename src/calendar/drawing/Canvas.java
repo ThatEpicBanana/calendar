@@ -86,7 +86,7 @@ public class Canvas {
 
         builder.deleteCharAt(builder.length() - 1);
 
-        builder.append(Ansi.RESET);
+        builder.append(Ansi.RESET + Ansi.HOME);
 
         System.out.print(builder.toString());
     }
