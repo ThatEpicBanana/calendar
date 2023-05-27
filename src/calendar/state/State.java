@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import calendar.drawing.Screen;
 import calendar.drawing.color.Theme;
 import calendar.storage.Calendar;
-import calendar.util.Coord;
+import calendar.util.Vec2;
 
 // handles the state of the app
 // what screen is showing, actually storing a Calendar object, etc
@@ -18,16 +18,22 @@ public class State {
     private Theme colors;
     public int popupSelection;
 
-    public State(LocalDate date, Theme colors, Coord dimensions, Coord cell) {
+    public boolean updating = true;
+
+    public State(LocalDate date, Theme colors, Vec2 dimensions, Vec2 cell) {
         this.date = date;
         this.colors = colors;
 
         this.calendar = new Calendar(this);
         this.screen = new Screen(dimensions.x, dimensions.y, cell.x, cell.y, this);
+
+        // TODO: readd this update
+        // updateScreen();
     }
 
     public void updateScreen() {
-        screen.print();
+        if(updating)
+            screen.print();
     }
 
     public LocalDate date() { return date; }

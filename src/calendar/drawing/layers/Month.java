@@ -20,7 +20,7 @@ import calendar.drawing.components.MultiBox;
 import calendar.state.State;
 import calendar.storage.Event;
 import calendar.storage.Section;
-import calendar.util.Coord;
+import calendar.util.Vec2;
 
 public class Month extends MultiBox {
     private int cellWidth;
@@ -201,22 +201,22 @@ public class Month extends MultiBox {
 
     public int height() { return super.height() + 1; }
 
-    private Coord dayToCoords(int day) {
+    private Vec2 dayToCoords(int day) {
         return gridDayToCoords(day - 1 + monthStart);
     }
 
-    private Coord gridDayToCoords(int gridDay) {
+    private Vec2 gridDayToCoords(int gridDay) {
         int day = gridDay % 7;
         int week = gridDay / 7;
 
         return gridToCoords(day, week);
     }
 
-    private Coord gridToCoords(int day, int week) {
+    private Vec2 gridToCoords(int day, int week) {
         int x = Canvas.cellDimToFull(cellWidth, day);
         int y = Canvas.cellDimToFull(cellHeight, week) + WEEKDAY_BOTTOM;
 
-        return new Coord(x, y);
+        return new Vec2(x, y);
     }
 
     private void drawInfoLine(Canvas canvas) {
@@ -237,13 +237,13 @@ public class Month extends MultiBox {
     }
 
     private void drawSelected(Canvas canvas) {
-        Coord selected = dayToCoords(date().getDayOfMonth());
+        Vec2 selected = dayToCoords(date().getDayOfMonth());
 
         canvas.highlightBox(selected.x, selected.y, cellWidth, cellHeight, colors().selectedDayFore(), colors().selectedDayBack());
     }
 
     private void drawOverflow(Canvas canvas, int day, int week, int amount) {
-        Coord cell = gridToCoords(day, week);
+        Vec2 cell = gridToCoords(day, week);
         int x = cell.x;
         int y = cell.y + cellHeight - 1;
 
@@ -269,7 +269,7 @@ public class Month extends MultiBox {
 
         // text
         for(int i = 0; i < rows; i++) {
-            Coord cell = gridToCoords(startDay, startWeek);
+            Vec2 cell = gridToCoords(startDay, startWeek);
             canvas.drawText(
                 text.get(i),
                 cell.x + 1,
@@ -294,7 +294,7 @@ public class Month extends MultiBox {
             int day = gridDay % 7;
             int week = gridDay / 7;
 
-            Coord cell = gridToCoords(day, week);
+            Vec2 cell = gridToCoords(day, week);
             int x = cell.x;
             int y = cell.y + rowOffset;
 

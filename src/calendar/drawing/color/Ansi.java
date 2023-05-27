@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.Scanner;
 
-import calendar.util.Coord;
+import calendar.util.Vec2;
 
 public class Ansi {
     public static final String ESC = "\033";
@@ -44,7 +44,7 @@ public class Ansi {
     private static final String GET_CURSOR = ESC + "[6n";
 
     // you gotta do some cursed stuff for this
-    public static Coord getDimensions() {
+    public static Vec2 getDimensions() {
         boolean askForInput = true;
 
         // turn off canonical mode on unix
@@ -88,6 +88,6 @@ public class Ansi {
         int row = Integer.parseInt(pos.substring(square + 1, semi));
         int column = Integer.parseInt(pos.substring(semi + 1));
 
-        return new Coord(column, row);
+        return new Vec2(column, row);
     }
 }

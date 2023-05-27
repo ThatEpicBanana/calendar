@@ -53,6 +53,9 @@ public enum Theme {
         public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
         public Color helpText2() { return overlay2(); }
+
+        public Color buttonText() { return subtext0(); }
+        public Color buttonBackground() { return surface0(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }
@@ -106,6 +109,9 @@ public enum Theme {
         public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
         public Color helpText2() { return overlay2(); }
+
+        public Color buttonText() { return Frappe.buttonText(); }
+        public Color buttonBackground() { return Frappe.buttonBackground(); }
     },
     Macchiato {
         public Color rosewater() { return new Color(244, 219, 214); }
@@ -159,6 +165,9 @@ public enum Theme {
         public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
         public Color helpText2() { return overlay2(); }
+
+        public Color buttonText() { return Frappe.buttonText(); }
+        public Color buttonBackground() { return Frappe.buttonBackground(); }
     },
     Mocha {
  	    public Color rosewater() { return new Color(245, 224, 220); }
@@ -212,6 +221,9 @@ public enum Theme {
         public Color infoLine() { return crust(); }
         public Color helpText() { return subtext0(); }
         public Color helpText2() { return overlay2(); }
+
+        public Color buttonText() { return Frappe.buttonText(); }
+        public Color buttonBackground() { return Frappe.buttonBackground(); }
     },
     Transparent {
         public Color text() { return Frappe.text(); }
@@ -236,6 +248,9 @@ public enum Theme {
         public Color infoLine() { return Frappe.infoLine(); }
         public Color helpText() { return Frappe.helpText(); }
         public Color helpText2() { return Frappe.helpText2(); }
+
+        public Color buttonText() { return Frappe.buttonText(); }
+        public Color buttonBackground() { return Frappe.buttonBackground(); }
     };
 
     public static final int HIGHLIGHT_COUNT = 14;
@@ -259,4 +274,7 @@ public enum Theme {
     public abstract Color infoLine();
     public abstract Color helpText();
     public abstract Color helpText2();
+
+    public abstract Color buttonText();
+    public abstract Color buttonBackground();
 }

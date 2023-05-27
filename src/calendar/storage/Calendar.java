@@ -22,6 +22,10 @@ public class Calendar {
     public State state() { return this.state; }
     public List<Section> sections() { return this.sections; }
 
+    public Section createDefaultSection() {
+        return new Section(this, "Add Section", 0, state);
+    }
+
     public Section addSection(String title, int color) {
         Section section = new Section(this, title, color, state);
         sections.add(section);
@@ -34,9 +38,19 @@ public class Calendar {
     }
 
 
+    public Event createDefaultEvent() {
+        LocalDateTime time = state.date().atTime(12, 0);
+        Section section = sections.get(0);
+
+        if(section == null) return null;
+
+        return new Event(this, section, "Add Event", time, time);
+    }
+
     public Event addEvent(Section section, String name, LocalDateTime start, LocalDateTime end) {
         Event event = new Event(this, section, name, start, end);
         section.add(event);
+        state().updateScreen();
         return event;
     }
 

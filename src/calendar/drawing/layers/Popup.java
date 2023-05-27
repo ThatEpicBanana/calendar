@@ -30,6 +30,8 @@ public class Popup implements Drawable {
     protected int line(int y) { return y + 2; }
     protected int maxLines() { return height() - 4; }
 
+    protected void drawText(Canvas canvas, String text, int textline) 
+        { drawText(canvas, text, textline, null, null); }
     protected void drawText(Canvas canvas, String text, int textline, Color foreground, Color background) {
         int x = (width() - text.length()) / 2;
         int y = line(textline);
@@ -37,15 +39,19 @@ public class Popup implements Drawable {
         canvas.drawText(text, x, y, foreground, background);
     }
 
-    protected void drawTextLeft(Canvas canvas, String text, int textline, int margin) {
+    protected void drawTextLeft(Canvas canvas, String text, int textline, int margin)
+        { drawTextLeft(canvas, text, textline, margin, null, null); }
+    protected void drawTextLeft(Canvas canvas, String text, int textline, int margin, Color foreground, Color background) {
         int x = margin;
         int y = line(textline);
-        canvas.drawText(text, x, y);
+        canvas.drawText(text, x, y, foreground, background);
     }
 
-    protected void drawTextRight(Canvas canvas, String text, int textline, int margin) {
+    protected void drawTextRight(Canvas canvas, String text, int textline, int margin)
+        { drawTextRight(canvas, text, textline, margin, null, null); }
+    protected void drawTextRight(Canvas canvas, String text, int textline, int margin, Color foreground, Color background) {
         int x = width() - text.length() - margin;
         int y = line(textline);
-        canvas.drawText(text, x, y);
+        canvas.drawText(text, x, y, foreground, background);
     }
 }

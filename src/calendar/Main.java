@@ -7,8 +7,9 @@ import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
 import calendar.storage.Calendar;
+import calendar.storage.Event;
 import calendar.storage.Section;
-import calendar.util.Coord;
+import calendar.util.Vec2;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,10 +33,12 @@ public class Main {
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
         Theme theme = Theme.Latte;
 
-        State state = new State(date, theme, Ansi.getDimensions(), new Coord(11, 4));
+        State state = new State(date, theme, Ansi.getDimensions(), new Vec2(11, 4));
+
+        state.updating = false;
 
         Calendar calendar = state.calendar;
-        Section school = calendar.addSection("school", 0);
+        Section school = calendar.addSection("schol", 0);
         Section birthdays = calendar.addSection("birthdays", 3);
         Section holidays = calendar.addSection("holidays", 9);
 
@@ -51,13 +54,17 @@ public class Main {
         LocalDate finals = date.withDayOfMonth(23);
         calendar.addEvent(school, "Study for Finals", finals.atTime(6, 30), finals.plusDays(2).atTime(7, 30));
 
-        state.screen.addSectionPopup();
-        state.updateScreen();
+        state.updating = true;
 
-        for(int i = 10; i >= 0; i--) {
-            school.setColor(i);
-            try { Thread.sleep(200); } catch(Exception e) { e.printStackTrace(); }
-        }
+        // state.screen.addSectionPopup();
+        state.screen.addAddEventPopup();
+
+        try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }
+
+        // for(int i = 10; i >= 0; i--) {
+        //     school.setColor(i);
+        //     try { Thread.sleep(200); } catch(Exception e) { e.printStackTrace(); }
+        // }
 
         // checking fps
         // long start = System.nanoTime();
