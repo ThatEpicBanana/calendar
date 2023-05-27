@@ -1,5 +1,7 @@
-package calendar.drawing;
+package calendar.state;
 
+import calendar.drawing.Canvas;
+import calendar.drawing.Drawable;
 import calendar.drawing.color.Theme;
 import calendar.drawing.layers.AddEventPopup;
 import calendar.drawing.layers.Month;

@@ -2,7 +2,7 @@ package calendar.state;
 
 import java.time.LocalDate;
 
-import calendar.drawing.Screen;
+import calendar.state.Screen;
 import calendar.drawing.color.Theme;
 import calendar.storage.Calendar;
 import calendar.util.Vec2;
@@ -50,13 +50,13 @@ public class State {
         updateScreen();
     }
 
-    public InputState createPopupAndInputState(Event event) {
-        Popup popup = new Popup(event);
-        InputState inputState = new InputState(event);
+    // public InputState createPopupAndInputState(Event event) {
+    //     Popup popup = new Popup(event);
+    //     InputState inputState = new InputState(event);
 
-        popup.setInputState(inputState);
-        inputState.setPopup(popup);
+    //     popup.setInputState(inputState);
+    //     inputState.setPopup(popup);
 
-        return inputState;
-    }
+    //     return inputState;
+    // }
 }

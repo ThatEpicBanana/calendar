@@ -1,4 +1,4 @@
-package calendar.state;
+package calendar.input;
 
 import java.util.Stack;
 

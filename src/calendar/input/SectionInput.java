@@ -1,4 +1,4 @@
-package calendar.drawing;
+package calendar.input;
 
 import java.awt.Color;
 import java.util.Scanner;
