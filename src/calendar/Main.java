@@ -11,6 +11,7 @@ import calendar.storage.Calendar;
 import calendar.storage.Section;
 import calendar.util.Vec2;
 
+import org.fusesource.jansi.AnsiConsole;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -35,7 +36,7 @@ public class Main {
 
         // this is the only thing i'm using jline for
         try {
-            Terminal terminal = TerminalBuilder.terminal();
+            Terminal terminal = TerminalBuilder.builder().system(true).jansi(true).build();
             terminal.enterRawMode();
         } catch(Exception e) { e.printStackTrace(); }
         
