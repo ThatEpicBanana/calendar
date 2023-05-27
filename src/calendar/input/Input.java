@@ -1,5 +1,8 @@
 package calendar.input;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Stack;
 
 public class Input {
@@ -7,39 +10,29 @@ public class Input {
 
     public Input() {
         this.layers = new Stack<>();
-        layers.push(new MonthInput());
     }
 
     private InputLayer current() {
         return layers.peek();
     }
 
-    public void handleInput(KeyEvent event) {
-        InputLayer newLayer = current().handleInput(command);
-        if (newLayer != null) {
+    public void handle(char character) {
+        InputLayer newLayer = current().handle(character);
+        if (newLayer != null)
             layers.push(newLayer);
-        }
+    }
+
+    public void inputLoop() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        
+        try {
+            while(true) {
+                char character = (char) reader.read();
+                if(character == 'q') break;
+                handle(character);
+            }
+
+            reader.close();
+        } catch(IOException e) { e.printStackTrace(); }
     }
 }
-
-interface InputLayer {
-    InputLayer handleInput(KeyEvent event);
-}
-
-public class MonthInput implements InputLayer {
-    public InputLayer handleInput(char command) {
-        switch (command) {
-            case 'a':
-                return new AddInput();
-            case 's':
-                return new SectionInput();
-            case 'j':
-                return null; // j vim moment //
-            case 'k':
-                return null; // k vim moment //
-            default:
-                return null;
-        }
-    }
-}
-

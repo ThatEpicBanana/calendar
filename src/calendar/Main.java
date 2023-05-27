@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Theme;
+import calendar.input.Input;
 import calendar.state.State;
 import calendar.storage.Calendar;
 import calendar.storage.Event;
@@ -57,9 +58,11 @@ public class Main {
         state.updating = true;
 
         // state.screen.addSectionPopup();
-        state.screen.addAddEventPopup();
+        state.screen.addAddEventPopup(state.calendar.createDefaultEvent());
 
-        try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }
+        // Input input = new Input();
+
+        // try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }
 
         // for(int i = 10; i >= 0; i--) {
         //     school.setColor(i);

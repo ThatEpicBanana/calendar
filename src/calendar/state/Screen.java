@@ -60,17 +60,8 @@ public class Screen implements Drawable {
     // adds an event popup
     // returns the event currently being edited
     // or null if the popup couldn't be created
-    public Event addAddEventPopup() { 
-        if(this.popup != null) return null;
-
-        Event event = state.calendar.createDefaultEvent();
-
-        if(event == null) return null;
-
-        this.popup = new AddEventPopup(popupWidth(), event, state);
-        state.updateScreen();
-
-        return event;
+    public boolean addAddEventPopup(Event event) { 
+        return addPopup(new AddEventPopup(popupWidth(), event, state));
     }
 
 

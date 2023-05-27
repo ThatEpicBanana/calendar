@@ -4,7 +4,10 @@ import java.time.LocalDate;
 
 import calendar.state.Screen;
 import calendar.drawing.color.Theme;
+import calendar.input.InputLayer;
+import calendar.input.SectionInputLayer;
 import calendar.storage.Calendar;
+import calendar.storage.Event;
 import calendar.util.Vec2;
 
 public class State {
@@ -12,7 +15,7 @@ public class State {
     public Screen screen;
     private LocalDate date;
     private Theme colors;
-    public int popupSelection;
+    public int popupLine;
 
     public boolean updating = true;
 
@@ -50,13 +53,19 @@ public class State {
         updateScreen();
     }
 
-    // public InputState createPopupAndInputState(Event event) {
-    //     Popup popup = new Popup(event);
-    //     InputState inputState = new InputState(event);
+    public InputLayer showSectionPopup() {
+        if(screen.addSectionPopup())
+            return new SectionInputLayer(this);
+        else
+            return null;
+    }
 
-    //     popup.setInputState(inputState);
-    //     inputState.setPopup(popup);
-
-    //     return inputState;
+    // add back once EventInputLayer is done
+    // public InputLayer showEventPopup() {
+    //     Event event = calendar.createDefaultEvent();
+    //     if (screen.addAddEventPopup(event))
+    //         return new EventInputLayer(this, event);
+    //     else 
+    //         return null;
     // }
 }

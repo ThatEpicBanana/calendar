@@ -29,6 +29,7 @@ public class Section {
     public int colorIndex() { return color; }
     public Color color() { return state.colors().highlights()[color]; }
     public void setColor(int newColor) { this.color = newColor; calendar.state().updateScreen(); }
+    public void addColor(int i) { this.color += i; calendar.state().updateScreen(); }
 
     protected void add(Event event) { this.events.add(event); }
     protected void remove(Event event) { this.events.remove(event); }
