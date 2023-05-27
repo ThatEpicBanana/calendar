@@ -50,18 +50,18 @@ public class Ansi {
 
     // you gotta do some cursed stuff for this
     public static Vec2 getDimensions() {
-        boolean askForInput = true;
+        // boolean askForInput = true;
 
         // turn off canonical mode on unix
-        File f = new File("/bin/stty");
-        if(f.exists() && f.canExecute()) {
-            ProcessBuilder pb = new ProcessBuilder("/bin/stty", "-icanon");
-            pb.redirectInput(Redirect.from(new File("/dev/tty")));
-            try { 
-                pb.start(); 
-                askForInput = false;
-            } catch(IOException e) { e.printStackTrace(); }
-        }
+        // File f = new File("/bin/stty");
+        // if(f.exists() && f.canExecute()) {
+        //     ProcessBuilder pb = new ProcessBuilder("/bin/stty", "-icanon");
+        //     pb.redirectInput(Redirect.from(new File("/dev/tty")));
+        //     try { 
+        //         pb.start(); 
+        //         askForInput = false;
+        //     } catch(IOException e) { e.printStackTrace(); }
+        // }
 
         // move the furthest possible and ask for cursor position
         System.out.print(move(1000, 1000) + GET_CURSOR);
@@ -72,15 +72,15 @@ public class Ansi {
         // prompt the user to press enter if needed
         // this is definitely a feature, not a bug 
         try { Thread.sleep(10); } catch(Exception e) {}
-        if(askForInput)
-            // prompt the user to press enter
-            // windows seems to draw the input over everthing else, 
-            // so just put it in the top left
-            System.out.print(TO_LEFT + "Press Enter to Start..." + move(0, 0));
-        else
-            // linux, on the other hand, just writes the input to the terminal
-            // so just remove the lind
-            System.out.print(TO_LEFT + ESC + "[0K");
+        // if(askForInput)
+        //     // prompt the user to press enter
+        //     // windows seems to draw the input over everthing else, 
+        //     // so just put it in the top left
+        //     System.out.print(TO_LEFT + "Press Enter to Start..." + move(0, 0));
+        // else
+        //     // linux, on the other hand, just writes the input to the terminal
+        //     // so just remove the lind
+        //     System.out.print(TO_LEFT + ESC + "[0K");
 
         // will output like ESC[row;columnR
         String pos = scanner.next();

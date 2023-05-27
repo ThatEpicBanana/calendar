@@ -11,6 +11,9 @@ import calendar.storage.Calendar;
 import calendar.storage.Section;
 import calendar.util.Vec2;
 
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+
 public class Main {
     public static void main(String[] args) {
         // GENERAL IDEAS:
@@ -29,6 +32,12 @@ public class Main {
         // and all the layers are packaged in a screen??? not so sure here
         // nah there'll probably be a seperate class that manages the month and all the popups
         // each screen is year-month-day (although the others may be too time-consuming)
+
+        // this is the only thing i'm using jline for
+        try {
+            Terminal terminal = TerminalBuilder.terminal();
+            terminal.enterRawMode();
+        } catch(Exception e) { e.printStackTrace(); }
         
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
         Theme theme = Theme.Latte;

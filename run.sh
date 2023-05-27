@@ -3,5 +3,5 @@
 ./build.sh
 
 cd build
-java calendar.Main
+java -classpath ".:../lib/*" calendar.Main
 cd ..
