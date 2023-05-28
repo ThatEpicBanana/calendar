@@ -1,5 +1,7 @@
-package calendar.input;
+package calendar.input.layer;
 
+import calendar.input.InputLayer;
+import calendar.input.Key;
 import calendar.state.State;
 import calendar.storage.Section;
 
