@@ -33,8 +33,20 @@ public enum Theme {
 
         public Color[] highlights() {
             return new Color[]{
-                rosewater(), flamingo(), pink(), mauve(), red(), maroon(), peach(), 
-                yellow(), green(), teal(), sky(), sapphire(), blue(), lavender()
+                flamingo(), // 0
+                rosewater(), // 11
+                peach(), // 22
+                yellow(), // 35
+                green(), // 109
+                teal(), // 183
+                sapphire(), // 189
+                sky(), // 197
+                blue(), // 220
+                lavender(), // 231
+                mauve(), // 266
+                pink(), // 316
+                red(), // 347
+                maroon() // 355
             };
         }
 
@@ -89,8 +101,20 @@ public enum Theme {
 
         public Color[] highlights() {
             return new Color[]{
-                rosewater(), flamingo(), pink(), mauve(), red(), maroon(), peach(), 
-                yellow(), green(), teal(), sky(), sapphire(), blue(), lavender()
+                flamingo(), // 0
+                rosewater(), // 11
+                peach(), // 22
+                yellow(), // 35
+                green(), // 109
+                teal(), // 183
+                sapphire(), // 189
+                sky(), // 197
+                blue(), // 220
+                lavender(), // 231
+                mauve(), // 266
+                pink(), // 316
+                red(), // 347
+                maroon() // 355
             };
         }
 
@@ -145,8 +169,20 @@ public enum Theme {
 
         public Color[] highlights() {
             return new Color[]{
-                rosewater(), flamingo(), pink(), mauve(), red(), maroon(), peach(), 
-                yellow(), green(), teal(), sky(), sapphire(), blue(), lavender()
+                flamingo(), // 0
+                rosewater(), // 11
+                peach(), // 22
+                yellow(), // 35
+                green(), // 109
+                teal(), // 183
+                sapphire(), // 189
+                sky(), // 197
+                blue(), // 220
+                lavender(), // 231
+                mauve(), // 266
+                pink(), // 316
+                red(), // 347
+                maroon() // 355
             };
         }
 
@@ -201,8 +237,20 @@ public enum Theme {
 
         public Color[] highlights() {
             return new Color[]{
-                rosewater(), flamingo(), pink(), mauve(), red(), maroon(), peach(), 
-                yellow(), green(), teal(), sky(), sapphire(), blue(), lavender()
+                flamingo(), // 0
+                rosewater(), // 11
+                peach(), // 22
+                yellow(), // 35
+                green(), // 109
+                teal(), // 183
+                sapphire(), // 189
+                sky(), // 197
+                blue(), // 220
+                lavender(), // 231
+                mauve(), // 266
+                pink(), // 316
+                red(), // 347
+                maroon() // 355
             };
         }
 

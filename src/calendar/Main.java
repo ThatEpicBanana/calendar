@@ -44,16 +44,16 @@ public class Main {
         } catch(Exception e) { e.printStackTrace(); }
 
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Latte;
+        Theme theme = Theme.Mocha;
 
         State state = new State(date, theme, dimensions, new Vec2(11, 4));
 
         state.updating = false;
 
         Calendar calendar = state.calendar;
-        Section school = calendar.addSection("schol", 0);
-        Section birthdays = calendar.addSection("birthdays", 3);
-        Section holidays = calendar.addSection("holidays", 9);
+        Section school = calendar.addSection("schol", 1);
+        Section birthdays = calendar.addSection("birthdays", 10);
+        Section holidays = calendar.addSection("holidays", 5);
 
         LocalDate july4 = date.withDayOfMonth(10);
         calendar.addEvent(holidays, "4th of July", july4.atTime(6, 30), july4.atTime(7, 30));
