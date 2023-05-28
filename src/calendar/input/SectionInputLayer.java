@@ -14,8 +14,10 @@ public class SectionInputLayer implements InputLayer {
     public int maxSession() { return state.calendar.sections().size() - 1; }
     public Section section() { return state.calendar.sections().get(line()); }
 
-    public InputLayer handle(char character) {
-        switch(Character.toLowerCase(character)) {
+    public InputLayer handle(Key character) {
+        if(!character.isAlphaNumeric()) return null;
+
+        switch(character.toLowerCase()) {
             case 'j':
                 down(); return null;
             case 'k':

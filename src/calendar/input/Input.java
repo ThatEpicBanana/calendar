@@ -16,14 +16,27 @@ public class Input {
         return layers.peek();
     }
 
-    public void handle(char character) {
+    private boolean handle(Key character) {
+        if(character.isEscape() || character.toChar() == 'q')
+            if(exit())
+                return true;
+
         InputLayer newLayer = current().handle(character);
         if (newLayer != null)
             layers.push(newLayer);
+
+        return false;
     }
 
     public void push(InputLayer layer) {
         layers.add(layer);
+    }
+
+    // exits the current layer
+    // returns if the inputLoop should be exited
+    private boolean exit() {
+        this.layers.pop().exit();
+        return this.layers.isEmpty();
     }
 
     public void inputLoop() {
@@ -31,9 +44,10 @@ public class Input {
         
         try {
             while(true) {
-                char character = (char) reader.read();
-                if(character == 'q') break;
-                handle(character);
+                int integer = reader.read();
+
+                if(handle(new Key(integer))) 
+                    break;
             }
         } catch(IOException e) { e.printStackTrace(); }
     }
