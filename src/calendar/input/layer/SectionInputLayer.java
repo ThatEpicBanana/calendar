@@ -19,33 +19,50 @@ public class SectionInputLayer implements InputLayer {
     public Section section() { return state.calendar.sections().get(line()); }
 
     public LayerChange handle(Key character) {
-        if(character.isEnter()) {
-            Section section = section();
-            InputLayer newLayer = new TextBoxLayer(state, section().title(), value -> section.setTitle(value));
-            return LayerChange.switchTo(newLayer);
-        }
+        // (q) exit
+        if(character.toChar() == 'q') 
+            return LayerChange.exit();
 
-        if(!character.isAlphaNumeric()) return LayerChange.keep();
+        // (enter) edit
+        if(character.isEnter()) 
+            return edit();
 
         switch(character.toLowerCase()) {
-            case 'j':
-                down(); break;
-            case 'k':
-                up(); break;
-            case 'h':
-                previousHighlight(); break;
-            case 'l':
-                nextHighlight(); break;
             case 'r':
-                remove(); break;
+                return remove();
+            case 'a':
+                return add();
         }
+
+        if(character.isUp()) 
+            up();
+        else if(character.isDown()) 
+            down();
+        else if(character.isLeft()) 
+            previousHighlight();
+        else if(character.isRight()) 
+            nextHighlight();
 
         return LayerChange.keep();
     }
 
-    private void remove() {
+    private LayerChange edit() {
+        Section section = section();
+        InputLayer newLayer = new TextBoxLayer(state, section().title(), value -> section.setTitle(value));
+        return LayerChange.switchTo(newLayer);
+    }
+
+    private LayerChange remove() {
         state.calendar.removeSection(line());
         if(line() > maxSession()) state.setPopupHover(maxSession());
+        return LayerChange.keep();
+    }
+
+    private LayerChange add() {
+        Section section = state.calendar.addSection("New Section", 0);
+        state.setPopupHover(maxSession());
+        InputLayer newLayer = new TextBoxLayer(state, "", value -> section.setTitle(value));
+        return LayerChange.switchTo(newLayer);
     }
 
     private void up() {

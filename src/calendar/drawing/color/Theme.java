@@ -141,7 +141,7 @@ public enum Theme {
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
 
-        public Color editingForeground() { return subtext1(); }
+        public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
     },
     Macchiato {
@@ -212,7 +212,7 @@ public enum Theme {
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
 
-        public Color editingForeground() { return subtext1(); }
+        public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
     },
     Mocha {
@@ -283,7 +283,7 @@ public enum Theme {
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
 
-        public Color editingForeground() { return subtext1(); }
+        public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
     },
     Transparent {

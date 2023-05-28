@@ -72,7 +72,7 @@ public class Main {
 
     private static State setupTestState(Vec2 dimensions) {
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Latte;
+        Theme theme = Theme.Mocha;
 
         State state = new State(date, theme, dimensions, new Vec2(11, 4));
 

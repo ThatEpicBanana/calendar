@@ -19,11 +19,15 @@ public class TextBoxLayer implements InputLayer {
     public LayerChange handle(Key character) {
         if(character.isEnter()) return LayerChange.exit();
 
-        if(character.isAlphaNumeric())
+        // todo: accept all ascii
+        if(character.isAscii())
             builder.append(character.toChar());
 
         if(character.isBackspace() && builder.length() > 0)
             builder.deleteCharAt(builder.length() - 1);
+
+        if(character.isSpace())
+            builder.append(' ');
 
         update();
 

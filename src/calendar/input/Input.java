@@ -20,7 +20,7 @@ public class Input {
     // returns if the inputLoop should end
     private boolean handle(Key character) {
         // exit current layer if escape or q is pressed
-        if((character.isEscape() || character.toChar() == 'q') && exit())
+        if(character.isEscape() && exit())
             return true;
 
         // exit current layer if requested
@@ -54,10 +54,10 @@ public class Input {
         
         try {
             while(true) {
-                int integer = reader.read();
+                Key key = Key.next(reader);
 
-                if(integer != -1) {
-                    boolean exit = handle(new Key(integer));
+                if(key != Key.UNKNOWN) {
+                    boolean exit = handle(key);
                     if(exit) break;
                 }
             }
