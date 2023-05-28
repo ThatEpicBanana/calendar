@@ -16,25 +16,43 @@ import org.jline.terminal.TerminalBuilder;
 
 public class Main {
     public static void main(String[] args) {
-        // GENERAL IDEAS:
+        // This is a calendar app that allows you to:
+        // - define different Sections
+        // - that each have different sets of Events
+        // - that can all be drawn to the screen
         //
-        // calendar will be comprised of a set of passes,
-        // one grid for the month
-        // another for the days of the month
-        // and another for the day grid
-        // these grids will be combined in the MultiGrid using Text.combine
-        //
-        // then, there'll be passes for the numbers, seperate month shading, and tasks
-        //
-        // this will all be in its own layer - the Month layer
-        //
-        // then, popups are seperate layers that could go on top
-        // and all the layers are packaged in a screen??? not so sure here
-        // nah there'll probably be a seperate class that manages the month and all the popups
-        // each screen is year-month-day (although the others may be too time-consuming)
+        // The code is seperated into four main different areas:
+        // - state
+        //   - the global state of the application
+        //   - all centered in State.java
+        //   - acts as a middle ground between the drawing and the input
+        //   - holds the Screen and Input(handler)
+        // - storage
+        //   - pretty much an extension of state,
+        //   - all centered in Calendar.java
+        //   - stores all the Sections and Events
+        //   - and provides methods to change them
+        // - drawing
+        //   - drawing the screen based on the state
+        //   - all centered in Screen.java
+        //   - based on a Canvas, which holds 2d arrays for the text and color
+        //   - each seperate component writes to its own Canvas which all get combined
+        // - input
+        //   - handles input
+        //   - all centered in Input.java
+        //   - defines a set of InputLayers for each screen
+        //   - each InputLayer has its own keybindings
+        // 
+        // There is one library that we *had* to use to make it all work called Jline
+        // It has many functionalities, but we only use it to:
+        // - enter the terminal into raw mode
+        //   - if this doesn't get done, for each key the user presses, they would have to press enter as well
+        //   - this is easy enough to enable separately on unix (linux and mac), but on windows you have to use native code
+        //     - so you pretty much have to use a library to enable it for all users
+        // - get the dimensions of the screen
+        //   - again, this isn't that bad to do on linux, but I couldn't find a good way for windows
+        // The only place that uses JLine is right below this comment
 
-
-        // these are the only things i'm using jline for
         Vec2 dimensions = new Vec2(0, 0);
         try {
             Terminal terminal = TerminalBuilder.builder().system(true).jansi(true).build();
@@ -42,6 +60,8 @@ public class Main {
 
             dimensions = new Vec2(terminal.getWidth(), terminal.getHeight());
         } catch(Exception e) { e.printStackTrace(); }
+
+        // set up a test state
 
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
         Theme theme = Theme.Mocha;
