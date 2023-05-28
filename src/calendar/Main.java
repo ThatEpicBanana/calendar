@@ -1,8 +1,8 @@
 package calendar;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
-import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Theme;
 import calendar.input.Input;
 import calendar.input.InputLayer;
@@ -15,7 +15,7 @@ import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // This is a calendar app that allows you to:
         // - define different Sections
         // - that each have different sets of Events
@@ -53,18 +53,26 @@ public class Main {
         //   - again, this isn't that bad to do on linux, but I couldn't find a good way for windows
         // The only place that uses JLine is right below this comment
 
-        Vec2 dimensions = new Vec2(0, 0);
-        try {
-            Terminal terminal = TerminalBuilder.builder().system(true).jansi(true).build();
-            terminal.enterRawMode();
+        // get info from terminal
 
-            dimensions = new Vec2(terminal.getWidth(), terminal.getHeight());
-        } catch(Exception e) { e.printStackTrace(); }
+        Terminal terminal = TerminalBuilder.builder().system(true).jansi(true).build();
+        terminal.enterRawMode();
+        Vec2 dimensions = new Vec2(terminal.getWidth(), terminal.getHeight());
 
         // set up a test state
 
+        State state = setupTestState(dimensions);
+
+        Input input = new Input();
+        InputLayer layer = state.showSectionPopup();
+        input.push(layer);
+
+        input.inputLoop();
+    }
+
+    private static State setupTestState(Vec2 dimensions) {
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Mocha;
+        Theme theme = Theme.Transparent;
 
         State state = new State(date, theme, dimensions, new Vec2(11, 4));
 
@@ -89,29 +97,16 @@ public class Main {
 
         state.updating = true;
 
-        Input input = new Input();
-        InputLayer layer = state.showSectionPopup();
-        input.push(layer);
+        return state;
+    }
 
-        input.inputLoop();
-        // state.screen.addAddEventPopup(state.calendar.createDefaultEvent());
+    public static void calculateFPS(State state) {
+        long start = System.nanoTime();
+        for(int i = 1000; i >= 0; i--)
+            state.updateScreen();
+        long end = System.nanoTime();
 
-        // Input input = new Input();
-
-        // try { Thread.sleep(2000); } catch(Exception e) { e.printStackTrace(); }
-
-        // for(int i = 10; i >= 0; i--) {
-        //     school.setColor(i);
-        //     try { Thread.sleep(200); } catch(Exception e) { e.printStackTrace(); }
-        // }
-
-        // checking fps
-        // long start = System.nanoTime();
-        // for(int i = 1000; i >= 0; i--)
-        //     state.updateScreen();
-        // long end = System.nanoTime();
-
-        // double seconds = (end - start) / 1000000000.0;
-        // System.out.println(1000 / seconds);
+        double seconds = (end - start) / 1000000000.0;
+        System.out.println(1000 / seconds);
     }
 }

@@ -275,7 +275,7 @@ public enum Theme {
     },
     Transparent {
         public Color text() { return Frappe.text(); }
-        public Color background() { return null; }
+        public Color background() { return Color.FORCE_TRANSPARENT; }
 
         public Color[] highlights() {
             return Frappe.highlights();

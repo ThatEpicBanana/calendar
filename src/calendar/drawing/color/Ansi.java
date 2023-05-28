@@ -28,11 +28,11 @@ public class Ansi {
     public static final String TO_RIGHT = ESC + "[1000G";
 
     public static void color(StringBuilder builder, char character, Color foreground, Color background) {
-        if(foreground != null)
+        if(foreground != null && foreground != Color.FORCE_TRANSPARENT)
             builder.append(String.format(FOREGROUND, foreground.r, foreground.g, foreground.b));
         else builder.append(FOREGROUND_RESET);
 
-        if(background != null)
+        if(background != null && background != Color.FORCE_TRANSPARENT)
             builder.append(String.format(BACKGROUND, background.r, background.g, background.b));
         else builder.append(BACKGROUND_RESET);
 
