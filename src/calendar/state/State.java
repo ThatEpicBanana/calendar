@@ -15,7 +15,8 @@ public class State {
     public Screen screen;
     private LocalDate date;
     private Theme colors;
-    private int popupLine;
+    private int popupHover = 0;
+    private boolean editingHover;
 
     public boolean updating = true;
 
@@ -37,7 +38,7 @@ public class State {
 
     public LocalDate date() { return date; }
     public Theme colors() { return colors; }
-    public int popupLine() { return popupLine; }
+    public int popupHover() { return popupHover; }
 
     public void setDate(LocalDate date) {
         this.date = date;
@@ -51,13 +52,20 @@ public class State {
 
     // reset the popup line number
     // note: doesn't update the screen
-    public void resetPopupLine() { this.popupLine = 0; }
+    public void resetPopupHover() { this.popupHover = 0; }
 
-    public void movePopupLine(int i) { this.popupLine += i; updateScreen(); }
-    public void movePopupLineBounded(int i, int start, int end) { 
-        this.popupLine = Math.min(end, Math.max(this.popupLine + i, start));
+    public void setPopupHover(int i) { this.popupHover = i; updateScreen(); }
+    public void movePopupHover(int i, int min, int max) { 
+        this.popupHover = Math.min(max, Math.max(this.popupHover + i, min));
         updateScreen();
     }
+
+    // might want to consider using an int and incrementing or decrementing it
+    // to handle multiple layers of editing
+    // currently, though, that's impossible, so this is fine
+    public boolean editingHover() { return this.editingHover; }
+    public void startEditingHover() { this.editingHover = true; updateScreen(); }
+    public void endEditingHover() { this.editingHover = false; updateScreen(); }
 
     public InputLayer showSectionPopup() {
         if(screen.addSectionPopup())

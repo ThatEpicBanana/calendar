@@ -36,9 +36,15 @@ public class SectionPopup extends Popup {
             drawText(canvas, section.title(), 2 + i);
         }
 
-        // current section
-         drawTextLeft(canvas, "←", 2 + state.popupLine(), margin + 1);
-        drawTextRight(canvas, "→", 2 + state.popupLine(), margin + 1);
+        if(sectionLength > 0) {
+            // current section
+             drawTextLeft(canvas, "←", 2 + state.popupHover(), margin + 1);
+            drawTextRight(canvas, "→", 2 + state.popupHover(), margin + 1);
+
+            // if editing
+            if(state.editingHover())
+                canvas.highlightBox(margin, boxy + state.popupHover(), boxwidth, 1, colors().editingForeground(), null);
+        }
 
         // info line
         int infoy = 2 + boxheight + 1;

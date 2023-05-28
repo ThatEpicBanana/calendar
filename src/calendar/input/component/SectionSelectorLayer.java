@@ -2,6 +2,7 @@ package calendar.input.component;
 
 import calendar.input.InputLayer;
 import calendar.input.Key;
+import calendar.input.LayerChange;
 
 public class SectionSelectorLayer implements InputLayer {
     private int index;
@@ -12,8 +13,8 @@ public class SectionSelectorLayer implements InputLayer {
         this.callback = callback;
     }
 
-    public InputLayer handle(Key character) {
-        return null; // for now
+    public LayerChange handle(Key character) {
+        return LayerChange.keep(); // for now
     }
 
     public void exit() {

@@ -68,6 +68,10 @@ public enum Theme {
 
         public Color buttonText() { return subtext0(); }
         public Color buttonBackground() { return surface0(); }
+
+        // for when the background is a highlight
+        public Color editingForeground() { return crust(); }
+        public Color editingBackground() { return surface2(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }
@@ -136,6 +140,9 @@ public enum Theme {
 
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
+
+        public Color editingForeground() { return subtext1(); }
+        public Color editingBackground() { return surface2(); }
     },
     Macchiato {
         public Color rosewater() { return new Color(244, 219, 214); }
@@ -204,6 +211,9 @@ public enum Theme {
 
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
+
+        public Color editingForeground() { return subtext1(); }
+        public Color editingBackground() { return surface2(); }
     },
     Mocha {
  	    public Color rosewater() { return new Color(245, 224, 220); }
@@ -272,6 +282,9 @@ public enum Theme {
 
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
+
+        public Color editingForeground() { return subtext1(); }
+        public Color editingBackground() { return surface2(); }
     },
     Transparent {
         public Color text() { return Frappe.text(); }
@@ -299,6 +312,9 @@ public enum Theme {
 
         public Color buttonText() { return Frappe.buttonText(); }
         public Color buttonBackground() { return Frappe.buttonBackground(); }
+
+        public Color editingForeground() { return Frappe.editingForeground(); }
+        public Color editingBackground() { return Frappe.editingBackground(); }
     };
 
     public static final int HIGHLIGHT_COUNT = 14;
@@ -325,4 +341,7 @@ public enum Theme {
 
     public abstract Color buttonText();
     public abstract Color buttonBackground();
+
+    public abstract Color editingForeground();
+    public abstract Color editingBackground();
 }

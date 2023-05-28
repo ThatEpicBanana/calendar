@@ -2,6 +2,7 @@ package calendar.input.layer;
 
 import calendar.input.InputLayer;
 import calendar.input.Key;
+import calendar.input.LayerChange;
 import calendar.state.State;
 
 public class MonthLayer implements InputLayer {
@@ -11,7 +12,7 @@ public class MonthLayer implements InputLayer {
         this.state = state;
     }
 
-    public InputLayer handle(Key character) {
-        return null; // for now
+    public LayerChange handle(Key character) {
+        return LayerChange.keep(); // for now
     }
 }

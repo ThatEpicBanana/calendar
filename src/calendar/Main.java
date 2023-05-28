@@ -64,7 +64,7 @@ public class Main {
         State state = setupTestState(dimensions);
 
         Input input = new Input();
-        InputLayer layer = state.showEventPopup();
+        InputLayer layer = state.showSectionPopup();
         input.push(layer);
 
         input.inputLoop();
@@ -72,7 +72,7 @@ public class Main {
 
     private static State setupTestState(Vec2 dimensions) {
         LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
-        Theme theme = Theme.Transparent;
+        Theme theme = Theme.Latte;
 
         State state = new State(date, theme, dimensions, new Vec2(11, 4));
 

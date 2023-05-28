@@ -16,15 +16,25 @@ public class Input {
         return layers.peek();
     }
 
+    // handles a key
+    // returns if the inputLoop should end
     private boolean handle(Key character) {
-        if(character.isEscape() || character.toChar() == 'q')
-            if(exit())
-                return true;
+        // exit current layer if escape or q is pressed
+        if((character.isEscape() || character.toChar() == 'q') && exit())
+            return true;
 
-        InputLayer newLayer = current().handle(character);
-        if (newLayer != null)
+        // exit current layer if requested
+        LayerChange change = current().handle(character);
+        if(change.exits() && exit()) return true;
+
+        // change layer if requested
+        InputLayer newLayer = change.newLayer();
+        if(newLayer != null) {
             layers.push(newLayer);
+            newLayer.start();
+        }
 
+        // keep handling new inputs
         return false;
     }
 
@@ -33,7 +43,7 @@ public class Input {
     }
 
     // exits the current layer
-    // returns if the inputLoop should be exited
+    // returns if the inputLoop should end
     private boolean exit() {
         this.layers.pop().exit();
         return this.layers.isEmpty();
@@ -46,8 +56,10 @@ public class Input {
             while(true) {
                 int integer = reader.read();
 
-                if(handle(new Key(integer))) 
-                    break;
+                if(integer != -1) {
+                    boolean exit = handle(new Key(integer));
+                    if(exit) break;
+                }
             }
         } catch(IOException e) { e.printStackTrace(); }
     }

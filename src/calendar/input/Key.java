@@ -8,6 +8,7 @@ public class Key {
     public boolean isEscape() { return value == 27; }
     public boolean isEnter() { return value == 13; }
     public boolean isTab() { return value == 9; }
+    public boolean isBackspace() { return value == 127; }
 
     public boolean isAlphaNumeric() { return Character.isAlphabetic(value) || Character.isDigit(value); }
     public char toChar() { return (char) value; }

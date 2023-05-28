@@ -2,21 +2,44 @@ package calendar.input.component;
 
 import calendar.input.InputLayer;
 import calendar.input.Key;
+import calendar.input.LayerChange;
+import calendar.state.State;
 
 public class TextBoxLayer implements InputLayer {
     private StringBuilder builder;
     private Updater<String> callback;
+    private State state;
 
-    public TextBoxLayer(Updater<String> callback) {
-        this.builder = new StringBuilder();
+    public TextBoxLayer(State state, String start, Updater<String> callback) {
+        this.builder = new StringBuilder(start);
         this.callback = callback;
+        this.state = state;
     }
 
-    public InputLayer handle(Key character) {
-        return null; // for now
+    public LayerChange handle(Key character) {
+        if(character.isEnter()) return LayerChange.exit();
+
+        if(character.isAlphaNumeric())
+            builder.append(character.toChar());
+
+        if(character.isBackspace() && builder.length() > 0)
+            builder.deleteCharAt(builder.length() - 1);
+
+        update();
+
+        return LayerChange.keep(); // for now
+    }
+
+    private void update() {
+        this.callback.update(builder.toString());
+    }
+
+    public void start() {
+        state.startEditingHover();
     }
 
     public void exit() {
-        this.callback.update(builder.toString());
+        update();
+        state.endEditingHover();
     }
 }
