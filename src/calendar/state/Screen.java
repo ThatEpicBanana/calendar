@@ -8,6 +8,7 @@ import calendar.drawing.layers.Month;
 import calendar.drawing.layers.Popup;
 import calendar.drawing.layers.SectionPopup;
 import calendar.state.State;
+import calendar.storage.EditingEvent;
 import calendar.storage.Event;
 
 public class Screen implements Drawable {
@@ -60,7 +61,7 @@ public class Screen implements Drawable {
     // adds an event popup
     // returns the event currently being edited
     // or null if the popup couldn't be created
-    public boolean addAddEventPopup(Event event) { 
+    public boolean addAddEventPopup(EditingEvent event) { 
         return addPopup(new AddEventPopup(popupWidth(), event, state));
     }
 

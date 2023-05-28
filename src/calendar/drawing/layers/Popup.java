@@ -30,6 +30,9 @@ public class Popup implements Drawable {
     protected int line(int y) { return y + 2; }
     protected int maxLines() { return height() - 4; }
 
+    protected int hover() { return state.popupHover(); }
+    protected boolean selected(int y) { return hover() == y; }
+
     protected void drawText(Canvas canvas, String text, int textline) 
         { drawText(canvas, text, textline, null, null); }
     protected void drawText(Canvas canvas, String text, int textline, Color foreground, Color background) {

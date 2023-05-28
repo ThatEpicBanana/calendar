@@ -7,6 +7,7 @@ import calendar.input.layer.AddEventInputLayer;
 import calendar.input.InputLayer;
 import calendar.input.layer.SectionInputLayer;
 import calendar.storage.Calendar;
+import calendar.storage.EditingEvent;
 import calendar.storage.Event;
 import calendar.util.Vec2;
 
@@ -75,7 +76,7 @@ public class State {
     }
 
     public InputLayer showEventPopup() {
-        Event event = calendar.createDefaultEvent();
+        EditingEvent event = calendar.createDefaultEvent();
         if (screen.addAddEventPopup(event))
             return new AddEventInputLayer(this, event);
         else 

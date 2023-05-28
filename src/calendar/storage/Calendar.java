@@ -38,13 +38,8 @@ public class Calendar {
     }
 
 
-    public Event createDefaultEvent() {
-        LocalDateTime time = state.date().atTime(12, 0);
-        Section section = sections.get(0);
-
-        if(section == null) return null;
-
-        return new Event(this, section, "Add Event", time, time);
+    public EditingEvent createDefaultEvent() {
+        return new EditingEvent(this);
     }
 
     public Event addEvent(Section section, String name, LocalDateTime start, LocalDateTime end) {
@@ -59,6 +54,11 @@ public class Calendar {
         section.add(event);
         state().updateScreen();
         return event;
+    }
+
+    public void addEvent(EditingEvent event) {
+        Event toAdd = event.toEvent();
+        toAdd.section().add(toAdd);
     }
     
     public void moveEvent(Event event, Section to) {

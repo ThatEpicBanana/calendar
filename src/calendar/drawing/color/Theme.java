@@ -71,7 +71,7 @@ public enum Theme {
 
         // for when the background is a highlight
         public Color editingForeground() { return crust(); }
-        public Color editingBackground() { return surface2(); }
+        public Color editingBackground() { return surface0(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }

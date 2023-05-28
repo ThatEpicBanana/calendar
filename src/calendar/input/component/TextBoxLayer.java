@@ -8,18 +8,23 @@ import calendar.state.State;
 public class TextBoxLayer implements InputLayer {
     private StringBuilder builder;
     private Updater<String> callback;
+    private Updater<String> finalizer;
     private State state;
 
     public TextBoxLayer(State state, String start, Updater<String> callback) {
+        this(state, start, callback, callback);
+    }
+
+    public TextBoxLayer(State state, String start, Updater<String> callback, Updater<String> finalize) {
         this.builder = new StringBuilder(start);
         this.callback = callback;
+        this.finalizer = finalize;
         this.state = state;
     }
 
     public LayerChange handle(Key character) {
         if(character.isEnter()) return LayerChange.exit();
 
-        // todo: accept all ascii
         if(character.isAscii())
             builder.append(character.toChar());
 
@@ -29,13 +34,9 @@ public class TextBoxLayer implements InputLayer {
         if(character.isSpace())
             builder.append(' ');
 
-        update();
+        this.callback.update(builder.toString());
 
         return LayerChange.keep(); // for now
-    }
-
-    private void update() {
-        this.callback.update(builder.toString());
     }
 
     public void start() {
@@ -43,7 +44,7 @@ public class TextBoxLayer implements InputLayer {
     }
 
     public void exit() {
-        update();
+        this.finalizer.update(builder.toString());
         state.endEditingHover();
     }
 }
