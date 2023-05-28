@@ -34,7 +34,7 @@ public class Main {
         //   - and provides methods to change them
         // - drawing
         //   - drawing the screen based on the state
-        //   - all centered in Screen.java
+        //   - all centered in state/Screen.java
         //   - based on a Canvas, which holds 2d arrays for the text and color
         //   - each seperate component writes to its own Canvas which all get combined
         // - input
@@ -64,7 +64,7 @@ public class Main {
         State state = setupTestState(dimensions);
 
         Input input = new Input();
-        InputLayer layer = state.showSectionPopup();
+        InputLayer layer = state.showEventPopup();
         input.push(layer);
 
         input.inputLoop();
