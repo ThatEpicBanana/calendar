@@ -7,6 +7,8 @@ import calendar.input.Key;
 import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.State;
+import calendar.storage.Event;
+import calendar.storage.Section;
 
 public class MonthLayer implements InputLayer {
     private State state;
@@ -31,6 +33,10 @@ public class MonthLayer implements InputLayer {
                 return LayerChange.switchTo(state.showSectionPopup());
             case '?':
                 return LayerChange.switchTo(state.showHelpPopup(help()));
+            case 'p':
+                return LayerChange.switchTo(state.showPreferencesPopup());
+            case 'r':
+                return removeEvents();
         }
 
         if(character.isUp() && day > 7)
@@ -59,6 +65,11 @@ public class MonthLayer implements InputLayer {
         day = 1;
     }
 
+    private LayerChange removeEvents() {
+        state.calendar.removeEventsOnDay(date());
+        return LayerChange.keep();
+    }
+
     private String[] help() {
         return new String[]{
             "(arrows) (hjkl)", "move between days",
@@ -70,8 +81,10 @@ public class MonthLayer implements InputLayer {
             "(H) (s-left)", "< month",
             "(L) (s-right)", "month >",
             "",
-            "(s)", "manage sections",
-            "(a)", "add event"
+            "(s) manage sections",
+            "(a) add event",
+            "(r) remove events",
+            "(p) preferences"
         };
     }
 

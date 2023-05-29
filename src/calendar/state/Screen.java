@@ -7,10 +7,9 @@ import calendar.drawing.layers.AddEventPopup;
 import calendar.drawing.layers.HelpPopup;
 import calendar.drawing.layers.Month;
 import calendar.drawing.layers.Popup;
+import calendar.drawing.layers.PreferencesPopup;
 import calendar.drawing.layers.SectionPopup;
-import calendar.state.State;
 import calendar.storage.EditingEvent;
-import calendar.storage.Event;
 
 public class Screen implements Drawable {
     public Month month;
@@ -70,6 +69,12 @@ public class Screen implements Drawable {
     // returns if it succeeds
     public boolean addHelpPopup(String[] text) {
         return addPopup(new HelpPopup(popupWidth(), state, text));
+    }
+
+    // adds the preferences popup
+    // returns if it succeeds
+    public boolean addPreferencesPopup() {
+        return addPopup(new PreferencesPopup(popupWidth(), state));
     }
 
 

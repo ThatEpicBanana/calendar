@@ -39,14 +39,14 @@ public enum Theme {
                 yellow(), // 35
                 green(), // 109
                 teal(), // 183
-                sapphire(), // 189
+                // sapphire(), // 189
                 sky(), // 197
                 blue(), // 220
                 lavender(), // 231
                 mauve(), // 266
                 pink(), // 316
                 red(), // 347
-                maroon() // 355
+                // maroon() // 355
             };
         }
 
@@ -56,7 +56,6 @@ public enum Theme {
         public Color offDayNum() { return subtext0(); }
 
         public Color selectedDayBack() { return mantle(); }
-        public Color selectedDayFore() { return teal(); }
 
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
@@ -113,14 +112,14 @@ public enum Theme {
                 yellow(), // 35
                 green(), // 109
                 teal(), // 183
-                sapphire(), // 189
+                // sapphire(), // 189
                 sky(), // 197
                 blue(), // 220
                 lavender(), // 231
                 mauve(), // 266
                 pink(), // 316
                 red(), // 347
-                maroon() // 355
+                // maroon() // 355
             };
         }
 
@@ -130,7 +129,6 @@ public enum Theme {
         public Color offDayNum() { return subtext0(); }
 
         public Color selectedDayBack() { return mantle(); }
-        public Color selectedDayFore() { return teal(); }
 
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
@@ -140,8 +138,8 @@ public enum Theme {
         public Color helpText() { return subtext0(); }
         public Color helpText2() { return overlay2(); }
 
-        public Color buttonText() { return Frappe.buttonText(); }
-        public Color buttonBackground() { return Frappe.buttonBackground(); }
+        public Color buttonText() { return subtext0(); }
+        public Color buttonBackground() { return surface0(); }
 
         public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
@@ -186,14 +184,14 @@ public enum Theme {
                 yellow(), // 35
                 green(), // 109
                 teal(), // 183
-                sapphire(), // 189
+                // sapphire(), // 189
                 sky(), // 197
                 blue(), // 220
                 lavender(), // 231
                 mauve(), // 266
                 pink(), // 316
                 red(), // 347
-                maroon() // 355
+                // maroon() // 355
             };
         }
 
@@ -203,7 +201,6 @@ public enum Theme {
         public Color offDayNum() { return subtext0(); }
 
         public Color selectedDayBack() { return mantle(); }
-        public Color selectedDayFore() { return teal(); }
 
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
@@ -213,8 +210,8 @@ public enum Theme {
         public Color helpText() { return subtext0(); }
         public Color helpText2() { return overlay2(); }
 
-        public Color buttonText() { return Frappe.buttonText(); }
-        public Color buttonBackground() { return Frappe.buttonBackground(); }
+        public Color buttonText() { return subtext0(); }
+        public Color buttonBackground() { return surface0(); }
 
         public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
@@ -259,14 +256,14 @@ public enum Theme {
                 yellow(), // 35
                 green(), // 109
                 teal(), // 183
-                sapphire(), // 189
+                // sapphire(), // 189
                 sky(), // 197
                 blue(), // 220
                 lavender(), // 231
                 mauve(), // 266
                 pink(), // 316
                 red(), // 347
-                maroon() // 355
+                // maroon() // 355
             };
         }
 
@@ -276,7 +273,6 @@ public enum Theme {
         public Color offDayNum() { return subtext0(); }
 
         public Color selectedDayBack() { return mantle(); }
-        public Color selectedDayFore() { return teal(); }
 
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return surface0(); }
@@ -308,7 +304,6 @@ public enum Theme {
         public Color offDayNum() { return Frappe.offDayNum(); }
 
         public Color selectedDayBack() { return Frappe.selectedDayBack(); }
-        public Color selectedDayFore() { return Frappe.selectedDayFore(); }
 
         public Color overflowText() { return text(); }
         public Color overflowHighlight() { return Frappe.overflowHighlight(); }
@@ -327,7 +322,7 @@ public enum Theme {
         public Color error() { return Frappe.error(); }
     };
 
-    public static final int HIGHLIGHT_COUNT = 14;
+    public static final int HIGHLIGHT_COUNT = 12;
 
     public abstract Color text();
     public abstract Color background();
@@ -339,7 +334,6 @@ public enum Theme {
     public abstract Color offDayNum();
 
     public abstract Color selectedDayBack();
-    public abstract Color selectedDayFore();
 
     public abstract Color overflowText();
     public abstract Color overflowHighlight();
@@ -356,4 +350,12 @@ public enum Theme {
     public abstract Color editingBackground();
 
     public abstract Color error();
+
+    public Color monthToColor(int month) {
+        return highlights()[trueMod(month - 1 - 6, HIGHLIGHT_COUNT)];
+    }
+
+    private int trueMod(int a, int by) {
+        return ((a % by) + by) % by;
+    }
 }

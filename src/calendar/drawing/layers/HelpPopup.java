@@ -20,7 +20,7 @@ public class HelpPopup extends Popup {
     public Canvas draw() {
         Canvas canvas = super.draw();
 
-        drawText(canvas, " Help ", 0, colors().helpText(), colors().textBackground());
+        drawText(canvas, " Help ", 0, state.monthColorText(), state.monthColor());
 
         int margin = 4;
         int boxy = line(2);

@@ -6,8 +6,9 @@ import calendar.input.LayerChange;
 import calendar.input.LayerType;
 
 public class HelpLayer implements InputLayer {
-    public LayerChange handle(Key character) {
-        if(character.toChar() == 'q') return LayerChange.exit();
+    public LayerChange handle(Key key) {
+        char character = key.toChar();
+        if(character == 'q' || character == '?') return LayerChange.exit();
 
         return LayerChange.keep();
     }

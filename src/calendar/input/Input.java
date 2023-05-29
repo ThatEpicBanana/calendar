@@ -77,8 +77,6 @@ public class Input {
                 if(key != Key.UNKNOWN) {
                     state.resetError();
 
-                    // System.out.println(key);
-
                     boolean exit = handle(key);
                     if(exit) break;
                 }

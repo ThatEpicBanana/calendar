@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import calendar.drawing.color.Theme;
 import calendar.input.Input;
 import calendar.input.InputLayer;
+import calendar.state.Settings;
 import calendar.state.State;
 import calendar.storage.Calendar;
 import calendar.storage.Section;
@@ -61,7 +62,7 @@ public class Main {
 
         // set up a test state
 
-        State state = setupState(dimensions);
+        State state = setupTestState(dimensions);
         state.updateScreen();
 
         Input input = new Input(state);
@@ -71,20 +72,21 @@ public class Main {
 
     private static State setupState(Vec2 dimensions) {
         LocalDate date = LocalDate.now();
-        Theme theme = Theme.Latte;
-
-        return new State(date, theme, dimensions, new Vec2(11, 4));
+        return new State(date, dimensions, new Vec2(11, 4));
     }
 
     private static State setupTestState(Vec2 dimensions) {
         State state = setupState(dimensions);
-        LocalDate date = state.date();
+        LocalDate date = state.date().withMonth(8).withDayOfMonth(8);
 
         state.updating = false;
 
+        state.setDate(date);
+        state.screen.reinitializeMonth();
+
         Calendar calendar = state.calendar;
         Section school = calendar.addSection("schol", 1);
-        Section birthdays = calendar.addSection("birthdays", 10);
+        Section birthdays = calendar.addSection("birthdays", 9);
         Section holidays = calendar.addSection("holidays", 5);
 
         LocalDate july4 = date.withDayOfMonth(10);

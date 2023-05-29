@@ -87,5 +87,21 @@ public class Calendar {
             .collect(Collectors.toList());
     }
 
+    public void removeEventsOnDay(LocalDate date) {
+        for(Section section : sections) {
+            List<Event> events = section.events();
+
+            for(int i = 0; i < events.size(); i++) {
+                Event event = events.get(i);
+                if(event.isOnDay(date)) {
+                    events.remove(i);
+                    i--;
+                }
+            }
+        }
+
+        state.updateScreen();
+    }
+
     public List<Event> eventsInCurrentMonth() { return eventsInMonth(state().date()); }
 } 

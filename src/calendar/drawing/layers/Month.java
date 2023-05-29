@@ -67,7 +67,7 @@ public class Month extends MultiBox {
         // current month
         monthStartDate = date().withDayOfMonth(1);
         monthLength = monthStartDate.lengthOfMonth();
-        monthStart = monthStartDate.getDayOfWeek().getValue();
+        monthStart = monthStartDate.getDayOfWeek().getValue() % 7;
 
         this.initTitle();
         this.initWeek();
@@ -86,7 +86,7 @@ public class Month extends MultiBox {
 
     private static int weeksFromState(State state) {
         LocalDate start = state.date().withDayOfMonth(1);
-        int startWeekday = start.getDayOfWeek().getValue();
+        int startWeekday = start.getDayOfWeek().getValue() % 7;
         int lengthOfMonth = start.lengthOfMonth();
 
         int gridDay = lengthOfMonth - 1 + startWeekday;
@@ -125,8 +125,8 @@ public class Month extends MultiBox {
         this.boxes[1] = weekdays = new Grid(cellWidth, weekCellHeight, columns, rows, Justification.Middle);
 
         // add the day names
-        for(int day = 0; day < 7; day++)
-            weekdays.grid[day][0] = DayOfWeek.of(day + 1).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+        for(int day = 1; day <= 7; day++)
+            weekdays.grid[day % 7][0] = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
 
     private void initMonth() {
@@ -220,6 +220,9 @@ public class Month extends MultiBox {
         // basic grid
         canvas.overlay(0, 0, super.draw());
 
+        if(state.settings.colorfulMonths())
+            canvas.highlightBox(boxx[0] + 2, boxy[0] + 1, title.width() - 4, 1, colors().highlightText(), state.monthColor());
+
         drawSelected(canvas);
 
         // events
@@ -269,7 +272,7 @@ public class Month extends MultiBox {
     private void drawSelected(Canvas canvas) {
         Vec2 selected = dayToCoords(date().getDayOfMonth());
 
-        canvas.highlightBox(selected.x, selected.y, cellWidth, cellHeight, colors().selectedDayFore(), colors().selectedDayBack());
+        canvas.highlightBox(selected.x, selected.y, cellWidth, cellHeight, state.settings.selectedDayColor(), colors().selectedDayBack());
     }
 
     private void drawOverflow(Canvas canvas, int day, int week, int amount) {

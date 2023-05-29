@@ -17,7 +17,12 @@ public class SectionInputLayer implements InputLayer {
 
     public int line() { return state.popupHover(); }
     public int maxSession() { return Math.max(state.calendar.sections().size() - 1, 0); }
-    public Section section() { return state.calendar.sections().get(line()); }
+    public Section section() {
+        if(!state.calendar.sections().isEmpty())
+            return state.calendar.sections().get(line());
+        else
+            return null;
+    }
 
     public LayerChange handle(Key character) {
         // (q) exit
@@ -74,8 +79,15 @@ public class SectionInputLayer implements InputLayer {
         state.movePopupHover(1, 0, maxSession());
     }
 
-    private void nextHighlight() { section().addColor(1); }
-    private void previousHighlight() { section().addColor(-1); }
+    private void nextHighlight() {
+        if(section() != null)
+            section().addColor(1);
+    }
+
+    private void previousHighlight() {
+        if(section() != null)
+            section().addColor(-1);
+    }
 
     public LayerType type() { return LayerType.Popup; }
 }

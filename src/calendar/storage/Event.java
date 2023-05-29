@@ -45,4 +45,8 @@ public class Event implements Comparable<Event> {
         LocalDate month = time.withDayOfMonth(1);
         return sameMonth(start, month) || sameMonth(end, month);
     }
+
+    public boolean isOnDay(LocalDate date) {
+        return this.start.toLocalDate().equals(date);
+    }
 } 

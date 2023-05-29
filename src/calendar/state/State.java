@@ -2,21 +2,22 @@ package calendar.state;
 
 import java.time.LocalDate;
 
+import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.input.layer.AddEventInputLayer;
 import calendar.input.layer.HelpLayer;
+import calendar.input.layer.PreferencesLayer;
 import calendar.input.InputLayer;
 import calendar.input.layer.SectionInputLayer;
 import calendar.storage.Calendar;
 import calendar.storage.EditingEvent;
-import calendar.storage.Event;
 import calendar.util.Vec2;
 
 public class State {
     public Calendar calendar;
     public Screen screen;
+    public Settings settings;
 
-    private Theme colors;
     private LocalDate date;
 
     private int popupHover = 0;
@@ -26,15 +27,12 @@ public class State {
 
     public boolean updating = true;
 
-    public State(LocalDate date, Theme colors, Vec2 dimensions, Vec2 cell) {
+    public State(LocalDate date, Vec2 dimensions, Vec2 cell) {
         this.date = date;
-        this.colors = colors;
+        this.settings = new Settings(this);
 
         this.calendar = new Calendar(this);
         this.screen = new Screen(dimensions.x, dimensions.y, cell.x, cell.y, this);
-
-        // TODO: readd this update
-        // updateScreen();
     }
 
     public void updateScreen() {
@@ -43,18 +41,24 @@ public class State {
     }
 
     public LocalDate date() { return date; }
-    public Theme colors() { return colors; }
+    public Theme colors() { return settings.colors(); }
     public int popupHover() { return popupHover; }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
-        updateScreen();
+    public Color monthColor() {
+        if(settings.colorfulMonths())
+            return colors().monthToColor(date().getMonthValue());
+        else
+            return colors().textBackground();
     }
 
-    public void setColors(Theme colors) {
-        this.colors = colors;
-        updateScreen();
+    public Color monthColorText() {
+        if(settings.colorfulMonths())
+            return colors().highlightText();
+        else
+            return colors().text();
     }
+
+    public void setDate(LocalDate date) { this.date = date; updateScreen(); }
 
     // reset the popup line number
     // note: doesn't update the screen
@@ -112,4 +116,10 @@ public class State {
             return null;
     }
 
+    public InputLayer showPreferencesPopup() {
+        if(screen.addPreferencesPopup())
+            return new PreferencesLayer(this);
+        else
+            return null;
+    }
 }
