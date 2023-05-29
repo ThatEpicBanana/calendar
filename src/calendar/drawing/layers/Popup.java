@@ -33,6 +33,16 @@ public class Popup implements Drawable {
     protected int hover() { return state.popupHover(); }
     protected boolean selected(int y) { return hover() == y; }
 
+    public String sanitize(String text, int maxWidth, int line) {
+        int len = text.length();
+        if(selected(line) && state.editingHover())
+            // from the end
+            return text.substring(len - Math.min(len, maxWidth));
+        else
+            // from the beginning
+            return text.substring(0, Math.min(len, maxWidth));
+    }
+
     protected void drawText(Canvas canvas, String text, int textline) 
         { drawText(canvas, text, textline, null, null); }
     protected void drawText(Canvas canvas, String text, int textline, Color foreground, Color background) {

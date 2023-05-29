@@ -33,7 +33,10 @@ public class SectionPopup extends Popup {
         for(int i = 0; i < sectionLength; i++) {
             Section section = sections.get(i);
             canvas.highlightBox(margin, boxy + i, boxwidth, 1, colors().highlightText(), section.color());
-            drawText(canvas, section.title(), 2 + i);
+
+            String title = section.title();
+            title = sanitize(title, boxwidth - 6, i);
+            drawText(canvas, title, 2 + i);
         }
 
         if(sectionLength > 0) {

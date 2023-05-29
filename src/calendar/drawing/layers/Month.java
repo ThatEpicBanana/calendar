@@ -253,21 +253,32 @@ public class Month extends MultiBox {
 
         canvas.highlightBox(0, y, width(), 1, null, colors().infoLine());
 
-        int x = 2;
-
-        for(Section section : state.calendar.sections()) {
-            String text = " " + section.title() + " ";
-            canvas.drawText(text, x, y, colors().highlightText(), section.color());
-            x += text.length() + 1;
-        }
-
         String helpText = "(?) for help";
         int helpX = width() - helpText.length() - 4;
         canvas.drawText(helpText, helpX, y, colors().helpText(), null);
 
         String errorCode = state.errorCode();
         canvas.drawText(errorCode, helpX - errorCode.length() - 1, y, colors().error(), null);
+
+        int x = 2;
+
+        for(Section section : state.calendar.sections()) {
+            String text = section.title();
+            int maxWidth = helpX - x - 1;
+            if(maxWidth < 0) return;
+            text = " " + sanitize(text, maxWidth - 2) + " ";
+
+            canvas.drawText(text, x, y, colors().highlightText(), section.color());
+
+            x += text.length() + 1;
+        }
     }
+
+    // prevents a string of text from being bigger than the max width
+    private String sanitize(String text, int maxWidth) {
+        return text.substring(0, Math.max(0, Math.min(text.length(), maxWidth)));
+    }
+
 
     private void drawSelected(Canvas canvas) {
         Vec2 selected = dayToCoords(date().getDayOfMonth());
