@@ -16,13 +16,15 @@ public class PreferencesPopup extends Popup {
     public Canvas draw() {
         Canvas canvas = super.draw();
 
-        int margin = 4;
+        int margin = 5;
         int width = width() - margin * 2;
 
         drawText(canvas, " Preferences ", 0, state.monthColorText(), state.monthColor());
 
         drawText(canvas, "Theme",        3);
-        canvas.highlightBox(margin + 2, line(3), width - 4, 1, colors().text(), colors().textBackground());
+        canvas.highlightBox(margin + 2, line(3), width - 4, 1, state.monthColorText(), state.monthColor());
+
+        canvas.overlay(margin - 1, line(5) - 1, Canvas.rectangle(width + 2, 5 + 2, false));
 
         drawText(canvas, "Latte",       5);
         drawText(canvas, "Frappe",      6);
@@ -42,8 +44,11 @@ public class PreferencesPopup extends Popup {
             drawTextRight(canvas, "←", selectedLine, margin + 1);
         }
 
-        drawText(canvas, "Colorful Months " + (settings().colorfulMonths() ? '✓' : '✕'), 11);
-        canvas.highlightBox(margin, line(11), width, 1, selected(5) ? colors().text() : colors().buttonText(), colors().buttonBackground());
+        margin = 4;
+        width = width() - margin * 2;
+
+        drawText(canvas, "Colorful Months " + (settings().colorfulMonths() ? '✓' : '✕'), 12);
+        canvas.highlightBox(margin, line(12), width, 1, selected(5) ? colors().text() : colors().buttonText(), colors().buttonBackground());
 
         drawText(canvas, "Day Color", 13);
         canvas.highlightBox(margin, line(13), width, 1, colors().highlightText(), settings().selectedDayColor());
