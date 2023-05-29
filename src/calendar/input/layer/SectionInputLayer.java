@@ -15,9 +15,10 @@ public class SectionInputLayer implements InputLayer {
         this.state = state;
     }
 
-    public int line() { return state.popupHover(); }
-    public int maxSession() { return Math.max(state.calendar.sections().size() - 1, 0); }
-    public Section section() {
+    private boolean hasSections() { return state.calendar.sections().size() > 0; }
+    private int line() { return state.popupHover(); }
+    private int maxSession() { return Math.max(state.calendar.sections().size() - 1, 0); }
+    private Section section() {
         if(!state.calendar.sections().isEmpty())
             return state.calendar.sections().get(line());
         else
@@ -59,8 +60,11 @@ public class SectionInputLayer implements InputLayer {
     }
 
     private LayerChange remove() {
-        state.calendar.removeSection(line());
-        if(line() > maxSession()) state.setPopupHover(maxSession());
+        if(hasSections()) {
+            state.calendar.removeSection(line());
+            if(line() > maxSession()) state.setPopupHover(maxSession());
+        }
+
         return LayerChange.keep();
     }
 
