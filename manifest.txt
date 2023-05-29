@@ -1,0 +1,2 @@
+Main-Class: calendar.Main
+Class-Path: lib/jansi-1.18.jar lib/jline-terminal-jansi-3.23.1-SNAPSHOT.jar lib/jline-terminal-3.23.1-SNAPSHOT.jar
