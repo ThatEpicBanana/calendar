@@ -3,6 +3,7 @@ package calendar.input.layer;
 import calendar.input.InputLayer;
 import calendar.input.Key;
 import calendar.input.LayerChange;
+import calendar.input.LayerType;
 import calendar.input.component.TextBoxLayer;
 import calendar.state.State;
 import calendar.storage.Section;
@@ -75,4 +76,6 @@ public class SectionInputLayer implements InputLayer {
 
     private void nextHighlight() { section().addColor(1); }
     private void previousHighlight() { section().addColor(-1); }
+
+    public LayerType type() { return LayerType.Popup; }
 }

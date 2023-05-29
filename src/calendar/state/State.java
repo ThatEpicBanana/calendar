@@ -14,10 +14,14 @@ import calendar.util.Vec2;
 public class State {
     public Calendar calendar;
     public Screen screen;
-    private LocalDate date;
+
     private Theme colors;
+    private LocalDate date;
+
     private int popupHover = 0;
     private boolean editingHover;
+    
+    private String errorCode = "";
 
     public boolean updating = true;
 
@@ -63,10 +67,22 @@ public class State {
 
     // might want to consider using an int and incrementing or decrementing it
     // to handle multiple layers of editing
-    // currently, though, that's impossible, so this is fine
+    // currently, though, that doesn't happen, so this is fine
     public boolean editingHover() { return this.editingHover; }
     public void startEditingHover() { this.editingHover = true; updateScreen(); }
     public void endEditingHover() { this.editingHover = false; updateScreen(); }
+
+
+    public String errorCode() { return errorCode; }
+    public void displayError(String errorCode) { this.errorCode = errorCode; updateScreen(); }
+    public void resetError() { this.errorCode = ""; updateScreen(); }
+
+
+    public void changeMonth(int by) {
+        this.date = this.date.withDayOfMonth(1).plusMonths(by);
+        screen.reinitializeMonth();
+    }
+
 
     public InputLayer showSectionPopup() {
         if(screen.addSectionPopup())
@@ -76,6 +92,11 @@ public class State {
     }
 
     public InputLayer showEventPopup() {
+        if(calendar.sections().isEmpty()) {
+            displayError("Failed to create event: please create a section (s) first");
+            return null;
+        }
+
         EditingEvent event = calendar.createDefaultEvent();
         if (screen.addAddEventPopup(event))
             return new AddEventInputLayer(this, event);

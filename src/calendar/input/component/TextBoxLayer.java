@@ -3,6 +3,7 @@ package calendar.input.component;
 import calendar.input.InputLayer;
 import calendar.input.Key;
 import calendar.input.LayerChange;
+import calendar.input.LayerType;
 import calendar.state.State;
 
 public class TextBoxLayer implements InputLayer {
@@ -47,4 +48,6 @@ public class TextBoxLayer implements InputLayer {
         this.finalizer.update(builder.toString());
         state.endEditingHover();
     }
+
+    public LayerType type() { return LayerType.Component; }
 }

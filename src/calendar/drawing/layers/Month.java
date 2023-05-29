@@ -38,7 +38,6 @@ public class Month extends MultiBox {
     // length of the month
     private int monthLength;
 
-    private static final int WEEKS = 5;
     private static final int MAX_EVENT_HEIGHT = 2;
 
     private static final int TITLE_BOTTOM = 2;
@@ -53,7 +52,7 @@ public class Month extends MultiBox {
             new int[3],
             new int[]{ 0, TITLE_BOTTOM, WEEKDAY_BOTTOM },
             Canvas.cellDimToFull(cellWidth, 7), 
-            Canvas.cellDimToFull(cellHeight, WEEKS) + WEEKDAY_BOTTOM
+            Canvas.cellDimToFull(cellHeight, weeksFromState(state)) + WEEKDAY_BOTTOM
         );
 
         this.state = state;
@@ -61,11 +60,14 @@ public class Month extends MultiBox {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
 
+        this.reinitialize();
+    }
+
+    public void reinitialize() {
         // current month
         monthStartDate = date().withDayOfMonth(1);
         monthLength = monthStartDate.lengthOfMonth();
         monthStart = monthStartDate.getDayOfWeek().getValue();
-
 
         this.initTitle();
         this.initWeek();
@@ -81,6 +83,20 @@ public class Month extends MultiBox {
     }
 
     private Theme colors() { return state.colors(); }
+
+    private static int weeksFromState(State state) {
+        LocalDate start = state.date();
+        int startWeekday = start.getDayOfWeek().getValue();
+        int lengthOfMonth = start.lengthOfMonth();
+
+        int gridDay = lengthOfMonth - 1 + startWeekday;
+
+        return gridDay / 7 + 1;
+    }
+
+    public int weeks() {
+        return dayToGridDay(monthLength) / 7 + 1;
+    }
 
     // initializing grids //
 
@@ -119,7 +135,7 @@ public class Month extends MultiBox {
         this.boxx[2] = x;
         
         // 1-height single row
-        int columns = 7, rows = WEEKS;
+        int columns = 7, rows = weeks();
 
         this.boxes[2] = month = new Grid(cellWidth, cellHeight, columns, rows, Justification.Right);
 
@@ -148,7 +164,7 @@ public class Month extends MultiBox {
         int nextStartDay = monthStart + monthLength;
 
         // next month
-        for(int day = 0; day + nextStartDay < 7 * WEEKS; day++) {
+        for(int day = 0; day + nextStartDay < 7 * weeks(); day++) {
             int dayAdjusted = day + nextStartDay;
             setOffDay(day, dayAdjusted);
         }
@@ -170,39 +186,14 @@ public class Month extends MultiBox {
         this.month.background[dayOfWeek][week] = colors().offDayBack();
     }
 
-    // drawing //
+    // coordinate helpers //
 
-    public Canvas draw() {
-        Canvas canvas = new Canvas(width(), height(), colors().text(), colors().background());
-
-        // basic grid
-        canvas.overlay(0, 0, super.draw());
-
-        // events
-        // notice that these are sorted
-        List<Event> events = state.calendar.eventsInCurrentMonth();
-
-        boolean[][][] alreadyDrawn = new boolean[7][WEEKS][cellHeight - 1];
-        int[][] overflow = new int[7][WEEKS];
-
-        for(Event event : events)
-            drawEvent(canvas, event, alreadyDrawn, overflow);
-         
-        for(int day = 0; day < 7; day++)
-            for(int week = 0; week < WEEKS; week++)
-                if(overflow[day][week] > 0)
-                    drawOverflow(canvas, day, week, overflow[day][week]);
-
-        drawSelected(canvas);
-        drawInfoLine(canvas);
-
-        return canvas;
+    private int dayToGridDay(int day) {
+        return day - 1 + monthStart;
     }
 
-    public int height() { return super.height() + 1; }
-
     private Vec2 dayToCoords(int day) {
-        return gridDayToCoords(day - 1 + monthStart);
+        return gridDayToCoords(dayToGridDay(day));
     }
 
     private Vec2 gridDayToCoords(int gridDay) {
@@ -212,12 +203,47 @@ public class Month extends MultiBox {
         return gridToCoords(day, week);
     }
 
-    private Vec2 gridToCoords(int day, int week) {
+    public Vec2 gridToCoords(int day, int week) {
         int x = Canvas.cellDimToFull(cellWidth, day);
         int y = Canvas.cellDimToFull(cellHeight, week) + WEEKDAY_BOTTOM;
 
         return new Vec2(x, y);
     }
+
+    // drawing //
+
+    public Canvas draw() {
+        Canvas canvas = new Canvas(width(), height(), colors().text(), colors().background());
+
+        int weeks = weeks();
+
+        // basic grid
+        canvas.overlay(0, 0, super.draw());
+
+        drawSelected(canvas);
+
+        // events
+        // notice that these are sorted
+        List<Event> events = state.calendar.eventsInCurrentMonth();
+
+        boolean[][][] alreadyDrawn = new boolean[7][weeks][cellHeight - 1];
+        int[][] overflow = new int[7][weeks];
+
+        for(Event event : events)
+            drawEvent(canvas, event, alreadyDrawn, overflow);
+         
+        for(int day = 0; day < 7; day++)
+            for(int week = 0; week < weeks; week++)
+                if(overflow[day][week] > 0)
+                    drawOverflow(canvas, day, week, overflow[day][week]);
+
+        drawInfoLine(canvas);
+
+        return canvas;
+    }
+
+    // for the info line
+    public int height() { return super.height() + 1; }
 
     private void drawInfoLine(Canvas canvas) {
         int y = height() - 1;
@@ -233,7 +259,11 @@ public class Month extends MultiBox {
         }
 
         String helpText = "(?) for help";
-        canvas.drawText(helpText, width() - helpText.length() - 4, y, colors().helpText(), null);
+        int helpX = width() - helpText.length() - 4;
+        canvas.drawText(helpText, helpX, y, colors().helpText(), null);
+
+        String errorCode = state.errorCode();
+        canvas.drawText(errorCode, helpX - errorCode.length() - 1, y, colors().error(), null);
     }
 
     private void drawSelected(Canvas canvas) {
@@ -300,11 +330,19 @@ public class Month extends MultiBox {
 
             int width = cellWidth;
 
+            // draw to the right if it isn't done
             if(gridDay < end) {
                 // extend coloring
                 width++;
                 // remove gridlines
                 for(int i = 0; i < rows; i++) canvas.text[x + cellWidth][y + i] = ' ';
+            }
+
+            // draw to the left if it's on the left edge
+            if(gridDay != start && day == 0) {
+                x--;
+                width++;
+                for(int i = 0; i < rows; i++) canvas.text[x][y + i] = ' ';
             }
 
             canvas.highlightBox(x, y, width, rows, colors().highlightText(), event.section().color());

@@ -5,6 +5,7 @@ import java.util.List;
 import calendar.input.InputLayer;
 import calendar.input.Key;
 import calendar.input.LayerChange;
+import calendar.input.LayerType;
 import calendar.state.State;
 import calendar.storage.Calendar;
 import calendar.storage.Section;
@@ -52,4 +53,6 @@ public class SectionSelectorLayer implements InputLayer {
         this.callback.update(index);
         state.endEditingHover();
     }
+
+    public LayerType type() { return LayerType.Component; }
 }

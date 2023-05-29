@@ -5,11 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Stack;
 
+import calendar.input.layer.MonthLayer;
+import calendar.state.State;
+
 public class Input {
     private Stack<InputLayer> layers;
+    private State state;
 
-    public Input() {
+    public Input(State state) {
         this.layers = new Stack<>();
+        this.state = state;
+        this.push(new MonthLayer(state));
     }
 
     private InputLayer current() {
@@ -40,12 +46,24 @@ public class Input {
 
     public void push(InputLayer layer) {
         layers.add(layer);
+        this.state.updateScreen();
     }
 
     // exits the current layer
     // returns if the inputLoop should end
     private boolean exit() {
+        LayerType type = this.layers.peek().type();
+
+        // make sure the popup removes correctly
+        if(type == LayerType.Popup) {
+            if(!state.screen.removePopup())
+                return false;
+            this.state.resetPopupHover();
+        }
+
         this.layers.pop().exit();
+        this.state.updateScreen();
+
         return this.layers.isEmpty();
     }
 
@@ -57,6 +75,10 @@ public class Input {
                 Key key = Key.next(reader);
 
                 if(key != Key.UNKNOWN) {
+                    state.resetError();
+
+                    // System.out.println(key);
+
                     boolean exit = handle(key);
                     if(exit) break;
                 }

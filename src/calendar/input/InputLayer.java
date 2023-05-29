@@ -11,4 +11,6 @@ public interface InputLayer {
 
     // does any cleanup necessary
     default void exit() {}
+
+    LayerType type();
 }

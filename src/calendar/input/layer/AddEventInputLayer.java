@@ -3,6 +3,7 @@ package calendar.input.layer;
 import calendar.input.InputLayer;
 import calendar.input.Key;
 import calendar.input.LayerChange;
+import calendar.input.LayerType;
 import calendar.input.component.SectionSelectorLayer;
 import calendar.input.component.TextBoxLayer;
 import calendar.state.State;
@@ -97,4 +98,6 @@ public class AddEventInputLayer implements InputLayer {
         state.calendar.addEvent(event);
         return LayerChange.exit();
     }
+
+    public LayerType type() { return LayerType.Popup; }
 }

@@ -72,6 +72,8 @@ public enum Theme {
         // for when the background is a highlight
         public Color editingForeground() { return crust(); }
         public Color editingBackground() { return surface0(); }
+
+        public Color error() { return red(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }
@@ -143,6 +145,8 @@ public enum Theme {
 
         public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
+
+        public Color error() { return red(); }
     },
     Macchiato {
         public Color rosewater() { return new Color(244, 219, 214); }
@@ -214,6 +218,8 @@ public enum Theme {
 
         public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
+
+        public Color error() { return red(); }
     },
     Mocha {
  	    public Color rosewater() { return new Color(245, 224, 220); }
@@ -285,6 +291,8 @@ public enum Theme {
 
         public Color editingForeground() { return new Color(0, 0, 0); }
         public Color editingBackground() { return surface2(); }
+
+        public Color error() { return red(); }
     },
     Transparent {
         public Color text() { return Frappe.text(); }
@@ -315,6 +323,8 @@ public enum Theme {
 
         public Color editingForeground() { return Frappe.editingForeground(); }
         public Color editingBackground() { return Frappe.editingBackground(); }
+
+        public Color error() { return Frappe.error(); }
     };
 
     public static final int HIGHLIGHT_COUNT = 14;
@@ -344,4 +354,6 @@ public enum Theme {
 
     public abstract Color editingForeground();
     public abstract Color editingBackground();
+
+    public abstract Color error();
 }

@@ -62,10 +62,9 @@ public class Main {
         // set up a test state
 
         State state = setupTestState(dimensions);
+        state.updateScreen();
 
-        Input input = new Input();
-        InputLayer layer = state.showEventPopup();
-        input.push(layer);
+        Input input = new Input(state);
 
         input.inputLoop();
     }

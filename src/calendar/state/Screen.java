@@ -86,6 +86,11 @@ public class Screen implements Drawable {
         return canvas;
     }
 
+    public void reinitializeMonth() {
+        this.month = new Month(state, cellWidth, cellHeight);
+        this.state.updateScreen();
+    }
+
     private void center(Canvas self, Canvas other, int offset) {
         int x = (width() - other.width()) / 2;
         int y = (height() - other.height()) / 2 + offset;
