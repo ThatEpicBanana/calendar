@@ -42,7 +42,7 @@ public class PreferencesPopup extends Popup {
             drawTextRight(canvas, "←", selectedLine, margin + 1);
         }
 
-        drawText(canvas, "Colorful Months ✕", 11);
+        drawText(canvas, "Colorful Months " + (settings().colorfulMonths() ? '✓' : '✕'), 11);
         canvas.highlightBox(margin, line(11), width, 1, selected(5) ? colors().text() : colors().buttonText(), colors().buttonBackground());
 
         drawText(canvas, "Day Color", 13);

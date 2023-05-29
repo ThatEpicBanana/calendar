@@ -3,10 +3,7 @@ package calendar;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import calendar.drawing.color.Theme;
 import calendar.input.Input;
-import calendar.input.InputLayer;
-import calendar.state.Settings;
 import calendar.state.State;
 import calendar.storage.Calendar;
 import calendar.storage.Section;
@@ -14,6 +11,9 @@ import calendar.util.Vec2;
 
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
+
+// TODO: more documentation
+// TODO: event list? not that important
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -62,7 +62,7 @@ public class Main {
 
         // set up a test state
 
-        State state = setupTestState(dimensions);
+        State state = setupState(dimensions);
         state.updateScreen();
 
         Input input = new Input(state);
