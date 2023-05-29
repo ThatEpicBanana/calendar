@@ -29,6 +29,8 @@ public class MonthLayer implements InputLayer {
                 return LayerChange.switchTo(state.showEventPopup());
             case 's':
                 return LayerChange.switchTo(state.showSectionPopup());
+            case '?':
+                return LayerChange.switchTo(state.showHelpPopup(help()));
         }
 
         if(character.isUp() && day > 7)
@@ -55,6 +57,22 @@ public class MonthLayer implements InputLayer {
     private void changeMonth(int by) {
         state.changeMonth(by);
         day = 1;
+    }
+
+    private String[] help() {
+        return new String[]{
+            "(arrows) (hjkl)", "move between days",
+            // "(k) (up) up",
+            // "(j) (down) down",
+            // "(h) (left) left",
+            // "(l) (right) right",
+            "",
+            "(H) (s-left)", "< month",
+            "(L) (s-right)", "month >",
+            "",
+            "(s)", "manage sections",
+            "(a)", "add event"
+        };
     }
 
     public LayerType type() { return LayerType.Screen; }

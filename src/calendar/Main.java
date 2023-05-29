@@ -61,7 +61,7 @@ public class Main {
 
         // set up a test state
 
-        State state = setupTestState(dimensions);
+        State state = setupState(dimensions);
         state.updateScreen();
 
         Input input = new Input(state);
@@ -69,11 +69,16 @@ public class Main {
         input.inputLoop();
     }
 
-    private static State setupTestState(Vec2 dimensions) {
-        LocalDate date = LocalDate.now().withMonth(java.time.Month.AUGUST.getValue()).withDayOfMonth(8);
+    private static State setupState(Vec2 dimensions) {
+        LocalDate date = LocalDate.now();
         Theme theme = Theme.Latte;
 
-        State state = new State(date, theme, dimensions, new Vec2(11, 4));
+        return new State(date, theme, dimensions, new Vec2(11, 4));
+    }
+
+    private static State setupTestState(Vec2 dimensions) {
+        State state = setupState(dimensions);
+        LocalDate date = state.date();
 
         state.updating = false;
 

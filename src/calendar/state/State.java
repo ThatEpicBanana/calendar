@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import calendar.drawing.color.Theme;
 import calendar.input.layer.AddEventInputLayer;
+import calendar.input.layer.HelpLayer;
 import calendar.input.InputLayer;
 import calendar.input.layer.SectionInputLayer;
 import calendar.storage.Calendar;
@@ -103,4 +104,12 @@ public class State {
         else 
             return null;
     }
+
+    public InputLayer showHelpPopup(String[] text) {
+        if(screen.addHelpPopup(text))
+            return new HelpLayer();
+        else
+            return null;
+    }
+
 }

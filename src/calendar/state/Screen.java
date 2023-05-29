@@ -4,6 +4,7 @@ import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
 import calendar.drawing.color.Theme;
 import calendar.drawing.layers.AddEventPopup;
+import calendar.drawing.layers.HelpPopup;
 import calendar.drawing.layers.Month;
 import calendar.drawing.layers.Popup;
 import calendar.drawing.layers.SectionPopup;
@@ -63,6 +64,12 @@ public class Screen implements Drawable {
     // or null if the popup couldn't be created
     public boolean addAddEventPopup(EditingEvent event) { 
         return addPopup(new AddEventPopup(popupWidth(), event, state));
+    }
+
+    // adds an info popup
+    // returns if it succeeds
+    public boolean addHelpPopup(String[] text) {
+        return addPopup(new HelpPopup(popupWidth(), state, text));
     }
 
 

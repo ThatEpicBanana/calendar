@@ -85,7 +85,7 @@ public class Month extends MultiBox {
     private Theme colors() { return state.colors(); }
 
     private static int weeksFromState(State state) {
-        LocalDate start = state.date();
+        LocalDate start = state.date().withDayOfMonth(1);
         int startWeekday = start.getDayOfWeek().getValue();
         int lengthOfMonth = start.lengthOfMonth();
 

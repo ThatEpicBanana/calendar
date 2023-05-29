@@ -1,16 +1,11 @@
 package calendar.drawing.layers;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Stream;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.color.Color;
 import calendar.state.State;
 import calendar.storage.EditingEvent;
-import calendar.storage.Event;
 
 public class AddEventPopup extends Popup {
     private EditingEvent event;
