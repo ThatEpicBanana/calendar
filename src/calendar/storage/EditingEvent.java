@@ -1,5 +1,6 @@
 package calendar.storage;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -7,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import calendar.state.State;
 
 public class EditingEvent {
     private String title;
@@ -42,15 +45,29 @@ public class EditingEvent {
 
     public String start() { return start; }
     public void setStart(String start) { this.start = start; calendar.state().updateScreen(); }
-    public void setStartChecked(String start) {
-        this.start = formatter.format(parse(start)); 
+    public void setStartChecked(String start, State state) {
+        LocalDateTime date = parse(start);
+
+        if(date == null) {
+            state.displayError(PARSE_ERROR);
+            this.start = start;
+        } else
+            this.start = formatter.format(date); 
+
         calendar.state().updateScreen();
     }
 
     public String end() { return end; }
     public void setEnd(String end) { this.end = end; calendar.state().updateScreen(); }
-    public void setEndChecked(String end) {
-        this.end = formatter.format(parse(end)); 
+    public void setEndChecked(String end, State state) {
+        LocalDateTime date = parse(end);
+
+        if(date == null) {
+            state.displayError(PARSE_ERROR);
+            this.end = end;
+        } else
+            this.end = formatter.format(date); 
+
         calendar.state().updateScreen();
     }
 
@@ -66,6 +83,9 @@ public class EditingEvent {
 
         return new Event(calendar, section, title, start, end);
     }
+
+    public static final String PARSE_ERROR = "failed to parse start/end of event";
+    public static final String EVENT_MAKE_ERROR = "failed to make event: " + PARSE_ERROR;
 
     private static Pattern NUMBER = Pattern.compile("\\d+");
     private static Pattern WORD = Pattern.compile("[a-zA-Z]+");
@@ -113,6 +133,10 @@ public class EditingEvent {
         // only add 12 if it's not already 12
         if(pm && hour != 12) hour += 12;
 
-        return LocalDateTime.of(year, month, day, hour, minute);
+        try {
+            return LocalDateTime.of(year, month, day, hour, minute);
+        } catch(DateTimeException e) {
+            return null;
+        }
     }
 }

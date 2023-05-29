@@ -257,9 +257,6 @@ public class Month extends MultiBox {
         int helpX = width() - helpText.length() - 4;
         canvas.drawText(helpText, helpX, y, colors().helpText(), null);
 
-        String errorCode = state.errorCode();
-        canvas.drawText(errorCode, helpX - errorCode.length() - 1, y, colors().error(), null);
-
         int x = 2;
 
         for(Section section : state.calendar.sections()) {
@@ -272,6 +269,9 @@ public class Month extends MultiBox {
 
             x += text.length() + 1;
         }
+
+        String errorCode = state.errorCode();
+        canvas.drawText(" " + errorCode + " ", helpX - errorCode.length() - 2, y, colors().error(), colors().infoLine());
     }
 
     // prevents a string of text from being bigger than the max width

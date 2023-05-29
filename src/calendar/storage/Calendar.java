@@ -58,7 +58,11 @@ public class Calendar {
 
     public void addEvent(EditingEvent event) {
         Event toAdd = event.toEvent();
-        toAdd.section().add(toAdd);
+        if(toAdd == null) 
+            state.displayError(EditingEvent.EVENT_MAKE_ERROR);
+        else 
+            toAdd.section().add(toAdd);
+
     }
     
     public void moveEvent(Event event, Section to) {

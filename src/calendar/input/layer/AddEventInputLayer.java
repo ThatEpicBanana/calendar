@@ -75,7 +75,7 @@ public class AddEventInputLayer implements InputLayer {
         InputLayer newLayer = new TextBoxLayer(
             state, event.start(),
             value -> event.setStart(value),
-            value -> event.setStartChecked(value)
+            value -> event.setStartChecked(value, state)
         );
         return LayerChange.switchTo(newLayer);
     }
@@ -84,7 +84,7 @@ public class AddEventInputLayer implements InputLayer {
         InputLayer newLayer = new TextBoxLayer(
             state, event.end(),
             value -> event.setEnd(value),
-            value -> event.setEndChecked(value)
+            value -> event.setEndChecked(value, state)
         );
         return LayerChange.switchTo(newLayer);
     }
