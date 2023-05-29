@@ -73,18 +73,14 @@ public class MonthLayer implements InputLayer {
     private String[] help() {
         return new String[]{
             "(arrows) (hjkl)", "move between days",
-            // "(k) (up) up",
-            // "(j) (down) down",
-            // "(h) (left) left",
-            // "(l) (right) right",
             "",
-            "(H) (s-left)", "← month",
-            "(L) (s-right)", "month →",
+            "(H) (shift-left)", "last month",
+            "(L) (shift-right)", "next month",
             "",
+            "(p) preferences",
             "(s) manage sections",
             "(a) add event",
             "(r) remove events",
-            "(p) preferences"
         };
     }
 
