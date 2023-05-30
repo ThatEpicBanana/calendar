@@ -6,6 +6,7 @@ import calendar.drawing.Canvas;
 import calendar.state.State;
 import calendar.storage.Section;
 
+// the section editing popup
 // TODO: scrolling
 public class SectionPopup extends Popup {
     public SectionPopup(int width, State state) {

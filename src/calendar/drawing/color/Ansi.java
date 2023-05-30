@@ -1,5 +1,6 @@
 package calendar.drawing.color;
 
+// utilities for dealing with ansi escape codes
 public class Ansi {
     public static final String ESC = "\033";
     public static final String RESET = ESC + "[0m";

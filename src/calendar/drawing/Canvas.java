@@ -3,6 +3,12 @@ package calendar.drawing;
 import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Color;
 
+// This is the backbone of the drawing, 
+// representing a canvas of text and its colors.
+// Each component draws on its own canvas, which 
+// get overlayed on to each other to draw the whole object.
+// This class also provides methods for drawing objects on it,
+// such as boxes, text, or colors
 public class Canvas {
     public final char[][] text;
 

@@ -3,6 +3,7 @@ package calendar.drawing.components;
 import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
 
+// a set of boxes or grids, all merged together
 public class MultiBox implements Drawable {
     public final Drawable[] boxes;
 

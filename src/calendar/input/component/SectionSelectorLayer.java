@@ -10,9 +10,13 @@ import calendar.state.State;
 import calendar.storage.Calendar;
 import calendar.storage.Section;
 
+// An input layer that handles picking a certain section
+// Generally, popups will create this layer to choose it
 public class SectionSelectorLayer implements InputLayer {
     private int index;
     private State state;
+    // a callback that gets run any time the layer gets changed
+    // for example: in order to update the selection and the screen
     private Updater<Integer> callback;
 
     private List<Section> sections() { return state.calendar.sections(); }

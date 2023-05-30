@@ -4,7 +4,7 @@ import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 
 // set of settings editable by the dialogue
-// stuff that shouldn't just be assumed
+// stuff that shouldn't just be assumed, such as the Theme
 public class Settings {
     private State state;
 

@@ -6,6 +6,8 @@ import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
 
+// a generic popup
+// generally a tall rectangle with rows of text
 public class Popup implements Drawable {
     private final int width;
     private final int height = 18;

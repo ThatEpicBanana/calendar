@@ -1,5 +1,6 @@
 package calendar.util;
 
+// a vector of an x and y
 public class Vec2 {
     public int x;
     public int y;

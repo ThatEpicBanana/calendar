@@ -2,6 +2,10 @@ package calendar.drawing;
 
 import java.util.HashMap;
 
+// utilities for the unicode box chars
+// ┌┐
+// └┘
+// especially used for drawing.components.grid
 public class BoxChars {
     // map of the basic light unicode box chars
     // each axis represents if the line is present in that direction

@@ -5,6 +5,7 @@ import calendar.drawing.color.Color;
 import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 
+// a grid of text boxes, each with their own color
 public class Grid implements Drawable {
     private int width;
     private int height;

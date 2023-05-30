@@ -11,6 +11,9 @@ import java.util.regex.Pattern;
 
 import calendar.state.State;
 
+// Represents an event before editing is finished
+// This is necessary as the dates may or may not be correct while editing
+// This can be morphed into an event using toEvent
 public class EditingEvent {
     private String title;
 

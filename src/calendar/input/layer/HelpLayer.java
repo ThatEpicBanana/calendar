@@ -5,6 +5,8 @@ import calendar.input.Key;
 import calendar.input.LayerChange;
 import calendar.input.LayerType;
 
+// an input layer for any help layer
+// very simple, just exits when q or ? is pressed
 public class HelpLayer implements InputLayer {
     public LayerChange handle(Key key) {
         char character = key.toChar();

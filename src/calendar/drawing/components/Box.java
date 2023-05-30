@@ -4,6 +4,7 @@ import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 
+// a rectangle with some text in it
 public class Box implements Drawable {
     private int width;
     private int height;

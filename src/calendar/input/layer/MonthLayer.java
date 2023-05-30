@@ -7,9 +7,9 @@ import calendar.input.Key;
 import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.State;
-import calendar.storage.Event;
-import calendar.storage.Section;
 
+// the input layer for the month screen
+// handles moving throughout the month, or opening popups
 public class MonthLayer implements InputLayer {
     private State state;
 

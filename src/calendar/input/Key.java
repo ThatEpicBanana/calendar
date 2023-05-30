@@ -3,6 +3,9 @@ package calendar.input;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+// a key inputted to the screen
+// includes all alphanumeric keys
+// as well as others such as enter or escape
 public class Key {
     private int value;
 
@@ -71,8 +74,8 @@ public class Key {
     }
 
     // decodes the next key in the stream
-    // this may take multiple values in the stream if an escape key is present
-    // to decode an ANSI escape code
+    // this may take multiple values in the stream 
+    // if an escape key is present, to decode an ANSI escape code
     public static Key next(BufferedReader reader) throws IOException {
         int integer = reader.read();
 
@@ -108,6 +111,7 @@ public class Key {
         return UNKNOWN;
     }
 
+    // shift-arrow keys look like "<esc>[1;2<direction>"
     private static Key decodeEscape1(BufferedReader reader) throws IOException {
         if((char) reader.read() != ';') return UNKNOWN;
         if((char) reader.read() != '2') return UNKNOWN;

@@ -11,6 +11,9 @@ import calendar.drawing.layers.PreferencesPopup;
 import calendar.drawing.layers.SectionPopup;
 import calendar.storage.EditingEvent;
 
+// represents the entire drawable screen - month and popup
+// when drawing, it centers them both onto the terminal screen
+// it also handles the creation and destruction of popups
 public class Screen implements Drawable {
     public Month month;
     public Popup popup;

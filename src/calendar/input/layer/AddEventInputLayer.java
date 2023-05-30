@@ -9,6 +9,8 @@ import calendar.input.component.TextBoxLayer;
 import calendar.state.State;
 import calendar.storage.EditingEvent;
 
+// the input layer for the add event popup
+// allows the user to add an event, nothing else
 public class AddEventInputLayer implements InputLayer {
     private State state;
     private EditingEvent event;

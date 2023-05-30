@@ -6,6 +6,7 @@ import calendar.drawing.color.Theme;
 import calendar.state.Settings;
 import calendar.state.State;
 
+// the settings dialogue
 public class PreferencesPopup extends Popup {
     public PreferencesPopup(int width, State state) {
         super(width, state);

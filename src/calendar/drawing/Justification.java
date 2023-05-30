@@ -1,6 +1,6 @@
 package calendar.drawing;
 
-// this is a bit of a wacky class, but just cope
+// An enum that provides methods for justifying some text on a box
 public enum Justification {
     Middle {
         public void write(Canvas canvas, String string, int x, int y, int width, int height, int yoffset) {

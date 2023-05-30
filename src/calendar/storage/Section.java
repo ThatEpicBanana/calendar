@@ -7,9 +7,11 @@ import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
 
+// represents a section of events in the calendar
+// it holds its own set of events, allowing the user to sort them
+// (although that isn't implemented just yet)
 public class Section {
     private Calendar calendar;
-    // it's fine to mutate these because the drawing changes
     private String title;
     private int color; 
 

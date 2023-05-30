@@ -22,6 +22,11 @@ import calendar.storage.Event;
 import calendar.storage.Section;
 import calendar.util.Vec2;
 
+// draws the entire month
+// - title
+// - weekdays
+// - days
+// - events
 public class Month extends MultiBox {
     private int cellWidth;
     private int cellHeight;
@@ -227,6 +232,7 @@ public class Month extends MultiBox {
 
         // events
         // notice that these are sorted
+        // TODO: filter events in certain sections
         List<Event> events = state.calendar.eventsInCurrentMonth();
 
         boolean[][][] alreadyDrawn = new boolean[7][weeks][cellHeight - 1];
@@ -296,6 +302,7 @@ public class Month extends MultiBox {
 
     // precondition: no events can have already been drawn in front of the currently drawing event
     private void drawEvent(Canvas canvas, Event event, boolean[][][] alreadyDrawn, int[][] overflow) {
+        // TODO: add cool time maybe? definitely put it in settings if so
         List<String> text = splitBounded(event.title(), cellWidth - 2);
         int rows = text.size();
 

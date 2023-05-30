@@ -8,6 +8,9 @@ import java.util.Stack;
 import calendar.input.layer.MonthLayer;
 import calendar.state.State;
 
+// handles all the input in the application
+// it keeps track of each layer of the input - from the month to the popups
+// then, it forwards all inputs to the top layer
 public class Input {
     private Stack<InputLayer> layers;
     private State state;
@@ -33,7 +36,7 @@ public class Input {
         LayerChange change = current().handle(character);
         if(change.exits() && exit()) return true;
 
-        // change layer if requested
+        // changes the layer if requested
         InputLayer newLayer = change.newLayer();
         if(newLayer != null) {
             layers.push(newLayer);

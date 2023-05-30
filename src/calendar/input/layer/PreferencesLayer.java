@@ -8,6 +8,8 @@ import calendar.input.LayerType;
 import calendar.state.Settings;
 import calendar.state.State;
 
+// the input layer for the preferences dialogue
+// it is the thing that actually changes the preferences
 public class PreferencesLayer implements InputLayer {
     private State state;
 

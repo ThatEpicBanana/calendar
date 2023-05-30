@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 
 import calendar.state.State;
 
+// stores all the data of a calendar
+// it maintains a list of sections, who each have their own lists of events
+// it also provides methods to add or remove sections and events
 public class Calendar {
     private ArrayList<Section> sections = new ArrayList<>();
 

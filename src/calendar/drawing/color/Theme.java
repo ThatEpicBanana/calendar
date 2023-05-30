@@ -1,5 +1,9 @@
 package calendar.drawing.color;
 
+// an enum for all the themes
+// each theme is taken from catppuccin
+// it can be changed in the settings,
+// and thus is held by it
 public enum Theme {
     Latte {
         public Color rosewater() { return new Color(220, 138, 120); }

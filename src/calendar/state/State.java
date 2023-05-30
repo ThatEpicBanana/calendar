@@ -13,6 +13,9 @@ import calendar.storage.Calendar;
 import calendar.storage.EditingEvent;
 import calendar.util.Vec2;
 
+// represents the entire state of the application
+// it acts as a communicator between the 
+// drawing (screen), storage (calendar), settings, and input
 public class State {
     public Calendar calendar;
     public Screen screen;

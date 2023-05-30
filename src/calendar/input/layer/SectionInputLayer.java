@@ -8,6 +8,8 @@ import calendar.input.component.TextBoxLayer;
 import calendar.state.State;
 import calendar.storage.Section;
 
+// the input layer for the section popup
+// allows for the user to add, remove, and change sections
 public class SectionInputLayer implements InputLayer {
     private State state;
 

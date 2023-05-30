@@ -3,6 +3,7 @@ package calendar.storage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+// represents a simple event, with a title, start, end, and section
 public class Event implements Comparable<Event> {
     private String title;
 

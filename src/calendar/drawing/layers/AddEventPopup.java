@@ -7,6 +7,7 @@ import calendar.drawing.color.Color;
 import calendar.state.State;
 import calendar.storage.EditingEvent;
 
+// the popup for adding an event
 public class AddEventPopup extends Popup {
     private EditingEvent event;
 

@@ -6,10 +6,16 @@ import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.State;
 
+// An InputLayer for inputting some text
 public class TextBoxLayer implements InputLayer {
-    private StringBuilder builder;
+    // a callback that gets run any time the layer gets changed
+    // for example: in order to update the selection and the screen
     private Updater<String> callback;
+    // a callback that gets run at the end of editing
     private Updater<String> finalizer;
+
+    // iteratively builds the string
+    private StringBuilder builder;
     private State state;
 
     public TextBoxLayer(State state, String start, Updater<String> callback) {

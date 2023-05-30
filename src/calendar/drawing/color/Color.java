@@ -1,5 +1,6 @@
 package calendar.drawing.color;
 
+// represents a simple color
 public class Color {
     public int r;
     public int g;
