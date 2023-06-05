@@ -122,6 +122,20 @@ public class Canvas {
         return this;
     }
 
+    public Canvas drawTextCentered(String string, int y, int width) 
+        { return this.drawTextCentered(string, 0, y, width); }
+    public Canvas drawTextCentered(String string, int x, int y, int width) {
+        x += (width - string.length()) / 2;
+        return this.drawText(string, x, y);
+    }
+
+    public Canvas drawTextRight(String string, int y, int width) 
+        { return this.drawTextRight(string, 0, y, width); }
+    public Canvas drawTextRight(String string, int x, int y, int width) {
+        x = x + width - string.length() - 1;
+        return this.drawText(string, x, y);
+    }
+
 
     // overlaying //
 

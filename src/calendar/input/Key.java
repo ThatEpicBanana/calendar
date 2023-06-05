@@ -10,6 +10,7 @@ public class Key {
     private int value;
 
     public Key(int value) { this.value = value; }
+    public Key(char value) { this.value = value; }
 
     public boolean isEscape() { return value == 27; }
     public boolean isEnter() { return value == 13; }

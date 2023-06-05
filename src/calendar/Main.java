@@ -63,6 +63,7 @@ public class Main {
         // set up a test state
 
         State state = setupState(dimensions);
+
         state.updateScreen();
 
         Input input = new Input(state);

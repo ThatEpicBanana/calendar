@@ -43,6 +43,9 @@ public class Event implements Comparable<Event> {
     private boolean sameMonth(LocalDateTime a, LocalDate b) { return a.getYear() == b.getYear() && a.getMonth() == b.getMonth(); }
 
     public boolean inMonth(LocalDate time) {
+        // LocalDateTime monthStart = time.withDayOfMonth(1).atTime(0, 0);
+        // LocalDateTime monthEnd = time.withDayOfMonth(time.lengthOfMonth()).atTime(23, 59);
+        // return start.isBefore(monthEnd) && end.isAfter(monthStart);
         LocalDate month = time.withDayOfMonth(1);
         return sameMonth(start, month) || sameMonth(end, month);
     }

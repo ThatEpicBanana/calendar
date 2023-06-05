@@ -57,6 +57,8 @@ public class SectionInputLayer implements InputLayer {
 
     private LayerChange edit() {
         Section section = section();
+        if(section == null) return LayerChange.keep();
+
         InputLayer newLayer = new TextBoxLayer(state, section().title(), value -> section.setTitle(value));
         return LayerChange.switchTo(newLayer);
     }
