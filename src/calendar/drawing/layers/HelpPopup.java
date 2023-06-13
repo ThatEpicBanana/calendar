@@ -21,21 +21,22 @@ public class HelpPopup extends Popup {
 
     public Canvas draw() {
         Canvas canvas = super.draw();
+        Canvas inset = canvas.offsetMargin(2);
 
-        drawText(canvas, " Help ", 0, state.monthColorText(), state.monthColor());
+        inset.textCentered(" Help ", 0, state.monthColorText(), state.monthColor());
 
-        int margin = 4;
-        int boxy = line(2);
-        int boxwidth = width() - margin * 2;
-        int boxheight = maxLines() - 2;
+        int margin = 2;
+        int boxy = 2;
+        int boxwidth = inset.width() - margin * 2;
+        int boxheight = inset.height() - 2;
 
         // box
-        canvas.highlightBox(margin,  boxy, boxwidth, boxheight, colors().helpText(), colors().textBackground());
+        inset.highlightBox(margin, boxy, boxwidth, boxheight, colors().helpText(), colors().textBackground());
 
         for(int i = 0; i < rows.length; i++) {
             String textrow = rows[i];
             int x = margin + (boxwidth - textrow.length()) / 2;
-            canvas.text(rows[i], x, boxy + i);
+            inset.text(rows[i], x, boxy + i);
         }
 
         return canvas;

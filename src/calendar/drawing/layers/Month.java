@@ -110,25 +110,25 @@ public class Month implements Drawable {
     private void drawTitle(Canvas canvas, Vec2 dims) {
         String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
 
-        canvas.textCentered(name, 1, dims.x);
+        canvas.textCentered(name, 1);
     }
 
-    private void drawWeekday(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims) {
+    private void drawWeekday(Canvas canvas, Vec2 gridCoord, Vec2 cellDims) {
         int day = gridCoord.x == 0 ? 7 : gridCoord.x;
         String name = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
-        canvas.textCentered(name, realCoord.x, realCoord.y, cellDims.x);
+        canvas.textCentered(name, 0);
     }
 
-    private void drawDay(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims) {
+    private void drawDay(Canvas canvas, Vec2 gridCoord, Vec2 cellDims) {
         LocalDate cellDate = gridToDayOfMonth(gridCoord);
         String name = cellDate.getDayOfMonth() + "";
 
-        canvas.textRight(name, realCoord.x, realCoord.y + cellDims.y - 1, cellDims.x);
+        canvas.textRight(name, cellDims.y - 1);
 
         // other month days
         if(!cellDate.getMonth().equals(date().getMonth()))
-            canvas.highlightBox(realCoord.x, realCoord.y, cellDims.x, cellDims.y, colors().offDayNum(), colors().offDayBack());
+            canvas.highlightBox(0, 0, cellDims.x, cellDims.y, colors().offDayNum(), colors().offDayBack());
     }
 
     // drawing //
@@ -275,14 +275,14 @@ public class Month implements Drawable {
                 // extend coloring
                 width++;
                 // remove gridlines
-                for(int i = 0; i < rows; i++) canvas.text[x + cellWidth()][y + i] = ' ';
+                for(int i = 0; i < rows; i++) canvas.set(x + cellWidth(), y + i, ' ');
             }
 
             // draw to the left if it's on the left edge
             if(gridDay != start && day == 0) {
                 x--;
                 width++;
-                for(int i = 0; i < rows; i++) canvas.text[x][y + i] = ' ';
+                for(int i = 0; i < rows; i++) canvas.set(x, y + i, ' ');
             }
 
             canvas.highlightBox(x, y, width, rows, colors().highlightText(), event.section().color());

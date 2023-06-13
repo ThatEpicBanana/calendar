@@ -14,7 +14,7 @@ public class Grid implements Drawable {
     private boolean heavy;
 
     public interface CellDrawer {
-        public void draw(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims);
+        public void draw(Canvas canvas, Vec2 gridCoord, Vec2 cellDims);
     }
 
     public Grid(int cellWidth, int cellHeight, int columns, int rows, boolean heavy, CellDrawer drawer) {
@@ -49,7 +49,9 @@ public class Grid implements Drawable {
             for(int row = 0; row < rows(); row++) {
                 Vec2 grid = new Vec2(column, row);
                 Vec2 real = gridPosToReal(grid);
-                drawer.draw(canvas, grid, real, cellDims);
+
+                Canvas inset = canvas.offset(real.x, real.y, cellDims.x, cellDims.y);
+                drawer.draw(inset, grid, cellDims);
             }
         }
 

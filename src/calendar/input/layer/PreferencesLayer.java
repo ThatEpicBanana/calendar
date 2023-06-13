@@ -43,9 +43,9 @@ public class PreferencesLayer implements InputLayer {
             state.movePopupHover(-1, 0, 6);
         else if(character.isDown()) 
             state.movePopupHover(1, 0, 6);
-        else if(character.isLeft())
+        else if(character.isLeft() && line() == 6)
             config().changeSelectedDayColor(-1);
-        else if(character.isRight())
+        else if(character.isRight() && line() == 6)
             config().changeSelectedDayColor(1);
 
         return LayerChange.keep();
