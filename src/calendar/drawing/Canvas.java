@@ -23,7 +23,7 @@ public class Canvas {
     public Canvas(int width, int height, Color foreground, Color background) {
         this(width, height);
 
-        this.fillColor(foreground, background);
+        this.fill(foreground, background);
     }
 
     public Canvas(int width, int height) {
@@ -33,7 +33,7 @@ public class Canvas {
         text = new char[width][height];
         foreground = new Color[width][height];
         background = new Color[width][height];
-        this.fillWith(' ');
+        this.fill(' ');
     }
 
     // getters //
@@ -43,7 +43,7 @@ public class Canvas {
 
     // fil //
 
-    public void fillWith(char val) {
+    public void fill(char val) {
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
                 this.text[x][y] = ' ';
@@ -51,7 +51,7 @@ public class Canvas {
 
     // colors //
 
-    public void fillColor(Color foreground, Color background) {
+    public void fill(Color foreground, Color background) {
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
                 this.highlight(x, y, foreground, background);
@@ -90,7 +90,7 @@ public class Canvas {
             builder.append('\n');
         }
 
-        builder.deleteCharAt(builder.length() - 1);
+        builder.deleteCharAt(builder.length() - 1); // remove the last newline
 
         builder.append(Ansi.RESET + Ansi.HOME);
 
@@ -104,13 +104,13 @@ public class Canvas {
 
     // text //
 
-    public Canvas drawText(String string, int x, int y, Color foreground, Color background) {
+    public Canvas text(String string, int x, int y, Color foreground, Color background) {
         return this
-            .drawText(string, x, y)
+            .text(string, x, y)
             .highlightBox(x, y, string.length(), 1, foreground, background);
     }
 
-    public Canvas drawText(String string, int x, int y) {
+    public Canvas text(String string, int x, int y) {
         int length = string.length();
         int minchar = x < 0 ? -x : 0;
         int maxchar = Math.min(width - x, length);
@@ -122,18 +122,16 @@ public class Canvas {
         return this;
     }
 
-    public Canvas drawTextCentered(String string, int y, int width) 
-        { return this.drawTextCentered(string, 0, y, width); }
-    public Canvas drawTextCentered(String string, int x, int y, int width) {
+    public Canvas textCentered(String string, int y, int width) { return this.textCentered(string, 0, y, width); }
+    public Canvas textCentered(String string, int x, int y, int width) {
         x += (width - string.length()) / 2;
-        return this.drawText(string, x, y);
+        return this.text(string, x, y);
     }
 
-    public Canvas drawTextRight(String string, int y, int width) 
-        { return this.drawTextRight(string, 0, y, width); }
-    public Canvas drawTextRight(String string, int x, int y, int width) {
+    public Canvas textRight(String string, int y, int width) { return this.textRight(string, 0, y, width); }
+    public Canvas textRight(String string, int x, int y, int width) {
         x = x + width - string.length() - 1;
-        return this.drawText(string, x, y);
+        return this.text(string, x, y);
     }
 
 
@@ -194,11 +192,11 @@ public class Canvas {
 
     // line drawing //
 
-    public Canvas drawVertical(int x, int start, int end, boolean heavy)
-        { return this.drawVertical(x, start, end, heavy ? BoxChars.heavy : BoxChars.light); }
+    public Canvas verticalLine(int x, int start, int end, boolean heavy)
+        { return this.verticalLine(x, start, end, heavy ? BoxChars.heavy : BoxChars.light); }
 
     // writes a vertical line at x from start to end, inclusive
-    private Canvas drawVertical(int x, int start, int end, char[][][][] chars) {
+    private Canvas verticalLine(int x, int start, int end, char[][][][] chars) {
         char vertical = chars[1][1][0][0]; // │
 
         for(int y = start; y <= end; y++)
@@ -208,11 +206,11 @@ public class Canvas {
         return this;
     }
 
-    public Canvas drawHorizontal(int y, int start, int end, boolean heavy)
-        { return this.drawHorizontal(y, start, end, heavy ? BoxChars.heavy : BoxChars.light); }
+    public Canvas horizontalLine(int y, int start, int end, boolean heavy)
+        { return this.horizontalLine(y, start, end, heavy ? BoxChars.heavy : BoxChars.light); }
 
     // writes a horizontal line at y from start to end, inclusive
-    private Canvas drawHorizontal(int y, int start, int end, char[][][][] chars) {
+    private Canvas horizontalLine(int y, int start, int end, char[][][][] chars) {
         char horizontal = chars[0][0][1][1]; // ─
         
         for(int x = start; x <= end; x++)
@@ -226,13 +224,13 @@ public class Canvas {
     // box drawing //
 
     // returns a Canvas with the specified rectangle to its edges
-    public static Canvas rectangle(int width, int height, boolean heavy, Color foreground, Color background) 
-        { return new Canvas(width, height, foreground, background).drawRectangle(width, height, heavy); }
-    public static Canvas rectangle(int width, int height, boolean heavy) 
-        { return rectangle(width, height, heavy, null, null); }
+    public static Canvas fromRectangle(int width, int height, boolean heavy, Color foreground, Color background) 
+        { return new Canvas(width, height, foreground, background).rectangle(width, height, heavy); }
+    public static Canvas fromRectangle(int width, int height, boolean heavy) 
+        { return fromRectangle(width, height, heavy, null, null); }
 
     // creates a rectangle filling a canvas of width and height
-    public Canvas drawRectangle(int width, int height, boolean heavy) {
+    public Canvas rectangle(int width, int height, boolean heavy) {
         char[][][][] chars = heavy ? BoxChars.heavy : BoxChars.light;
 
         final int left = 0;
@@ -245,40 +243,37 @@ public class Canvas {
         text[left][bottom] = chars[1][0][0][1]; // └
         text[right][bottom] = chars[1][0][1][0]; // ┘
         
-        drawVertical(left,  top + 1, bottom - 1, chars);
-        drawVertical(right, top + 1, bottom - 1, chars);
+        verticalLine(left,  top + 1, bottom - 1, chars);
+        verticalLine(right, top + 1, bottom - 1, chars);
 
-        drawHorizontal(top,    left + 1, right - 1, chars);
-        drawHorizontal(bottom, left + 1, right - 1, chars);
+        horizontalLine(top,    left + 1, right - 1, chars);
+        horizontalLine(bottom, left + 1, right - 1, chars);
 
         return this;
     }
 
 
-    // converts a cell width or height to what the full width or height should be
-    public static int cellDimToFull(int cell, int amount) 
+    // converts a cell length to what the full length should be
+    public static int gridLength(int cell, int amount) 
         { return (cell + 1) * amount + 1; }
 
-    public static int cellToChar(int cell, int cellDim) 
-        { return cell * (cellDim + 1) + 1; }
-
     // returns a new Canvas with the specified grid in the top left
-    public static Canvas grid(int cellWidth, int cellHeight, int columns, int rows, boolean heavy) {
-        int width = cellDimToFull(cellWidth, columns);
-        int height = cellDimToFull(cellHeight, rows);
+    public static Canvas fromGrid(int cellWidth, int cellHeight, int columns, int rows, boolean heavy) {
+        int width = gridLength(cellWidth, columns);
+        int height = gridLength(cellHeight, rows);
 
         Canvas canvas = new Canvas(width, height);
-        canvas.drawGrid(cellWidth, cellHeight, columns, rows, heavy);
+        canvas.grid(cellWidth, cellHeight, columns, rows, heavy);
         return canvas;
     }
 
-    // creates a grid of columns and rows with cells of cellWidth and cellheight
-    public Canvas drawGrid(int cellWidth, int cellHeight, int columns, int rows, boolean heavy) {
+    // draws a grid of columns and rows with inner cells of cellWidth and cellheight
+    public Canvas grid(int cellWidth, int cellHeight, int columns, int rows, boolean heavy) {
         char[][][][] chars = heavy ? BoxChars.heavy : BoxChars.light;
 
         // as of now, it just draws the grid based on the cell width and height
-        int width = cellDimToFull(cellWidth, columns);
-        int height = cellDimToFull(cellHeight, rows);
+        int width = gridLength(cellWidth, columns);
+        int height = gridLength(cellHeight, rows);
 
         // various dimensions
         final int left = 0;
@@ -290,19 +285,19 @@ public class Canvas {
         final int ydiff = cellHeight + 1;
 
         // outer rectangle
-        this.drawRectangle(width, height, heavy);
+        this.rectangle(width, height, heavy);
 
         // columns
         for(int x = xdiff; x < width - 1; x += xdiff) {
             text[x][top] = chars[0][1][1][1]; // ┬
-            this.drawVertical(x, top + 1, bottom - 1, chars); // │
+            this.verticalLine(x, top + 1, bottom - 1, chars); // │
             text[x][bottom] = chars[1][0][1][1]; // ┴
         }
         
         // rows
         for(int y = ydiff; y < height - 1; y += ydiff) {
             text[left][y] = chars[1][1][0][1]; // ├
-            this.drawHorizontal(y, left + 1, right - 1, chars); // ─
+            this.horizontalLine(y, left + 1, right - 1, chars); // ─
             text[right][y] = chars[1][1][1][0]; // ┤
         }
 

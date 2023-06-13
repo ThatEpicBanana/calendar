@@ -25,7 +25,7 @@ public class PreferencesPopup extends Popup {
         drawText(canvas, "Theme",        3);
         canvas.highlightBox(margin + 2, line(3), width - 4, 1, state.monthColorText(), state.monthColor());
 
-        canvas.overlay(margin - 1, line(5) - 1, Canvas.rectangle(width + 2, 5 + 2, false));
+        canvas.overlay(margin - 1, line(5) - 1, Canvas.fromRectangle(width + 2, 5 + 2, false));
 
         drawText(canvas, "Latte",       5);
         drawText(canvas, "Frappe",      6);

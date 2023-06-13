@@ -23,7 +23,7 @@ public class Popup implements Drawable {
     public Theme colors() { return state.colors(); }
 
     public Canvas draw() {
-        return Canvas.rectangle(width, height, true, colors().text(), colors().background());
+        return Canvas.fromRectangle(width, height, true, colors().text(), colors().background());
     }
 
     public int width() { return this.width; }
@@ -51,7 +51,7 @@ public class Popup implements Drawable {
         int x = (width() - text.length()) / 2;
         int y = line(textline);
 
-        canvas.drawText(text, x, y, foreground, background);
+        canvas.text(text, x, y, foreground, background);
     }
 
     protected void drawTextLeft(Canvas canvas, String text, int textline, int margin)
@@ -59,7 +59,7 @@ public class Popup implements Drawable {
     protected void drawTextLeft(Canvas canvas, String text, int textline, int margin, Color foreground, Color background) {
         int x = margin;
         int y = line(textline);
-        canvas.drawText(text, x, y, foreground, background);
+        canvas.text(text, x, y, foreground, background);
     }
 
     protected void drawTextRight(Canvas canvas, String text, int textline, int margin)
@@ -67,6 +67,6 @@ public class Popup implements Drawable {
     protected void drawTextRight(Canvas canvas, String text, int textline, int margin, Color foreground, Color background) {
         int x = width() - text.length() - margin;
         int y = line(textline);
-        canvas.drawText(text, x, y, foreground, background);
+        canvas.text(text, x, y, foreground, background);
     }
 }

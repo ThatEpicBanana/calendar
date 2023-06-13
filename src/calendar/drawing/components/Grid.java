@@ -43,7 +43,7 @@ public class Grid implements Drawable {
         { return gridPosToReal(gridPos, this.cellDims); }
 
     public Canvas draw() {
-        Canvas canvas = Canvas.grid(cellDims.x, cellDims.y, gridDims.x, gridDims.y, heavy);
+        Canvas canvas = Canvas.fromGrid(cellDims.x, cellDims.y, gridDims.x, gridDims.y, heavy);
 
         for(int column = 0; column < columns(); column++) {
             for(int row = 0; row < rows(); row++) {

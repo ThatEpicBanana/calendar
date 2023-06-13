@@ -26,7 +26,7 @@ public class Box implements Drawable {
     }
 
     public Canvas draw() {
-        Canvas canvas = Canvas.rectangle(width(), height(), heavy);
+        Canvas canvas = Canvas.fromRectangle(width(), height(), heavy);
 
         drawer.draw(canvas, dims);
 

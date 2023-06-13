@@ -10,10 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 import calendar.drawing.Canvas;
-import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.drawing.Drawable;
-import calendar.drawing.Justification;
 import calendar.drawing.components.Box;
 import calendar.drawing.components.Grid;
 import calendar.state.State;
@@ -112,21 +110,21 @@ public class Month implements Drawable {
     private void drawTitle(Canvas canvas, Vec2 dims) {
         String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
 
-        canvas.drawTextCentered(name, 1, dims.x);
+        canvas.textCentered(name, 1, dims.x);
     }
 
     private void drawWeekday(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims) {
         int day = gridCoord.x == 0 ? 7 : gridCoord.x;
         String name = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
-        canvas.drawTextCentered(name, realCoord.x, realCoord.y, cellDims.x);
+        canvas.textCentered(name, realCoord.x, realCoord.y, cellDims.x);
     }
 
     private void drawDay(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims) {
         LocalDate cellDate = gridToDayOfMonth(gridCoord);
         String name = cellDate.getDayOfMonth() + "";
 
-        canvas.drawTextRight(name, realCoord.x, realCoord.y + cellDims.y - 1, cellDims.x);
+        canvas.textRight(name, realCoord.x, realCoord.y + cellDims.y - 1, cellDims.x);
 
         // other month days
         if(!cellDate.getMonth().equals(date().getMonth()))
@@ -140,10 +138,10 @@ public class Month implements Drawable {
 
         int weeks = weeks();
 
-        int titleX = Canvas.cellDimToFull(cellWidth(), 2) + cellWidth() / 2;
+        int titleX = Canvas.gridLength(cellWidth(), 2) + cellWidth() / 2;
         int titleY = 0;
 
-        canvas.drawRectangle(width(), height() - 1, false);
+        canvas.rectangle(width(), height() - 1, false);
 
         canvas.merge(titleX, 0, this.title.draw());
         canvas.merge(0, TITLE_BOTTOM, this.weekdays.draw());
@@ -192,7 +190,7 @@ public class Month implements Drawable {
         int x = cell.x;
         int y = cell.y + cellHeight() - 1;
 
-        canvas.drawText(String.format(" +%d ", amount), x, y, colors().overflowText(), colors().overflowHighlight());
+        canvas.text(String.format(" +%d ", amount), x, y, colors().overflowText(), colors().overflowHighlight());
     }
 
     private void drawInfoLine(Canvas canvas) {
@@ -202,7 +200,7 @@ public class Month implements Drawable {
 
         String helpText = "(?) for help";
         int helpX = width() - helpText.length() - 4;
-        canvas.drawText(helpText, helpX, y, colors().helpText(), null);
+        canvas.text(helpText, helpX, y, colors().helpText(), null);
 
         int x = 2;
 
@@ -212,13 +210,13 @@ public class Month implements Drawable {
             if(maxWidth < 0) return;
             text = " " + sanitize(text, maxWidth - 2) + " ";
 
-            canvas.drawText(text, x, y, colors().highlightText(), section.color());
+            canvas.text(text, x, y, colors().highlightText(), section.color());
 
             x += text.length() + 1;
         }
 
         String errorCode = state.errorCode();
-        canvas.drawText(" " + errorCode + " ", helpX - errorCode.length() - 2, y, colors().error(), colors().infoLine());
+        canvas.text(" " + errorCode + " ", helpX - errorCode.length() - 2, y, colors().error(), colors().infoLine());
     }
 
     // precondition: no events can have already been drawn in front of the currently drawing event
@@ -242,7 +240,7 @@ public class Month implements Drawable {
         // text
         for(int i = 0; i < rows; i++) {
             Vec2 cell = gridToCoords(startDay, startWeek);
-            canvas.drawText(
+            canvas.text(
                 text.get(i),
                 cell.x + 1,
                 cell.y + rowOffset + i

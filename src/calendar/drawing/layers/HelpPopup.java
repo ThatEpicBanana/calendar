@@ -35,7 +35,7 @@ public class HelpPopup extends Popup {
         for(int i = 0; i < rows.length; i++) {
             String textrow = rows[i];
             int x = margin + (boxwidth - textrow.length()) / 2;
-            canvas.drawText(rows[i], x, boxy + i);
+            canvas.text(rows[i], x, boxy + i);
         }
 
         return canvas;
