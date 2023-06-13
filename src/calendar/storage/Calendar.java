@@ -1,5 +1,11 @@
 package calendar.storage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,10 +19,10 @@ import calendar.state.State;
 // stores all the data of a calendar
 // it maintains a list of sections, who each have their own lists of events
 // it also provides methods to add or remove sections and events
-public class Calendar {
+public class Calendar implements Serializable {
     private ArrayList<Section> sections = new ArrayList<>();
 
-    private State state;
+    private transient State state;
 
     public Calendar(State state) {
         this.state = state;
@@ -111,4 +117,43 @@ public class Calendar {
     }
 
     public List<Event> eventsInCurrentMonth() { return eventsInMonth(state().date()); }
+
+    // populate after deserialization
+    protected void populate(State state) {
+        this.state = state;
+
+        for(Section section : sections)
+            section.populate(this, state);
+    }
+
+    public static Calendar deserialize(String file, State state) {
+        if(new File(file).exists()) {
+            try {
+                try(FileInputStream fileInput = new FileInputStream(file)) {
+                    try(ObjectInputStream objectInput = new ObjectInputStream(fileInput)) {
+                        Calendar calendar = (Calendar) objectInput.readObject();
+                        calendar.populate(state);
+                        return calendar;
+                    }
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // TODO: some logging or something
+        return new Calendar(state);
+    } 
+
+    public void serialize(String file) {
+        try {
+            try(FileOutputStream fileOut = new FileOutputStream(file)) {
+                try(ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+                    out.writeObject(this);
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 } 

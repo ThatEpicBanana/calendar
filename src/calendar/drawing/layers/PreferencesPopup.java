@@ -3,7 +3,7 @@ package calendar.drawing.layers;
 import calendar.drawing.Canvas;
 import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
-import calendar.state.Settings;
+import calendar.state.Config;
 import calendar.state.State;
 
 // the settings dialogue
@@ -12,7 +12,7 @@ public class PreferencesPopup extends Popup {
         super(width, state);
     }
 
-    private Settings settings() { return state.settings; }
+    private Config config() { return state.config; }
 
     public Canvas draw() {
         Canvas canvas = super.draw();
@@ -48,11 +48,11 @@ public class PreferencesPopup extends Popup {
         margin = 4;
         width = width() - margin * 2;
 
-        drawText(canvas, "Colorful Months " + (settings().colorfulMonths() ? '✓' : '✕'), 12);
+        drawText(canvas, "Colorful Months " + (config().colorfulMonths() ? '✓' : '✕'), 12);
         canvas.highlightBox(margin, line(12), width, 1, selected(5) ? colors().text() : colors().buttonText(), colors().buttonBackground());
 
         drawText(canvas, "Day Color", 13);
-        canvas.highlightBox(margin, line(13), width, 1, colors().highlightText(), settings().selectedDayColor());
+        canvas.highlightBox(margin, line(13), width, 1, colors().highlightText(), config().selectedDayColor());
 
         if(selected(6)) {
             drawTextLeft(canvas, "←", 13, margin + 1);

@@ -5,7 +5,7 @@ import calendar.input.InputLayer;
 import calendar.input.Key;
 import calendar.input.LayerChange;
 import calendar.input.LayerType;
-import calendar.state.Settings;
+import calendar.state.Config;
 import calendar.state.State;
 
 // the input layer for the preferences dialogue
@@ -18,7 +18,7 @@ public class PreferencesLayer implements InputLayer {
     }
 
     private int line() { return state.popupHover(); }
-    private Settings settings() { return state.settings; }
+    private Config config() { return state.config; }
 
     public LayerChange handle(Key character) {
         if(character.toChar() == 'q' || character.toChar() == 'p') return LayerChange.exit();
@@ -44,19 +44,19 @@ public class PreferencesLayer implements InputLayer {
         else if(character.isDown()) 
             state.movePopupHover(1, 0, 6);
         else if(character.isLeft())
-            settings().changeSelectedDayColor(-1);
+            config().changeSelectedDayColor(-1);
         else if(character.isRight())
-            settings().changeSelectedDayColor(1);
+            config().changeSelectedDayColor(1);
 
         return LayerChange.keep();
     }
 
     private void toggleColorfulMonths() {
-        settings().toggleColorfulMonths();
+        config().toggleColorfulMonths();
     }
 
     private void switchTheme(Theme theme) {
-        settings().setTheme(theme);
+        config().setTheme(theme);
     }
 
     public LayerType type() { return LayerType.Popup; }

@@ -69,11 +69,13 @@ public class Main {
         Input input = new Input(state);
 
         input.inputLoop();
+
+        state.updateFiles();
     }
 
     private static State setupState(Vec2 dimensions) {
         LocalDate date = LocalDate.now();
-        return new State(date, dimensions, new Vec2(11, 4));
+        return new State(date, dimensions, new Vec2(11, 4), "calendar.ser", "config.ser");
     }
 
     private static State setupTestState(Vec2 dimensions) {

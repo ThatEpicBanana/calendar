@@ -1,17 +1,18 @@
 package calendar.storage;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 // represents a simple event, with a title, start, end, and section
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, Serializable {
     private String title;
 
     private LocalDateTime start;
     private LocalDateTime end;
 
-    private Section section;
-    private Calendar calendar;
+    private transient Section section;
+    private transient Calendar calendar;
 
     public Event(Calendar calendar, Section section, String title, LocalDateTime start, LocalDateTime end) {
         this.title = title;
@@ -52,5 +53,11 @@ public class Event implements Comparable<Event> {
 
     public boolean isOnDay(LocalDate date) {
         return this.start.toLocalDate().equals(date);
+    }
+
+    // populate after deserialization
+    protected void populate(Calendar calendar, Section section) {
+        this.calendar = calendar;
+        this.section = section;
     }
 } 

@@ -19,7 +19,7 @@ import calendar.util.Vec2;
 public class State {
     public Calendar calendar;
     public Screen screen;
-    public Settings settings;
+    public Config config;
 
     private LocalDate date;
 
@@ -30,12 +30,26 @@ public class State {
 
     public boolean updating = true;
 
+    private String calendarFile;
+    private String configFile;
+
     public State(LocalDate date, Vec2 dimensions, Vec2 cell) {
         this.date = date;
-        this.settings = new Settings(this);
-
-        this.calendar = new Calendar(this);
         this.screen = new Screen(dimensions.x, dimensions.y, cell.x, cell.y, this);
+
+        this.config = new Config(this);
+        this.calendar = new Calendar(this);
+    }
+
+    public State(LocalDate date, Vec2 dimensions, Vec2 cell, String calendarFile, String configFile) {
+        this.date = date;
+        this.screen = new Screen(dimensions.x, dimensions.y, cell.x, cell.y, this);
+
+        this.calendarFile = calendarFile;
+        this.configFile = configFile;
+
+        this.calendar = Calendar.deserialize(calendarFile, this);
+        this.config = Config.deserialize(configFile, this);
     }
 
     public void updateScreen() {
@@ -44,18 +58,18 @@ public class State {
     }
 
     public LocalDate date() { return date; }
-    public Theme colors() { return settings.colors(); }
+    public Theme colors() { return config.colors(); }
     public int popupHover() { return popupHover; }
 
     public Color monthColor() {
-        if(settings.colorfulMonths())
+        if(config.colorfulMonths())
             return colors().monthToColor(date().getMonthValue());
         else
             return colors().textBackground();
     }
 
     public Color monthColorText() {
-        if(settings.colorfulMonths())
+        if(config.colorfulMonths())
             return colors().highlightText();
         else
             return colors().text();
@@ -124,5 +138,10 @@ public class State {
             return new PreferencesLayer(this);
         else
             return null;
+    }
+
+    public void updateFiles() {
+        this.config.serialize(configFile);
+        this.calendar.serialize(calendarFile);
     }
 }

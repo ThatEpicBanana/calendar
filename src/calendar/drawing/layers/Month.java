@@ -150,7 +150,7 @@ public class Month implements Drawable {
         canvas.merge(0, WEEKDAY_BOTTOM, this.month.draw());
 
 
-        if(state.settings.colorfulMonths())
+        if(state.config.colorfulMonths())
             canvas.highlightBox(titleX + 2, titleY + 1, title.width() - 4, 1, colors().highlightText(), state.monthColor());
 
         drawSelected(canvas);
@@ -184,7 +184,7 @@ public class Month implements Drawable {
     private void drawSelected(Canvas canvas) {
         Vec2 selected = dayToCoords(date().getDayOfMonth());
 
-        canvas.highlightBox(selected.x, selected.y, cellWidth(), cellHeight(), state.settings.selectedDayColor(), colors().selectedDayBack());
+        canvas.highlightBox(selected.x, selected.y, cellWidth(), cellHeight(), state.config.selectedDayColor(), colors().selectedDayBack());
     }
 
     private void drawOverflow(Canvas canvas, int day, int week, int amount) {
