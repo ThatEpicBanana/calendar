@@ -28,6 +28,9 @@ public class Ansi {
     public static final String TO_LEFT = ESC + "[0G";
     public static final String TO_RIGHT = ESC + "[1000G";
 
+    public static final String SHOW_CURSOR = ESC + "[?25h";
+    public static final String HIDE_CURSOR = ESC + "[?25l";
+
     public static void color(StringBuilder builder, char character, Color foreground, Color background) {
         if(foreground != null && foreground != Color.FORCE_TRANSPARENT)
             builder.append(String.format(FOREGROUND, foreground.r, foreground.g, foreground.b));
@@ -39,4 +42,7 @@ public class Ansi {
 
         builder.append(character);
     }
+
+    public static void showCursor() { System.out.print(SHOW_CURSOR); }
+    public static void hideCursor() { System.out.print(HIDE_CURSOR); }
 }

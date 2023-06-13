@@ -3,6 +3,7 @@ package calendar;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import calendar.drawing.color.Ansi;
 import calendar.input.Input;
 import calendar.state.State;
 import calendar.storage.Calendar;
@@ -64,12 +65,14 @@ public class Main {
 
         State state = setupState(dimensions);
 
+        Ansi.hideCursor();
         state.updateScreen();
 
         Input input = new Input(state);
 
         input.inputLoop();
 
+        Ansi.showCursor();
         state.updateFiles();
     }
 
