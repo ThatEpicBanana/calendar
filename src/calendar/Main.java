@@ -64,6 +64,9 @@ public class Main {
         // set up a test state
 
         State state = setupState(dimensions);
+        
+        if(args.length >= 1 && args[0].equals("--headless"))
+            state.updating = false;
 
         Ansi.hideCursor();
         state.updateScreen();
