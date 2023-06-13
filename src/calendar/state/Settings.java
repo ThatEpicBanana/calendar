@@ -35,7 +35,7 @@ public class Settings {
 
     public void setTheme(Theme theme) {
         this.colors = theme; 
-        state.screen.month.reinitialize();
+        // state.screen.month.reinitialize();
         state.updateScreen();
     }
 }

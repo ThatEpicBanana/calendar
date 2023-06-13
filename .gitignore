@@ -1,5 +1,6 @@
 build/
 .DS_Store
+/calendar
 calendar.jar
 calendar
 calendar.build_artifacts.txt

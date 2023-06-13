@@ -29,7 +29,7 @@ public class SectionPopup extends Popup {
         canvas.highlightBox(margin,  boxy, boxwidth, boxheight, null, colors().textBackground());
 
         List<Section> sections = sections();
-        int sectionLength = sections.size();
+        int sectionLength = Math.min(sections.size(), boxheight);
 
         for(int i = 0; i < sectionLength; i++) {
             Section section = sections.get(i);
@@ -40,7 +40,7 @@ public class SectionPopup extends Popup {
             drawText(canvas, title, 2 + i);
         }
 
-        if(sectionLength > 0) {
+        if(sectionLength > 0 && hover() < sectionLength) {
             // current section
              drawTextLeft(canvas, "←", 2 + hover(), margin + 1);
             drawTextRight(canvas, "→", 2 + hover(), margin + 1);

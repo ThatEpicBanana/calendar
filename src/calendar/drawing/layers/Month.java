@@ -16,7 +16,6 @@ import calendar.drawing.Drawable;
 import calendar.drawing.Justification;
 import calendar.drawing.components.Box;
 import calendar.drawing.components.Grid;
-import calendar.drawing.components.MultiBox;
 import calendar.state.State;
 import calendar.storage.Event;
 import calendar.storage.Section;
@@ -27,21 +26,16 @@ import calendar.util.Vec2;
 // - weekdays
 // - days
 // - events
-public class Month extends MultiBox {
-    private int cellWidth;
-    private int cellHeight;
+public class Month implements Drawable {
+    private Vec2 cellDims;
+    private Vec2 fullDims;
+    private Vec2 monthDims;
 
     private State state;
 
     private Box title;
     private Grid weekdays;
     private Grid month;
-
-    private LocalDate monthStartDate;
-    // which weekday the month starts on
-    private int monthStart;
-    // length of the month
-    private int monthLength;
 
     private static final int MAX_EVENT_HEIGHT = 2;
 
@@ -51,157 +45,57 @@ public class Month extends MultiBox {
     // constructors //
 
     public Month(State state, int cellWidth, int cellHeight) {
-        super(
-            new Drawable[3],
-            // the first box is the title, in the middle of the third day
-            new int[3],
-            new int[]{ 0, TITLE_BOTTOM, WEEKDAY_BOTTOM },
-            Canvas.cellDimToFull(cellWidth, 7), 
-            Canvas.cellDimToFull(cellHeight, weeksFromState(state)) + WEEKDAY_BOTTOM
-        );
-
         this.state = state;
 
-        this.cellWidth = cellWidth;
-        this.cellHeight = cellHeight;
+        this.monthDims = new Vec2(7, weeks());
 
-        this.reinitialize();
-    }
+        this.cellDims = new Vec2(cellWidth, cellHeight);
+        this.fullDims = Grid.gridPosToReal(monthDims, cellDims).addY(WEEKDAY_BOTTOM + 1);
 
-    public void reinitialize() {
-        // current month
-        monthStartDate = date().withDayOfMonth(1);
-        monthLength = monthStartDate.lengthOfMonth();
-        monthStart = monthStartDate.getDayOfWeek().getValue() % 7;
-
-        this.initTitle();
-        this.initWeek();
-        this.initMonth();
+        this.title = new Box(new Vec2(cellWidth * 2 + 3, 3), false, this::drawTitle);
+        this.weekdays = new Grid(this.cellDims.withY(1), this.monthDims.withY(1), false, this::drawWeekday);
+        this.month = new Grid(cellDims, monthDims, false, this::drawDay);
     }
 
     // getters //
 
     private LocalDate date() { return state.date(); }
-    private LocalDate endDate() {
-        LocalDate date = date();
-        return date.withDayOfMonth(date.lengthOfMonth());
-    }
+
+    private int monthLength() { return date().lengthOfMonth(); }
+    private LocalDate startDate() { return date().withDayOfMonth(1); }
+    private LocalDate endDate() { return date().withDayOfMonth(monthLength()); }
+    private int startDay() { return startDate().getDayOfWeek().getValue() % 7; }
 
     private Theme colors() { return state.colors(); }
 
-    private static int weeksFromState(State state) {
-        LocalDate start = state.date().withDayOfMonth(1);
-        int startWeekday = start.getDayOfWeek().getValue() % 7;
-        int lengthOfMonth = start.lengthOfMonth();
+    private int dayToGridDay(int day) 
+        { return day - 1 + startDay(); }
 
-        int gridDay = lengthOfMonth - 1 + startWeekday;
+    public int weeks() 
+        { return dayToGridDay(monthLength()) / 7 + 1; }
 
-        return gridDay / 7 + 1;
+    private int cellWidth() { return cellDims.x; }
+    private int cellHeight() { return cellDims.y; }
+
+    public int width() { return fullDims.x; }
+    public int height() { return fullDims.y; }
+
+    // helper methods //
+    
+    private int gridToOffset(Vec2 gridCoord) {
+        return gridCoord.y * 7 + gridCoord.x;
     }
 
-    public int weeks() {
-        return dayToGridDay(monthLength) / 7 + 1;
-    }
-
-    // initializing grids //
-
-    private void initTitle() {
-        // in the middle of the third day
-        int x = Canvas.cellDimToFull(cellWidth, 2) + cellWidth / 2;
-        this.boxx[0] = x;
-
-        int width = cellWidth * 2 + 3;
-        int height = 3;
-
-        String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
-
-        this.boxes[0] = title = new Box(width, height, name, false, Justification.Middle);
-    }
-
-    private void initWeek() {
-        // far to the left
-        int x = 0;
-        this.boxx[1] = x;
-        
-        // 1-height single row
-        int weekCellHeight = 1;
-        int columns = 7, rows = 1;
-
-        this.boxes[1] = weekdays = new Grid(cellWidth, weekCellHeight, columns, rows, Justification.Middle);
-
-        // add the day names
-        for(int day = 1; day <= 7; day++)
-            weekdays.grid[day % 7][0] = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-    }
-
-    private void initMonth() {
-        // far to the left
-        int x = 0;
-        this.boxx[2] = x;
-        
-        // 1-height single row
-        int columns = 7, rows = weeks();
-
-        this.boxes[2] = month = new Grid(cellWidth, cellHeight, columns, rows, Justification.Right);
-
-        // add the day numbers
-        this.initDays();
-    }
-
-    private void initDays() {
-        // previous month
-        LocalDate previous = monthStartDate.minusMonths(1);
-        int previousLength = previous.lengthOfMonth();
-
-        // this is wacky, it's the offset from the start day of the month going in the past
-        for(int offset = 1; monthStart - offset >= 0; offset++) {
-            int day = previousLength - (offset - 1) - 1;
-            int gridDay = monthStart - offset;
-            setOffDay(day, gridDay);
-        }
-
-        // current month
-        for(int day = 0; day < monthLength; day++) {
-            int dayAdjusted = day + monthStart;
-            setDay(day, dayAdjusted);
-        }
-
-        int nextStartDay = monthStart + monthLength;
-
-        // next month
-        for(int day = 0; day + nextStartDay < 7 * weeks(); day++) {
-            int dayAdjusted = day + nextStartDay;
-            setOffDay(day, dayAdjusted);
-        }
-    }
-
-    private void setDay(int day, int gridDay) {
-        int week = gridDay / 7;
-        int dayOfWeek = gridDay % 7;
-
-        this.month.grid[dayOfWeek][week] = day + 1 + "";
-    }
-
-    private void setOffDay(int day, int gridDay) {
-        int week = gridDay / 7;
-        int dayOfWeek = gridDay % 7;
-
-        this.month.grid[dayOfWeek][week] = day + 1 + "";
-        this.month.foreground[dayOfWeek][week] = colors().offDayNum(); 
-        this.month.background[dayOfWeek][week] = colors().offDayBack();
-    }
-
-    // coordinate helpers //
-
-    private int dayToGridDay(int day) {
-        return day - 1 + monthStart;
+    private LocalDate gridToDayOfMonth(Vec2 gridCoord) {
+        int dayOfMonth = gridToOffset(gridCoord) - startDay();
+        return startDate().plusDays(dayOfMonth);
     }
 
     private Vec2 dayToCoords(int day) {
-        return gridDayToCoords(dayToGridDay(day));
+        return offsetToCoords(dayToGridDay(day));
     }
 
-    private Vec2 gridDayToCoords(int gridDay) {
+    private Vec2 offsetToCoords(int gridDay) {
         int day = gridDay % 7;
         int week = gridDay / 7;
 
@@ -209,10 +103,34 @@ public class Month extends MultiBox {
     }
 
     public Vec2 gridToCoords(int day, int week) {
-        int x = Canvas.cellDimToFull(cellWidth, day);
-        int y = Canvas.cellDimToFull(cellHeight, week) + WEEKDAY_BOTTOM;
+        return month.gridPosToReal(new Vec2(day, week)).addY(WEEKDAY_BOTTOM);
+    }
 
-        return new Vec2(x, y);
+
+    // grid drawers //
+
+    private void drawTitle(Canvas canvas, Vec2 dims) {
+        String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
+
+        canvas.drawTextCentered(name, 1, dims.x);
+    }
+
+    private void drawWeekday(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims) {
+        int day = gridCoord.x == 0 ? 7 : gridCoord.x;
+        String name = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+
+        canvas.drawTextCentered(name, realCoord.x, realCoord.y, cellDims.x);
+    }
+
+    private void drawDay(Canvas canvas, Vec2 gridCoord, Vec2 realCoord, Vec2 cellDims) {
+        LocalDate cellDate = gridToDayOfMonth(gridCoord);
+        String name = cellDate.getDayOfMonth() + "";
+
+        canvas.drawTextRight(name, realCoord.x, realCoord.y + cellDims.y - 1, cellDims.x);
+
+        // other month days
+        if(!cellDate.getMonth().equals(date().getMonth()))
+            canvas.highlightBox(realCoord.x, realCoord.y, cellDims.x, cellDims.y, colors().offDayNum(), colors().offDayBack());
     }
 
     // drawing //
@@ -222,11 +140,18 @@ public class Month extends MultiBox {
 
         int weeks = weeks();
 
-        // basic grid
-        canvas.overlay(0, 0, super.draw());
+        int titleX = Canvas.cellDimToFull(cellWidth(), 2) + cellWidth() / 2;
+        int titleY = 0;
+
+        canvas.drawRectangle(width(), height() - 1, false);
+
+        canvas.merge(titleX, 0, this.title.draw());
+        canvas.merge(0, TITLE_BOTTOM, this.weekdays.draw());
+        canvas.merge(0, WEEKDAY_BOTTOM, this.month.draw());
+
 
         if(state.settings.colorfulMonths())
-            canvas.highlightBox(boxx[0] + 2, boxy[0] + 1, title.width() - 4, 1, colors().highlightText(), state.monthColor());
+            canvas.highlightBox(titleX + 2, titleY + 1, title.width() - 4, 1, colors().highlightText(), state.monthColor());
 
         drawSelected(canvas);
 
@@ -235,7 +160,7 @@ public class Month extends MultiBox {
         // TODO: filter events in certain sections
         List<Event> events = state.calendar.eventsInCurrentMonth();
 
-        boolean[][][] alreadyDrawn = new boolean[7][weeks][cellHeight - 1];
+        boolean[][][] alreadyDrawn = new boolean[7][weeks][cellHeight() - 1];
         int[][] overflow = new int[7][weeks];
 
         for(Event event : events)
@@ -251,8 +176,24 @@ public class Month extends MultiBox {
         return canvas;
     }
 
-    // for the info line
-    public int height() { return super.height() + 1; }
+    // prevents a string of text from being bigger than the max width
+    private String sanitize(String text, int maxWidth) {
+        return text.substring(0, Math.max(0, Math.min(text.length(), maxWidth)));
+    }
+
+    private void drawSelected(Canvas canvas) {
+        Vec2 selected = dayToCoords(date().getDayOfMonth());
+
+        canvas.highlightBox(selected.x, selected.y, cellWidth(), cellHeight(), state.settings.selectedDayColor(), colors().selectedDayBack());
+    }
+
+    private void drawOverflow(Canvas canvas, int day, int week, int amount) {
+        Vec2 cell = gridToCoords(day, week);
+        int x = cell.x;
+        int y = cell.y + cellHeight() - 1;
+
+        canvas.drawText(String.format(" +%d ", amount), x, y, colors().overflowText(), colors().overflowHighlight());
+    }
 
     private void drawInfoLine(Canvas canvas) {
         int y = height() - 1;
@@ -280,33 +221,13 @@ public class Month extends MultiBox {
         canvas.drawText(" " + errorCode + " ", helpX - errorCode.length() - 2, y, colors().error(), colors().infoLine());
     }
 
-    // prevents a string of text from being bigger than the max width
-    private String sanitize(String text, int maxWidth) {
-        return text.substring(0, Math.max(0, Math.min(text.length(), maxWidth)));
-    }
-
-
-    private void drawSelected(Canvas canvas) {
-        Vec2 selected = dayToCoords(date().getDayOfMonth());
-
-        canvas.highlightBox(selected.x, selected.y, cellWidth, cellHeight, state.settings.selectedDayColor(), colors().selectedDayBack());
-    }
-
-    private void drawOverflow(Canvas canvas, int day, int week, int amount) {
-        Vec2 cell = gridToCoords(day, week);
-        int x = cell.x;
-        int y = cell.y + cellHeight - 1;
-
-        canvas.drawText(String.format(" +%d ", amount), x, y, colors().overflowText(), colors().overflowHighlight());
-    }
-
     // precondition: no events can have already been drawn in front of the currently drawing event
     private void drawEvent(Canvas canvas, Event event, boolean[][][] alreadyDrawn, int[][] overflow) {
         // TODO: add cool time maybe? definitely put it in settings if so
-        List<String> text = splitBounded(event.title(), cellWidth - 2);
+        List<String> text = splitBounded(event.title(), cellWidth() - 2);
         int rows = text.size();
 
-        int start = event.start().getDayOfMonth() - 1 + monthStart;
+        int start = event.start().getDayOfMonth() - 1 + startDay();
 
         int startDay = start % 7;
         int startWeek = start / 7;
@@ -336,7 +257,7 @@ public class Month extends MultiBox {
         LocalDateTime endDate = endDate().atTime(0, 0);
         if(event.end().isBefore(endDate))
             endDate = event.end();
-        int end = endDate.getDayOfMonth() - 1 + monthStart;
+        int end = endDate.getDayOfMonth() - 1 + startDay();
 
 
         // color
@@ -349,14 +270,14 @@ public class Month extends MultiBox {
             int x = cell.x;
             int y = cell.y + rowOffset;
 
-            int width = cellWidth;
+            int width = cellWidth();
 
             // draw to the right if it isn't done
             if(gridDay < end) {
                 // extend coloring
                 width++;
                 // remove gridlines
-                for(int i = 0; i < rows; i++) canvas.text[x + cellWidth][y + i] = ' ';
+                for(int i = 0; i < rows; i++) canvas.text[x + cellWidth()][y + i] = ' ';
             }
 
             // draw to the left if it's on the left edge
