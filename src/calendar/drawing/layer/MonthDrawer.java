@@ -111,7 +111,7 @@ public class MonthDrawer implements Drawable {
     private void drawTitle(Canvas canvas, Vec2 dims) {
         String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
 
-        canvas.text(name, Just.centeredOnRow(1));
+        canvas.text(name, Just.centeredOnRow(0));
     }
 
     private void drawWeekday(Canvas canvas, Vec2 gridCoord, Vec2 cellDims) {
