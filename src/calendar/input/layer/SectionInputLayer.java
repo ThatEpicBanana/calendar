@@ -29,7 +29,7 @@ public class SectionInputLayer implements InputLayer {
 
     public LayerChange handle(Key character) {
         // (q) exit
-        if(character.toChar() == 'q') 
+        if(character.toLowerCase() == 'q' || character.toLowerCase() == 's') 
             return LayerChange.exit();
 
         // (enter) edit

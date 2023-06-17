@@ -33,7 +33,8 @@ public class AddEventInputLayer implements InputLayer {
     }
 
     public LayerChange handle(Key character) {
-        if(character.toChar() == 'q') return LayerChange.exit();
+        if(character.toLowerCase() == 'q' || character.toLowerCase() == 'a') 
+            return LayerChange.exit();
 
         if(character.isUp()) up();
         else if(character.isDown()) down();
@@ -67,9 +68,8 @@ public class AddEventInputLayer implements InputLayer {
     private void right() { state.setPopupHover(5); }
 
     private LayerChange editTitle() {
-        // title for the first edit is empty
         InputLayer newLayer = new TextBoxLayer(state, setTitle ? event.title() : "", value -> event.setTitle(value));
-        setTitle = true;
+        setTitle = true; // title for the first edit is empty
         return LayerChange.switchTo(newLayer);
     }
 

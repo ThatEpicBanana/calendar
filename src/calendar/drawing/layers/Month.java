@@ -3,6 +3,8 @@ package calendar.drawing.layers;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +14,7 @@ import java.util.Locale;
 import calendar.drawing.Canvas;
 import calendar.drawing.color.Theme;
 import calendar.drawing.Drawable;
+import calendar.drawing.Just;
 import calendar.drawing.components.Box;
 import calendar.drawing.components.Grid;
 import calendar.state.State;
@@ -110,21 +113,21 @@ public class Month implements Drawable {
     private void drawTitle(Canvas canvas, Vec2 dims) {
         String name = date().getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + " " + date().getYear();
 
-        canvas.textCentered(name, 1);
+        canvas.text(name, Just.centeredOnRow(1));
     }
 
     private void drawWeekday(Canvas canvas, Vec2 gridCoord, Vec2 cellDims) {
         int day = gridCoord.x == 0 ? 7 : gridCoord.x;
         String name = DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.ENGLISH);
 
-        canvas.textCentered(name, 0);
+        canvas.text(name, Just.centeredOnRow(0));
     }
 
     private void drawDay(Canvas canvas, Vec2 gridCoord, Vec2 cellDims) {
         LocalDate cellDate = gridToDayOfMonth(gridCoord);
         String name = cellDate.getDayOfMonth() + "";
 
-        canvas.textRight(name, cellDims.y - 1);
+        canvas.text(name, Just.bottomRight());
 
         // other month days
         if(!cellDate.getMonth().equals(date().getMonth()))
@@ -221,8 +224,7 @@ public class Month implements Drawable {
 
     // precondition: no events can have already been drawn in front of the currently drawing event
     private void drawEvent(Canvas canvas, Event event, boolean[][][] alreadyDrawn, int[][] overflow) {
-        // TODO: add cool time maybe? definitely put it in settings if so
-        List<String> text = splitBounded(event.title(), cellWidth() - 2);
+        List<String> text = splitBounded(event.displayTitle(state), cellWidth() - 2);
         int rows = text.size();
 
         int start = event.start().getDayOfMonth() - 1 + startDay();

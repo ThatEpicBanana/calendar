@@ -2,6 +2,7 @@ package calendar.drawing;
 
 import calendar.drawing.color.Color;
 
+// TODO: a similar class that handles a scrollable area
 public class OffsetCanvas extends Canvas {
     private int offx;
     private int offy;
@@ -19,15 +20,17 @@ public class OffsetCanvas extends Canvas {
         }
     }
 
-    public void set(int x, int y, char val) {
+    public Canvas set(int x, int y, char val) {
         this.text[x + offx][y + offy] = val;
+        return this;
     }
 
-    public void highlight(int x, int y, Color foreground, Color background) {
+    public Canvas highlight(int x, int y, Color foreground, Color background) {
         if(foreground != null)
             this.foreground[x + offx][y + offy] = foreground;
         if(background != null)
             this.background[x + offx][y + offy] = background;
+        return this;
     }
 
     // overrides //

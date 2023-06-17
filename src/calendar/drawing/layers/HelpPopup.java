@@ -1,6 +1,7 @@
 package calendar.drawing.layers;
 
 import calendar.drawing.Canvas;
+import calendar.drawing.Just;
 import calendar.state.State;
 
 // a generic help popup
@@ -23,21 +24,13 @@ public class HelpPopup extends Popup {
         Canvas canvas = super.draw();
         Canvas inset = canvas.offsetMargin(2);
 
-        inset.textCentered(" Help ", 0, state.monthColorText(), state.monthColor());
+        inset.text(" Help ", Just.centeredOnRow(0), state.monthColorText(), state.monthColor());
 
-        int margin = 2;
-        int boxy = 2;
-        int boxwidth = inset.width() - margin * 2;
-        int boxheight = inset.height() - 2;
+        Canvas box = inset.offsetCenteredMargin(2, 2, inset.height() - 2);
+        box.fill(colors().helpText(), colors().textBackground());
 
-        // box
-        inset.highlightBox(margin, boxy, boxwidth, boxheight, colors().helpText(), colors().textBackground());
-
-        for(int i = 0; i < rows.length; i++) {
-            String textrow = rows[i];
-            int x = margin + (boxwidth - textrow.length()) / 2;
-            inset.text(rows[i], x, boxy + i);
-        }
+        for(int i = 0; i < rows.length; i++)
+            box.text(rows[i], Just.leftOfRow(i));
 
         return canvas;
     }

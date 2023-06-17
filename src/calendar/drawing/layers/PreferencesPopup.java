@@ -1,7 +1,7 @@
 package calendar.drawing.layers;
 
 import calendar.drawing.Canvas;
-import calendar.drawing.color.Color;
+import calendar.drawing.Just;
 import calendar.drawing.color.Theme;
 import calendar.state.Config;
 import calendar.state.State;
@@ -18,46 +18,42 @@ public class PreferencesPopup extends Popup {
         Canvas box = super.draw();
         Canvas canvas = box.offsetMargin(2);
 
-        canvas.textCentered(" Preferences ", 0, state.monthColorText(), state.monthColor());
+        canvas.text(" Preferences ", Just.centeredOnRow(0), state.monthColorText(), state.monthColor());
 
-        Canvas themeBox = canvas.offsetCenteredMargin(3, 2, 8);
-
-        themeBox.rectangle(0, 0, themeBox.width(), themeBox.height() - 1, false);
-        themeBox.textCentered("   Theme   ", 0, state.monthColorText(), state.monthColor());
-
-        Canvas themeList = themeBox.offsetCenteredMargin(1, 2, 5);
-
-        themeList.textCentered("Latte",       0);
-        themeList.textCentered("Frappe",      1);
-        themeList.textCentered("Macchiato",   2);
-        themeList.textCentered("Mocha",       3);
-        themeList.textCentered("Transparent", 4);
-
-        themeList.highlightBox(0, 0, themeList.width(), 1, Theme.Latte.text(),       Theme.Latte.background());
-        themeList.highlightBox(0, 1, themeList.width(), 1, Theme.Frappe.text(),      Theme.Frappe.background());
-        themeList.highlightBox(0, 2, themeList.width(), 1, Theme.Macchiato.text(),   Theme.Macchiato.background());
-        themeList.highlightBox(0, 3, themeList.width(), 1, Theme.Mocha.text(),       Theme.Mocha.background());
-        themeList.highlightBox(0, 4, themeList.width(), 1, Theme.Transparent.text(), Theme.Transparent.background());
-
-        if(hover() < 5) {
-            int selectedLine = hover();
-            themeList.text("→", 1, selectedLine);
-            themeList.textRight("←", selectedLine);
-        }
+        canvas.offsetCenteredMargin(3, 2, 8).draw(this::themeBox);
 
         Canvas others = canvas.offsetCenteredMargin(11, 3, 2);
 
-        others.textCentered("Colorful Months " + (config().colorfulMonths() ? '✓' : '✕'), 0);
-        others.highlightBox(0, 0, others.width(), 1, selected(5) ? colors().text() : colors().buttonText(), colors().buttonBackground());
-
-        others.textCentered("Day Color", 2);
-        others.highlightBox(0, 2, others.width(), 1, colors().highlightText(), config().selectedDayColor());
-
-        if(selected(6)) {
-            others.text("←", 1, 2);
-            others.textRight("→", 2);
-        }
+        others.draw(wid.toggle("Colorful Months", Just.centeredOnRow(0), config().colorfulMonths(), 5));
+        others.draw(wid.rollingSelection("Day Color", Just.centeredOnRow(1), config().selectedDayColor(), 6));
+        others.draw(wid.toggle("Event Times", Just.centeredOnRow(2), config().drawEventTimes(), 7));
 
         return box;
+    }
+
+    private void themeBox(Canvas canvas) {
+        canvas.rectangle(0, 0, canvas.width(), canvas.height() - 1, false);
+        canvas.text("   Theme   ", Just.centeredOnRow(0), state.monthColorText(), state.monthColor());
+        canvas.offsetCenteredMargin(1, 2, 5).draw(this::themeList);
+    }
+
+    private void themeList(Canvas canvas) {
+        canvas.text("Latte",       Just.centeredOnRow(0));
+        canvas.text("Frappe",      Just.centeredOnRow(1));
+        canvas.text("Macchiato",   Just.centeredOnRow(2));
+        canvas.text("Mocha",       Just.centeredOnRow(3));
+        canvas.text("Transparent", Just.centeredOnRow(4));
+
+        canvas.highlightBox(0, 0, canvas.width(), 1, Theme.Latte.text(),       Theme.Latte.background());
+        canvas.highlightBox(0, 1, canvas.width(), 1, Theme.Frappe.text(),      Theme.Frappe.background());
+        canvas.highlightBox(0, 2, canvas.width(), 1, Theme.Macchiato.text(),   Theme.Macchiato.background());
+        canvas.highlightBox(0, 3, canvas.width(), 1, Theme.Mocha.text(),       Theme.Mocha.background());
+        canvas.highlightBox(0, 4, canvas.width(), 1, Theme.Transparent.text(), Theme.Transparent.background());
+
+        if(hover() < 5) {
+            int selectedLine = hover();
+            canvas.text("→", Just.leftOfRow(selectedLine));
+            canvas.text("←", Just.rightOfRow(selectedLine));
+        }
     }
 }

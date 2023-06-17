@@ -35,24 +35,21 @@ public class PreferencesLayer implements InputLayer {
                 case 2: switchTheme(Theme.Macchiato); break;
                 case 3: switchTheme(Theme.Mocha); break;
                 case 4: switchTheme(Theme.Transparent); break;
-                case 5: toggleColorfulMonths(); break;
+                case 5: config().toggleColorfulMonths(); break;
+                case 7: config().toggleDrawEventTimes(); break;
             }
         }
 
         if(character.isUp()) 
-            state.movePopupHover(-1, 0, 6);
+            state.movePopupHover(-1, 0, 7);
         else if(character.isDown()) 
-            state.movePopupHover(1, 0, 6);
+            state.movePopupHover(1, 0, 7);
         else if(character.isLeft() && line() == 6)
             config().changeSelectedDayColor(-1);
         else if(character.isRight() && line() == 6)
             config().changeSelectedDayColor(1);
 
         return LayerChange.keep();
-    }
-
-    private void toggleColorfulMonths() {
-        config().toggleColorfulMonths();
     }
 
     private void switchTheme(Theme theme) {

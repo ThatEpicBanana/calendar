@@ -3,6 +3,10 @@ package calendar.storage;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+
+import calendar.state.State;
 
 // represents a simple event, with a title, start, end, and section
 public class Event implements Comparable<Event>, Serializable {
@@ -36,6 +40,29 @@ public class Event implements Comparable<Event>, Serializable {
     public Section section() { return section; }
     // screen will get updated elsewhere
     protected void moveTo(Section section) { this.section = section; }
+
+
+    public String displayTitle(State state) {
+        String display = title;
+
+        if(state.config.drawEventTimes())
+            display = displayStart() + ": " + display;
+
+        return display;
+    }
+
+    private String displayStart() {
+        int hour = start.getHour();
+
+        char ampm = 'A';
+        if(hour >= 12) {
+            ampm = 'P';
+            if(hour > 12)
+                hour -= 12;
+        }
+
+        return hour + "" + ampm;
+    }
 
 
     // comparing is done through the starts

@@ -2,6 +2,7 @@ package calendar.drawing;
 
 import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Color;
+import calendar.util.Vec2;
 
 // This is the backbone of the drawing, 
 // representing a canvas of text and its colors.
@@ -68,43 +69,61 @@ public class Canvas {
         return new OffsetCanvas(this, x, y, width, height);
     }
 
+    // drawer //
+
+    public interface Drawer {
+        void draw(Canvas canvas);
+    }
+
+    public Canvas draw(Drawer drawer) {
+        drawer.draw(this);
+        return this;
+    }
+
     // getters //
 
     public int height() { return height; }
     public int width() { return width; }
 
+    public Vec2 dims() { return new Vec2(width, height); }
+
     // basic //
     
-    public void set(int x, int y, char val, Color foreground, Color background) {
+    public Canvas set(int x, int y, char val, Color foreground, Color background) {
         this.set(x, y, val);
         this.highlight(x, y, foreground, background);
+        return this;
     }
 
     // text //
 
-    public void set(int x, int y, char val) {
+    public Canvas set(int x, int y, char val) {
         this.text[x][y] = val;
+        return this;
     }
 
-    public void fill(char val) {
+    public Canvas fill(char val) {
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
                 this.text[x][y] = ' ';
+        return this;
     }
 
     // colors //
 
-    public void highlight(int x, int y, Color foreground, Color background) {
+    public Canvas highlight(int x, int y, Color foreground, Color background) {
         if(foreground != null)
             this.foreground[x][y] = foreground;
         if(background != null)
             this.background[x][y] = background;
+        return this;
     }
 
-    public void fill(Color foreground, Color background) {
+    public Canvas fill(Color foreground, Color background) {
         for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
                 this.highlight(x, y, foreground, background);
+        return this;
     }
 
     public Canvas highlightBox(int startx, int starty, int width, int height, Color foreground, Color background) {
@@ -165,16 +184,14 @@ public class Canvas {
         return this;
     }
 
-    public Canvas textCentered(String string, int y) { return this.textCentered(string, y, null, null); }
-    public Canvas textCentered(String string, int y, Color foreground, Color background) {
-        int x = (width - string.length()) / 2;
-        return this.text(string, x, y, foreground, background);
+    public Canvas text(String string, Just justification) {
+        Vec2 pos = justification.get(dims(), new Vec2(string.length(), 1));
+        return text(string, pos.x, pos.y);
     }
 
-    public Canvas textRight(String string, int y) { return this.textRight(string, y, null, null); }
-    public Canvas textRight(String string, int y, Color foreground, Color background) {
-        int x = width - string.length() - 1;
-        return this.text(string, x, y, foreground, background);
+    public Canvas text(String string, Just justification, Color foreground, Color background) {
+        Vec2 pos = justification.get(dims(), new Vec2(string.length(), 1));
+        return text(string, pos.x, pos.y, foreground, background);
     }
 
 

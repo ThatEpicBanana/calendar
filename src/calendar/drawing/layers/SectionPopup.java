@@ -3,6 +3,7 @@ package calendar.drawing.layers;
 import java.util.List;
 
 import calendar.drawing.Canvas;
+import calendar.drawing.Just;
 import calendar.state.State;
 import calendar.storage.Section;
 
@@ -17,46 +18,37 @@ public class SectionPopup extends Popup {
 
     public Canvas draw() {
         Canvas canvas = super.draw();
+        Canvas inset = canvas.offsetMargin(2);
 
-        drawText(canvas, " Manage Sections ", 0, null, colors().textBackground());
+        inset.text(" Manage Sections ", Just.centeredOnRow(0), state.monthColorText(), state.monthColor());
 
-        int margin = 4;
-        int boxy = line(2);
-        int boxwidth = width() - margin * 2;
-        int boxheight = maxLines() - 4;
+        int sectionsHeight = inset.height() - 4;
+        inset.offsetCenteredMargin(2, 2, sectionsHeight)
+             .draw(this::drawSections);
 
-        // sections box
-        canvas.highlightBox(margin,  boxy, boxwidth, boxheight, null, colors().textBackground());
+        inset.offsetCenteredMargin(sectionsHeight + 3, 2, 1)
+             .draw(this::drawInfoLine);
+
+        return canvas;
+    }
+
+    private void drawSections(Canvas canvas) {
+        canvas.fill(null, colors().textBackground());
 
         List<Section> sections = sections();
-        int sectionLength = Math.min(sections.size(), boxheight);
+        int sectionLength = Math.min(sections.size(), canvas.height());
 
         for(int i = 0; i < sectionLength; i++) {
             Section section = sections.get(i);
-            canvas.highlightBox(margin, boxy + i, boxwidth, 1, colors().highlightText(), section.color());
-
-            String title = section.title();
-            title = sanitize(title, boxwidth - 6, i);
-            drawText(canvas, title, 2 + i);
+            String title = sanitize(section.title(), canvas.width() - 6, i);
+            
+            canvas.draw(wid.rollingSelection(title, Just.centeredOnRow(i), section.color(), i));
         }
+    }
 
-        if(sectionLength > 0 && hover() < sectionLength) {
-            // current section
-             drawTextLeft(canvas, "←", 2 + hover(), margin + 1);
-            drawTextRight(canvas, "→", 2 + hover(), margin + 1);
-
-            // if editing
-            if(state.editingHover())
-                canvas.highlightBox(margin, boxy + hover(), boxwidth, 1, colors().editingForeground(), null);
-        }
-
-        // info line
-        int infoy = 2 + boxheight + 1;
-        canvas.highlightBox(margin, line(infoy), boxwidth, 1, colors().helpText2(), colors().textBackground());
-
-         drawTextLeft(canvas, "(a) add", infoy, margin + 1);
-        drawTextRight(canvas, "remove (r)", infoy, margin + 1);
-
-        return canvas;
-    } 
+    private void drawInfoLine(Canvas canvas) {
+        canvas.fill(colors().helpText2(), colors().textBackground())
+              .text("(a) add", Just.leftOfRow(0))
+              .text("remove (r)", Just.rightOfRow(0));
+    }
 }

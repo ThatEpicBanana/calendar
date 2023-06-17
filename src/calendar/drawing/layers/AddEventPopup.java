@@ -1,8 +1,7 @@
 package calendar.drawing.layers;
 
-import java.util.Arrays;
-
 import calendar.drawing.Canvas;
+import calendar.drawing.Just;
 import calendar.drawing.color.Color;
 import calendar.state.State;
 import calendar.storage.EditingEvent;
@@ -16,66 +15,20 @@ public class AddEventPopup extends Popup {
         this.event = event;
     }
 
-    private void drawTitle(Canvas canvas, String title, Color highlight, int x, int y, int width) {
-        drawText(canvas, title, y);
-        canvas.highlightBox(x, line(y), width, 1, colors().highlightText(), highlight);
-    }
-
-    private void drawTitled(Canvas canvas, int line, int y, int maxWidth, String title, String text, Color highlight) {
-        int width = Math.max(title.length(), text.length());
-        width = Math.min(width, maxWidth - 2) + 2;
-        int x = (width() - width) / 2;
-
-        drawTitle(canvas, title, highlight, x, y, width);
-
-        String sanitized = sanitize(text, maxWidth - 2, line);
-        drawText(canvas, sanitized, y + 1);
-        canvas.highlightBox(x, line(y + 1), width, 1, textColor(line), textBackground(line));
-    }
-
-    private void drawTitled(Canvas canvas, int startLine, int y, int maxWidth, String title, String[] text, Color highlight) {
-        int textWidth = Arrays.stream(text).map(line -> line.length()).max(Integer::compare).get();
-        int width = Math.max(title.length(), textWidth);
-        width = Math.min(width, maxWidth - 2) + 2;
-        int x = (width() - width) / 2;
-
-        drawTitle(canvas, title, highlight, x, y, width);
-
-        for(int i = 0; i < text.length; i++) {
-            String sanitized = sanitize(text[i], maxWidth - 2, y + i + 1);
-            drawText(canvas, sanitized, y + i + 1);
-
-            int line = startLine + i;
-            canvas.highlightBox(x, line(y + i + 1), width, 1, textColor(line), textBackground(line));
-        }
-    }
-
-    public Color textBackground(int line) {
-        return selected(line) ? colors().editingBackground() : colors().textBackground();
-    }
-
-    public Color textColor(int line) {
-        return selected(line) && state.editingHover() ? event.section().color() : colors().text();
-    }
-
-    public Color buttonTextColor(int line) {
-        return selected(line) ? colors().editingForeground() : colors().highlightText();
-    }
-
     public Canvas draw() {
         Canvas canvas = super.draw();
+        Canvas inset = canvas.offsetMargin(2);
 
-        int maxWidth = width() - 4;
         Color highlight = event.section().color();
 
-        drawText(canvas, "  Add  Task  ", 0, colors().highlightText(), highlight);
+        inset.text("  Add  Task  ", Just.centeredOnRow(0), colors().highlightText(), highlight);
 
-        drawTitled(canvas, 0, 3, maxWidth, "Title", event.title(), highlight);
-        drawTitled(canvas, 1, 6, maxWidth, "Time Frame", new String[]{ event.start(), event.end() }, highlight);
-        drawTitled(canvas, 3, 10, maxWidth, "Section", event.section().title(), highlight);
+        inset.draw(wid.titledText("Title", Just.centeredOnRow(3), event.title(), highlight, 0));
+        inset.draw(wid.titledText("Time Frame", Just.centeredOnRow(6), new String[]{ event.start(), event.end() }, highlight, 1));
+        inset.draw(wid.titledText("Section", Just.centeredOnRow(10), event.section().title(), highlight, 3));
 
-         drawTextLeft(canvas, " Confirm ", 13, 4, buttonTextColor(4), highlight);
-        drawTextRight(canvas, " Abandon ", 13, 4, buttonTextColor(5), highlight);
+        inset.draw(wid.button("Confirm", Just.bottomLeft(), highlight, 4));
+        inset.draw(wid.button("Abandon", Just.bottomRight(), highlight, 5));
 
         return canvas;
     } 

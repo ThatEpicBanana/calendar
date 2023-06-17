@@ -97,6 +97,7 @@ public class State {
 
     public String errorCode() { return errorCode; }
     public void displayError(String errorCode) { this.errorCode = errorCode; updateScreen(); }
+    protected void displayErrorWithoutUpdate(String errorCode) { this.errorCode = errorCode; }
     public void resetError() { this.errorCode = ""; updateScreen(); }
 
 
