@@ -1,4 +1,4 @@
-package calendar.drawing.layers;
+package calendar.drawing.layer;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.Just;
@@ -7,8 +7,8 @@ import calendar.state.Config;
 import calendar.state.State;
 
 // the settings dialogue
-public class PreferencesPopup extends Popup {
-    public PreferencesPopup(int width, State state) {
+public class PreferencesDrawer extends PopupDrawer {
+    public PreferencesDrawer(int width, State state) {
         super(width, state);
     }
 

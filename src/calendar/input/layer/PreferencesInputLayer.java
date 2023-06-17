@@ -10,10 +10,10 @@ import calendar.state.State;
 
 // the input layer for the preferences dialogue
 // it is the thing that actually changes the preferences
-public class PreferencesLayer implements InputLayer {
+public class PreferencesInputLayer implements InputLayer {
     private State state;
 
-    public PreferencesLayer(State state) {
+    public PreferencesInputLayer(State state) {
         this.state = state;
     }
 

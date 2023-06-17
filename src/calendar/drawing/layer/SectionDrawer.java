@@ -1,4 +1,4 @@
-package calendar.drawing.layers;
+package calendar.drawing.layer;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import calendar.storage.Section;
 
 // the section editing popup
 // TODO: scrolling
-public class SectionPopup extends Popup {
-    public SectionPopup(int width, State state) {
+public class SectionDrawer extends PopupDrawer {
+    public SectionDrawer(int width, State state) {
         super(width, state);
     }
 

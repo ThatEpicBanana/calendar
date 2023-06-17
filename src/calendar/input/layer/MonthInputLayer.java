@@ -10,7 +10,7 @@ import calendar.state.State;
 
 // the input layer for the month screen
 // handles moving throughout the month, or opening popups
-public class MonthLayer implements InputLayer {
+public class MonthInputLayer implements InputLayer {
     private State state;
 
     private int day;
@@ -18,7 +18,7 @@ public class MonthLayer implements InputLayer {
     private LocalDate date() { return state.date(); }
     private int maxDay() { return date().lengthOfMonth(); }
 
-    public MonthLayer(State state) {
+    public MonthInputLayer(State state) {
         this.state = state;
         this.day = date().getDayOfMonth();
     }

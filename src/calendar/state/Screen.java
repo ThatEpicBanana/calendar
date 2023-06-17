@@ -3,12 +3,12 @@ package calendar.state;
 import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
 import calendar.drawing.color.Theme;
-import calendar.drawing.layers.AddEventPopup;
-import calendar.drawing.layers.HelpPopup;
-import calendar.drawing.layers.Month;
-import calendar.drawing.layers.Popup;
-import calendar.drawing.layers.PreferencesPopup;
-import calendar.drawing.layers.SectionPopup;
+import calendar.drawing.layer.AddEventDrawer;
+import calendar.drawing.layer.HelpDrawer;
+import calendar.drawing.layer.Month;
+import calendar.drawing.layer.PopupDrawer;
+import calendar.drawing.layer.PreferencesDrawer;
+import calendar.drawing.layer.SectionDrawer;
 import calendar.storage.EditingEvent;
 
 // represents the entire drawable screen - month and popup
@@ -16,7 +16,7 @@ import calendar.storage.EditingEvent;
 // it also handles the creation and destruction of popups
 public class Screen implements Drawable {
     public Month month;
-    public Popup popup;
+    public PopupDrawer popup;
 
     private int width;
     private int height;
@@ -46,7 +46,7 @@ public class Screen implements Drawable {
     private int popupWidth() 
         { return cellWidth * 3 - 4; }
 
-    private boolean addPopup(Popup popup) {
+    private boolean addPopup(PopupDrawer popup) {
         if(this.popup == null) {
             this.popup = popup;
             state.updateScreen();
@@ -58,26 +58,26 @@ public class Screen implements Drawable {
     // adds a section popup
     // returns if it succeeds
     public boolean addSectionPopup() { 
-        return addPopup(new SectionPopup(popupWidth(), state));
+        return addPopup(new SectionDrawer(popupWidth(), state));
     }
 
     // adds an event popup
     // returns the event currently being edited
     // or null if the popup couldn't be created
     public boolean addAddEventPopup(EditingEvent event) { 
-        return addPopup(new AddEventPopup(popupWidth(), event, state));
+        return addPopup(new AddEventDrawer(popupWidth(), event, state));
     }
 
     // adds an info popup
     // returns if it succeeds
     public boolean addHelpPopup(String[] text) {
-        return addPopup(new HelpPopup(popupWidth(), state, text));
+        return addPopup(new HelpDrawer(popupWidth(), state, text));
     }
 
     // adds the preferences popup
     // returns if it succeeds
     public boolean addPreferencesPopup() {
-        return addPopup(new PreferencesPopup(popupWidth(), state));
+        return addPopup(new PreferencesDrawer(popupWidth(), state));
     }
 
 

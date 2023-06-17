@@ -1,10 +1,8 @@
-package calendar.drawing.layers;
+package calendar.drawing.layer;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +13,8 @@ import calendar.drawing.Canvas;
 import calendar.drawing.color.Theme;
 import calendar.drawing.Drawable;
 import calendar.drawing.Just;
-import calendar.drawing.components.Box;
-import calendar.drawing.components.Grid;
+import calendar.drawing.component.Box;
+import calendar.drawing.component.Grid;
 import calendar.state.State;
 import calendar.storage.Event;
 import calendar.storage.Section;
@@ -27,7 +25,7 @@ import calendar.util.Vec2;
 // - weekdays
 // - days
 // - events
-public class Month implements Drawable {
+public class MonthDrawer implements Drawable {
     private Vec2 cellDims;
     private Vec2 fullDims;
     private Vec2 monthDims;
@@ -45,7 +43,7 @@ public class Month implements Drawable {
 
     // constructors //
 
-    public Month(State state, int cellWidth, int cellHeight) {
+    public MonthDrawer(State state, int cellWidth, int cellHeight) {
         this.state = state;
 
         this.monthDims = new Vec2(7, weeks());

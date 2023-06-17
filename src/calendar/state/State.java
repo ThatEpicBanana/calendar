@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.input.layer.AddEventInputLayer;
-import calendar.input.layer.HelpLayer;
-import calendar.input.layer.PreferencesLayer;
+import calendar.input.layer.HelpInputLayer;
+import calendar.input.layer.PreferencesInputLayer;
 import calendar.input.InputLayer;
 import calendar.input.layer.SectionInputLayer;
 import calendar.storage.Calendar;
@@ -129,14 +129,14 @@ public class State {
 
     public InputLayer showHelpPopup(String[] text) {
         if(screen.addHelpPopup(text))
-            return new HelpLayer();
+            return new HelpInputLayer();
         else
             return null;
     }
 
     public InputLayer showPreferencesPopup() {
         if(screen.addPreferencesPopup())
-            return new PreferencesLayer(this);
+            return new PreferencesInputLayer(this);
         else
             return null;
     }

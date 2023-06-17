@@ -1,4 +1,4 @@
-package calendar.drawing.layers;
+package calendar.drawing.layer;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.Just;
@@ -7,10 +7,10 @@ import calendar.state.State;
 import calendar.storage.EditingEvent;
 
 // the popup for adding an event
-public class AddEventPopup extends Popup {
+public class AddEventDrawer extends PopupDrawer {
     private EditingEvent event;
 
-    public AddEventPopup(int width, EditingEvent event, State state) {
+    public AddEventDrawer(int width, EditingEvent event, State state) {
         super(width, state);
         this.event = event;
     }

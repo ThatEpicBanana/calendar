@@ -1,4 +1,4 @@
-package calendar.drawing.layers;
+package calendar.drawing.layer;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.Just;
@@ -6,15 +6,15 @@ import calendar.state.State;
 
 // a generic help popup
 // see input.layer.MonthLayer for month help 
-public class HelpPopup extends Popup {
+public class HelpDrawer extends PopupDrawer {
     private String[] rows;
 
-    public HelpPopup(int width, State state, String[] rows) {
+    public HelpDrawer(int width, State state, String[] rows) {
         super(width, state);
         this.rows = rows;
     }
 
-    public HelpPopup(int width, State state, String rows) {
+    public HelpDrawer(int width, State state, String rows) {
         super(width, state);
 
         this.rows = rows.split("\n");

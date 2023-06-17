@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Stack;
 
-import calendar.input.layer.MonthLayer;
+import calendar.input.layer.MonthInputLayer;
 import calendar.state.State;
 
 // handles all the input in the application
@@ -18,7 +18,7 @@ public class Input {
     public Input(State state) {
         this.layers = new Stack<>();
         this.state = state;
-        this.push(new MonthLayer(state));
+        this.push(new MonthInputLayer(state));
     }
 
     private InputLayer current() {

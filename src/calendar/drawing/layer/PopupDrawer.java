@@ -1,22 +1,21 @@
-package calendar.drawing.layers;
+package calendar.drawing.layer;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
 import calendar.drawing.Widgets;
-import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
 
 // a generic popup
 // generally a tall rectangle with rows of text
-public class Popup implements Drawable {
+public class PopupDrawer implements Drawable {
     private final int width;
     private final int height = 18;
 
     protected State state;
     protected Widgets wid;
 
-    public Popup(int width, State state) {
+    public PopupDrawer(int width, State state) {
         this.width = width;
 
         this.state = state;

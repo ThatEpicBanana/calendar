@@ -1,4 +1,4 @@
-package calendar.drawing.components;
+package calendar.drawing.component;
 
 import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
