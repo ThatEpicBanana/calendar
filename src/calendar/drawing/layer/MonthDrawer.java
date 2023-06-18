@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import calendar.drawing.Canvas;
+import calendar.drawing.canvas.Canvas;
 import calendar.drawing.color.Theme;
 import calendar.drawing.Drawable;
 import calendar.drawing.Just;

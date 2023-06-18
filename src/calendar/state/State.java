@@ -10,6 +10,7 @@ import calendar.input.layer.PreferencesInputLayer;
 import calendar.input.InputLayer;
 import calendar.input.layer.SectionInputLayer;
 import calendar.state.layer.AddEventLayer;
+import calendar.state.layer.ScrollableLayer;
 import calendar.state.layer.SelectionsLayer;
 import calendar.storage.Calendar;
 import calendar.storage.EditingEvent;
@@ -31,6 +32,7 @@ public class State {
     private String errorCode = "";
 
     public boolean updating = true;
+    public boolean supressNextUpdate = false;
 
     private String calendarFile;
     private String configFile;
@@ -92,7 +94,7 @@ public class State {
 
 
     public InputLayer showSectionPopup() {
-        SelectionsLayer selector = new SelectionsLayer(this);
+        ScrollableLayer selector = new ScrollableLayer(this);
         if(screen.addSectionPopup(selector))
             return new SectionInputLayer(this, selector);
         else

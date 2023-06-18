@@ -1,10 +1,12 @@
-package calendar.drawing;
+package calendar.drawing.canvas;
 
 import java.util.Arrays;
 
+import calendar.drawing.Just;
 import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
+import calendar.state.layer.ScrollableLayer;
 import calendar.state.layer.SelectionsLayer;
 import calendar.util.Vec2;
 
@@ -56,6 +58,28 @@ public class Widgets {
 
             canvas.text(title, pos.x + 1, pos.y)
                 .highlightBox(pos.x, pos.y, width, 1, foreground, highlight);
+        };
+    }
+
+    public Canvas.Drawer scrollbar(boolean overflow) {
+        return (canvas) -> {
+            ScrollableLayer scrolling = (ScrollableLayer) selector;
+
+            int scroll = scrolling.scroll();
+            int win = scrolling.windowHeight() + 1;
+            int full = scrolling.fullHeight() + 1;
+
+            if(full > win) {
+                int height = win * win / full;
+                int y = scroll * win / full;
+
+                int x = canvas.width() - (overflow ? 0 : 2);
+                int maxHeight = canvas.height() - (overflow ? 0 : 2);
+
+                height = Math.min(height, maxHeight);
+
+                canvas.highlightBox(x, y, 1, height, null, colors().text());
+            }
         };
     }
 

@@ -3,13 +3,13 @@ package calendar.state.layer;
 import calendar.state.State;
 
 public class SelectionsLayer {
-    private int selection = 0;
+    protected int selection = 0;
     private boolean editing = false;
 
     private int min = 0;
     private int max = -1;
 
-    private State state;
+    protected State state;
 
     public SelectionsLayer(State state) {
         this.state = state;
@@ -23,10 +23,11 @@ public class SelectionsLayer {
     public int selection() { return this.selection; }
     public void setSelection(int i) { this.selection = i; state.updateScreen(); }
     public void moveSelection(int by) { 
-        this.selection = Math.max(this.selection + by, min);
+        int newSelection = Math.max(this.selection + by, min);
         if(max != -1) 
-            selection = Math.min(max, selection);
-        state.updateScreen();
+            newSelection = Math.min(max, newSelection);
+
+        setSelection(newSelection);
     }
 
     public void nextSelection() { this.moveSelection(1); }

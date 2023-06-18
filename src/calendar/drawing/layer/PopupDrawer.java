@@ -1,8 +1,8 @@
 package calendar.drawing.layer;
 
-import calendar.drawing.Canvas;
+import calendar.drawing.canvas.Canvas;
 import calendar.drawing.Drawable;
-import calendar.drawing.Widgets;
+import calendar.drawing.canvas.Widgets;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
 

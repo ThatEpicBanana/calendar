@@ -1,7 +1,7 @@
 package calendar.drawing.component;
 
-import calendar.drawing.Canvas;
 import calendar.drawing.Drawable;
+import calendar.drawing.canvas.Canvas;
 import calendar.util.Vec2;
 
 public class Grid implements Drawable {

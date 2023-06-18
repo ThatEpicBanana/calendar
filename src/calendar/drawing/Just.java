@@ -1,5 +1,6 @@
 package calendar.drawing;
 
+import calendar.drawing.canvas.Canvas;
 import calendar.util.Vec2;
 
 // some justification / positioning

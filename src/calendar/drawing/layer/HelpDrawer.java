@@ -1,6 +1,6 @@
 package calendar.drawing.layer;
 
-import calendar.drawing.Canvas;
+import calendar.drawing.canvas.Canvas;
 import calendar.drawing.Just;
 import calendar.state.State;
 

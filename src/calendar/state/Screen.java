@@ -1,6 +1,6 @@
 package calendar.state;
 
-import calendar.drawing.Canvas;
+import calendar.drawing.canvas.Canvas;
 import calendar.drawing.Drawable;
 import calendar.drawing.color.Theme;
 import calendar.drawing.layer.AddEventDrawer;
@@ -10,8 +10,8 @@ import calendar.drawing.layer.PopupDrawer;
 import calendar.drawing.layer.PreferencesDrawer;
 import calendar.drawing.layer.SectionDrawer;
 import calendar.state.layer.AddEventLayer;
+import calendar.state.layer.ScrollableLayer;
 import calendar.state.layer.SelectionsLayer;
-import calendar.storage.EditingEvent;
 
 // represents the entire drawable screen - month and popup
 // when drawing, it centers them both onto the terminal screen
@@ -59,7 +59,7 @@ public class Screen implements Drawable {
 
     // adds a section popup
     // returns if it succeeds
-    public boolean addSectionPopup(SelectionsLayer selector) { 
+    public boolean addSectionPopup(ScrollableLayer selector) { 
         return addPopup(new SectionDrawer(popupWidth(), state, selector));
     }
 

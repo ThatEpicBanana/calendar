@@ -6,24 +6,24 @@ import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.input.component.TextBoxLayer;
 import calendar.state.State;
-import calendar.state.layer.SelectionsLayer;
+import calendar.state.layer.ScrollableLayer;
 import calendar.storage.Section;
 
 // the input layer for the section popup
 // allows for the user to add, remove, and change sections
 public class SectionInputLayer implements InputLayer {
     private State state;
-    private SelectionsLayer selector;
+    private ScrollableLayer layer;
 
-    public SectionInputLayer(State state, SelectionsLayer selector) {
+    public SectionInputLayer(State state, ScrollableLayer layer) {
         this.state = state;
-        this.selector = selector;
+        this.layer = layer;
 
         updateBounds();
     }
 
     private boolean hasSections() { return state.calendar.sections().size() > 0; }
-    private int line() { return selector.selection(); }
+    private int line() { return layer.selection(); }
     private int maxSession() { return Math.max(state.calendar.sections().size() - 1, 0); }
     private Section section() {
         if(!state.calendar.sections().isEmpty())
@@ -33,7 +33,8 @@ public class SectionInputLayer implements InputLayer {
     }
 
     private void updateBounds() {
-        this.selector.setBounds(0, maxSession());
+        int max = maxSession();
+        this.layer.setBounds(0, max);
     }
 
     public LayerChange handle(Key character) {
@@ -68,14 +69,15 @@ public class SectionInputLayer implements InputLayer {
         Section section = section();
         if(section == null) return LayerChange.keep();
 
-        InputLayer newLayer = new TextBoxLayer(selector, section().title(), value -> section.setTitle(value));
+        InputLayer newLayer = new TextBoxLayer(layer, section().title(), value -> section.setTitle(value));
         return LayerChange.switchTo(newLayer);
     }
 
     private LayerChange remove() {
         if(hasSections()) {
             state.calendar.removeSection(line());
-            if(line() > maxSession()) selector.setSelection(maxSession());
+            updateBounds();
+            if(line() > maxSession()) layer.setSelection(maxSession());
         }
 
         return LayerChange.keep();
@@ -84,17 +86,17 @@ public class SectionInputLayer implements InputLayer {
     private LayerChange add() {
         Section section = state.calendar.addSection("New Section", 0);
         updateBounds();
-        selector.setSelection(maxSession());
-        InputLayer newLayer = new TextBoxLayer(selector, "", value -> section.setTitle(value));
+        layer.setSelection(maxSession());
+        InputLayer newLayer = new TextBoxLayer(layer, "", value -> section.setTitle(value));
         return LayerChange.switchTo(newLayer);
     }
 
     private void up() {
-        selector.prevSelection();
+        layer.prevSelection();
     }
 
     private void down() {
-        selector.nextSelection();
+        layer.nextSelection();
     }
 
     private void nextHighlight() {

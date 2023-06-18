@@ -2,21 +2,26 @@ package calendar.drawing.layer;
 
 import java.util.List;
 
-import calendar.drawing.Canvas;
+import calendar.drawing.canvas.Canvas;
 import calendar.drawing.Just;
 import calendar.state.State;
-import calendar.state.layer.SelectionsLayer;
+import calendar.state.layer.ScrollableLayer;
 import calendar.storage.Section;
 
 // the section editing popup
 // TODO: scrolling
 public class SectionDrawer extends SelectablePopupDrawer {
-    public SectionDrawer(int width, State state, SelectionsLayer layer) {
+    private ScrollableLayer scrolling;
+
+    public SectionDrawer(int width, State state, ScrollableLayer layer) {
         super(width, state, layer);
+
+        this.scrolling = layer;
+        this.scrolling.setHeightSupplier(() -> state.calendar.sections().size());;
     }
 
     private List<Section> sections() { return state.calendar.sections(); }
-
+    
     public Canvas draw() {
         Canvas canvas = super.draw();
         Canvas inset = canvas.offsetMargin(2);
@@ -25,6 +30,8 @@ public class SectionDrawer extends SelectablePopupDrawer {
 
         int sectionsHeight = inset.height() - 4;
         inset.offsetCenteredMargin(2, 2, sectionsHeight)
+             .draw(wid.scrollbar(true))
+             .scroll(scrolling)
              .draw(this::drawSections);
 
         inset.offsetCenteredMargin(sectionsHeight + 3, 2, 1)

@@ -8,7 +8,6 @@ import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.State;
 import calendar.state.layer.SelectionsLayer;
-import calendar.storage.Calendar;
 import calendar.storage.Section;
 
 // An input layer that handles picking a certain section

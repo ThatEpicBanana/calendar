@@ -1,6 +1,6 @@
 package calendar.drawing.layer;
 
-import calendar.drawing.Widgets;
+import calendar.drawing.canvas.Widgets;
 import calendar.state.State;
 import calendar.state.layer.SelectionsLayer;
 

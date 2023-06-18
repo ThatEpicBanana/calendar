@@ -1,7 +1,10 @@
-package calendar.drawing;
+package calendar.drawing.canvas;
 
+import calendar.drawing.BoxChars;
+import calendar.drawing.Just;
 import calendar.drawing.color.Ansi;
 import calendar.drawing.color.Color;
+import calendar.state.layer.ScrollableLayer;
 import calendar.util.Vec2;
 
 // This is the backbone of the drawing, 
@@ -55,7 +58,7 @@ public class Canvas {
 
     public Canvas offsetCentered(int y, int width, int height) {
         int x = (this.width() - width) / 2;
-        return new OffsetCanvas(this, x, y, width, height);
+        return this.offset(x, y, width, height);
     }
 
     public Canvas offsetCenteredMargin(int y, int margin, int height) {
@@ -63,7 +66,13 @@ public class Canvas {
 
         int x = (this.width() - width) / 2;
 
-        return new OffsetCanvas(this, x, y, width, height);
+        return this.offset(x, y, width, height);
+    }
+
+    // scrolling //
+
+    public Canvas scroll(ScrollableLayer layer) {
+        return new ScrollableCanvas(this, layer);
     }
 
     // drawer //
@@ -102,7 +111,7 @@ public class Canvas {
     public Canvas fill(char val) {
         for(int x = 0; x < width(); x++)
             for(int y = 0; y < height(); y++)
-                this.text[x][y] = ' ';
+                set(x, y, val);
         return this;
     }
 
@@ -257,7 +266,7 @@ public class Canvas {
         char vertical = chars[1][1][0][0]; // │
 
         for(int y = start; y <= end; y++)
-            text[x][y] = vertical;
+            set(x, y, vertical);
 
         // return self for chaining
         return this;
@@ -271,7 +280,7 @@ public class Canvas {
         char horizontal = chars[0][0][1][1]; // ─
         
         for(int x = start; x <= end; x++)
-            text[x][y] = horizontal;
+            set(x, y, horizontal);
 
         // return self for chaining
         return this;
@@ -352,22 +361,22 @@ public class Canvas {
 
         // columns
         for(int x = xdiff; x < width - 1; x += xdiff) {
-            text[x][top] = chars[0][1][1][1]; // ┬
+            set(x, top, chars[0][1][1][1]); // ┬
             this.verticalLine(x, top + 1, bottom - 1, chars); // │
-            text[x][bottom] = chars[1][0][1][1]; // ┴
+            set(x, bottom, chars[1][0][1][1]); // ┴
         }
         
         // rows
         for(int y = ydiff; y < height - 1; y += ydiff) {
-            text[left][y] = chars[1][1][0][1]; // ├
+            set(left, y, chars[1][1][0][1]); // ├
             this.horizontalLine(y, left + 1, right - 1, chars); // ─
-            text[right][y] = chars[1][1][1][0]; // ┤
+            set(right, y, chars[1][1][1][0]); // ┤
         }
 
         // intersections
         for(int x = xdiff; x < width - 1; x += xdiff)
             for(int y = ydiff; y < height - 1; y += ydiff)
-                text[x][y] = chars[1][1][1][1]; // ┼
+                set(x, y, chars[1][1][1][1]); // ┼
         
         return this;
     }

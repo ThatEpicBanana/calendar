@@ -1,17 +1,33 @@
-package calendar.drawing;
+package calendar.drawing.canvas;
 
 import calendar.drawing.color.Color;
 
 // TODO: a similar class that handles a scrollable area
 public class OffsetCanvas extends Canvas {
-    private int offx;
-    private int offy;
+    protected int offx;
+    protected int offy;
 
     protected OffsetCanvas(Canvas other, int offx, int offy, int width, int height) {
         super(other, width, height);
 
         this.offx = offx;
         this.offy = offy;
+
+        if(other instanceof OffsetCanvas) {
+            OffsetCanvas others = (OffsetCanvas) other;
+            this.offx += others.offx;
+            this.offy += others.offy;
+        }
+    }
+
+    // for ScrollableCanvas
+    // it respects the original offset, 
+    // but doesn't do anything extra
+    protected OffsetCanvas(Canvas other) {
+        super(other, other.width(), other.height());
+
+        this.offx = 0;
+        this.offy = 0;
 
         if(other instanceof OffsetCanvas) {
             OffsetCanvas others = (OffsetCanvas) other;
@@ -35,25 +51,7 @@ public class OffsetCanvas extends Canvas {
 
     // overrides //
     
-    // uses set()
-    // public Canvas text(String string, int x, int y)
-
     protected Canvas overlayWith(int x, int y, Canvas other, Overlayer overlayer) {
         return super.overlayWith(x + offx, y + offy, other, overlayer);
     }
-
-    protected Canvas verticalLine(int x, int start, int end, char[][][][] chars) { 
-        return super.verticalLine(x + offx, start + offy, end + offy, chars);
-    }
-
-    protected Canvas horizontalLine(int y, int start, int end, char[][][][] chars) { 
-        return super.horizontalLine(y + offy, start + offx, end + offx, chars);
-    }
-
-    // uses set() because it also uses verticalLine
-    // public Canvas rectangle(int x, int y, int width, int height, boolean heavy)
-
-    public Canvas grid(int offx, int offy, int cellWidth, int cellHeight, int columns, int rows, boolean heavy) {
-        return super.grid(offx + this.offx, offy + this.offy, cellWidth, cellHeight, columns, rows, heavy);
-    }        
 }
