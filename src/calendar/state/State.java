@@ -9,6 +9,8 @@ import calendar.input.layer.HelpInputLayer;
 import calendar.input.layer.PreferencesInputLayer;
 import calendar.input.InputLayer;
 import calendar.input.layer.SectionInputLayer;
+import calendar.state.layer.AddEventLayer;
+import calendar.state.layer.SelectionsLayer;
 import calendar.storage.Calendar;
 import calendar.storage.EditingEvent;
 import calendar.util.Vec2;
@@ -59,7 +61,6 @@ public class State {
 
     public LocalDate date() { return date; }
     public Theme colors() { return config.colors(); }
-    public int popupHover() { return popupHover; }
 
     public Color monthColor() {
         if(config.colorfulMonths())
@@ -77,23 +78,6 @@ public class State {
 
     public void setDate(LocalDate date) { this.date = date; updateScreen(); }
 
-    // reset the popup line number
-    // note: doesn't update the screen
-    public void resetPopupHover() { this.popupHover = 0; }
-
-    public void setPopupHover(int i) { this.popupHover = i; updateScreen(); }
-    public void movePopupHover(int i, int min, int max) { 
-        this.popupHover = Math.min(max, Math.max(this.popupHover + i, min));
-        updateScreen();
-    }
-
-    // might want to consider using an int and incrementing or decrementing it
-    // to handle multiple layers of editing
-    // currently, though, that doesn't happen, so this is fine
-    public boolean editingHover() { return this.editingHover; }
-    public void startEditingHover() { this.editingHover = true; updateScreen(); }
-    public void endEditingHover() { this.editingHover = false; updateScreen(); }
-
 
     public String errorCode() { return errorCode; }
     public void displayError(String errorCode) { this.errorCode = errorCode; updateScreen(); }
@@ -108,8 +92,9 @@ public class State {
 
 
     public InputLayer showSectionPopup() {
-        if(screen.addSectionPopup())
-            return new SectionInputLayer(this);
+        SelectionsLayer selector = new SelectionsLayer(this);
+        if(screen.addSectionPopup(selector))
+            return new SectionInputLayer(this, selector);
         else
             return null;
     }
@@ -120,9 +105,9 @@ public class State {
             return null;
         }
 
-        EditingEvent event = calendar.createDefaultEvent();
-        if (screen.addAddEventPopup(event))
-            return new AddEventInputLayer(this, event);
+        AddEventLayer layer = new AddEventLayer(this);
+        if (screen.addAddEventPopup(layer))
+            return new AddEventInputLayer(this, layer);
         else 
             return null;
     }
@@ -135,8 +120,9 @@ public class State {
     }
 
     public InputLayer showPreferencesPopup() {
-        if(screen.addPreferencesPopup())
-            return new PreferencesInputLayer(this);
+        SelectionsLayer selector = new SelectionsLayer(this);
+        if(screen.addPreferencesPopup(selector))
+            return new PreferencesInputLayer(this, selector);
         else
             return null;
     }

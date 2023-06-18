@@ -58,11 +58,8 @@ public class Input {
         LayerType type = this.layers.peek().type();
 
         // make sure the popup removes correctly
-        if(type == LayerType.Popup) {
-            if(!state.screen.removePopup())
-                return false;
-            this.state.resetPopupHover();
-        }
+        if(type == LayerType.Popup && !state.screen.removePopup())
+            return false;
 
         this.layers.pop().exit();
         this.state.updateScreen();

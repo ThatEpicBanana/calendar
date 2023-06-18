@@ -1,10 +1,13 @@
 package calendar.input.component;
 
+import org.w3c.dom.Text;
+
 import calendar.input.InputLayer;
 import calendar.input.Key;
 import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.State;
+import calendar.state.layer.SelectionsLayer;
 
 // An InputLayer for inputting some text
 public class TextBoxLayer implements InputLayer {
@@ -16,17 +19,17 @@ public class TextBoxLayer implements InputLayer {
 
     // iteratively builds the string
     private StringBuilder builder;
-    private State state;
+    private SelectionsLayer selector;
 
-    public TextBoxLayer(State state, String start, Updater<String> callback) {
-        this(state, start, callback, callback);
+    public TextBoxLayer(SelectionsLayer selector, String start, Updater<String> callback) {
+        this(selector, start, callback, callback);
     }
 
-    public TextBoxLayer(State state, String start, Updater<String> callback, Updater<String> finalize) {
+    public TextBoxLayer(SelectionsLayer selector, String start, Updater<String> callback, Updater<String> finalize) {
         this.builder = new StringBuilder(start);
         this.callback = callback;
         this.finalizer = finalize;
-        this.state = state;
+        this.selector = selector;
     }
 
     public LayerChange handle(Key character) {
@@ -47,12 +50,14 @@ public class TextBoxLayer implements InputLayer {
     }
 
     public void start() {
-        state.startEditingHover();
+        if(selector != null)
+        selector.startEditing();
     }
 
     public void exit() {
         this.finalizer.update(builder.toString());
-        state.endEditingHover();
+        if(selector != null)
+        selector.endEditing();
     }
 
     public LayerType type() { return LayerType.Component; }

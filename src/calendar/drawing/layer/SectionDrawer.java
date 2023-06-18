@@ -5,13 +5,14 @@ import java.util.List;
 import calendar.drawing.Canvas;
 import calendar.drawing.Just;
 import calendar.state.State;
+import calendar.state.layer.SelectionsLayer;
 import calendar.storage.Section;
 
 // the section editing popup
 // TODO: scrolling
-public class SectionDrawer extends PopupDrawer {
-    public SectionDrawer(int width, State state) {
-        super(width, state);
+public class SectionDrawer extends SelectablePopupDrawer {
+    public SectionDrawer(int width, State state, SelectionsLayer layer) {
+        super(width, state, layer);
     }
 
     private List<Section> sections() { return state.calendar.sections(); }

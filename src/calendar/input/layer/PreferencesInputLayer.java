@@ -7,17 +7,21 @@ import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.Config;
 import calendar.state.State;
+import calendar.state.layer.SelectionsLayer;
 
 // the input layer for the preferences dialogue
 // it is the thing that actually changes the preferences
 public class PreferencesInputLayer implements InputLayer {
     private State state;
+    private SelectionsLayer selector;
 
-    public PreferencesInputLayer(State state) {
+    public PreferencesInputLayer(State state, SelectionsLayer selector) {
         this.state = state;
+        this.selector = selector;
+        selector.setBounds(0, 7);
     }
 
-    private int line() { return state.popupHover(); }
+    private int line() { return selector.selection(); }
     private Config config() { return state.config; }
 
     public LayerChange handle(Key character) {
@@ -41,9 +45,9 @@ public class PreferencesInputLayer implements InputLayer {
         }
 
         if(character.isUp()) 
-            state.movePopupHover(-1, 0, 7);
+            selector.prevSelection();
         else if(character.isDown()) 
-            state.movePopupHover(1, 0, 7);
+            selector.nextSelection();
         else if(character.isLeft() && line() == 6)
             config().changeSelectedDayColor(-1);
         else if(character.isRight() && line() == 6)

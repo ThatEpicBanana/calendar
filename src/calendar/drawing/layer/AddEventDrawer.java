@@ -4,20 +4,23 @@ import calendar.drawing.Canvas;
 import calendar.drawing.Just;
 import calendar.drawing.color.Color;
 import calendar.state.State;
+import calendar.state.layer.AddEventLayer;
 import calendar.storage.EditingEvent;
 
 // the popup for adding an event
-public class AddEventDrawer extends PopupDrawer {
-    private EditingEvent event;
+public class AddEventDrawer extends SelectablePopupDrawer {
+    private AddEventLayer layer;
 
-    public AddEventDrawer(int width, EditingEvent event, State state) {
-        super(width, state);
-        this.event = event;
+    public AddEventDrawer(int width, State state, AddEventLayer layer) {
+        super(width, state, layer);
+        this.layer = layer;
     }
 
     public Canvas draw() {
         Canvas canvas = super.draw();
         Canvas inset = canvas.offsetMargin(2);
+
+        EditingEvent event = this.layer.event;
 
         Color highlight = event.section().color();
 

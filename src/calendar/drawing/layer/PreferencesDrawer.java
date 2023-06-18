@@ -5,11 +5,12 @@ import calendar.drawing.Just;
 import calendar.drawing.color.Theme;
 import calendar.state.Config;
 import calendar.state.State;
+import calendar.state.layer.SelectionsLayer;
 
 // the settings dialogue
-public class PreferencesDrawer extends PopupDrawer {
-    public PreferencesDrawer(int width, State state) {
-        super(width, state);
+public class PreferencesDrawer extends SelectablePopupDrawer {
+    public PreferencesDrawer(int width, State state, SelectionsLayer selector) {
+        super(width, state, selector);
     }
 
     private Config config() { return state.config; }
@@ -50,8 +51,8 @@ public class PreferencesDrawer extends PopupDrawer {
         canvas.highlightBox(0, 3, canvas.width(), 1, Theme.Mocha.text(),       Theme.Mocha.background());
         canvas.highlightBox(0, 4, canvas.width(), 1, Theme.Transparent.text(), Theme.Transparent.background());
 
-        if(hover() < 5) {
-            int selectedLine = hover();
+        if(selection() < 5) {
+            int selectedLine = selection();
             canvas.text("→", Just.leftOfRow(selectedLine));
             canvas.text("←", Just.rightOfRow(selectedLine));
         }

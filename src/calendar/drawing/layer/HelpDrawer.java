@@ -15,7 +15,7 @@ public class HelpDrawer extends PopupDrawer {
     }
 
     public HelpDrawer(int width, State state, String rows) {
-        super(width, state);
+        super(width, state, null);
 
         this.rows = rows.split("\n");
     }

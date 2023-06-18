@@ -13,8 +13,7 @@ import calendar.util.Vec2;
 public class Canvas {
     protected final char[][] text;
 
-    private int width;
-    private int height;
+    private Vec2 dims;
 
     public Color[][] foreground;
     public Color[][] background;
@@ -28,8 +27,7 @@ public class Canvas {
     }
 
     public Canvas(int width, int height) {
-        this.width = width;
-        this.height = height;
+        this.dims = new Vec2(width, height);
 
         text = new char[width][height];
         foreground = new Color[width][height];
@@ -40,8 +38,7 @@ public class Canvas {
     // offset //
 
     protected Canvas(Canvas other, int width, int height) {
-        this.width = width;
-        this.height = height;
+        this.dims = new Vec2(width, height);
 
         this.text = other.text;
         this.foreground = other.foreground;
@@ -57,14 +54,14 @@ public class Canvas {
     }
 
     public Canvas offsetCentered(int y, int width, int height) {
-        int x = (this.width - width) / 2;
+        int x = (this.width() - width) / 2;
         return new OffsetCanvas(this, x, y, width, height);
     }
 
     public Canvas offsetCenteredMargin(int y, int margin, int height) {
-        int width = this.width - margin * 2;
+        int width = this.width() - margin * 2;
 
-        int x = (this.width - width) / 2;
+        int x = (this.width() - width) / 2;
 
         return new OffsetCanvas(this, x, y, width, height);
     }
@@ -82,10 +79,10 @@ public class Canvas {
 
     // getters //
 
-    public int height() { return height; }
-    public int width() { return width; }
+    public int width() { return dims.x; }
+    public int height() { return dims.y; }
 
-    public Vec2 dims() { return new Vec2(width, height); }
+    public Vec2 dims() { return dims; }
 
     // basic //
     
@@ -103,8 +100,8 @@ public class Canvas {
     }
 
     public Canvas fill(char val) {
-        for(int x = 0; x < width; x++)
-            for(int y = 0; y < height; y++)
+        for(int x = 0; x < width(); x++)
+            for(int y = 0; y < height(); y++)
                 this.text[x][y] = ' ';
         return this;
     }
@@ -120,8 +117,8 @@ public class Canvas {
     }
 
     public Canvas fill(Color foreground, Color background) {
-        for(int x = 0; x < width; x++)
-            for(int y = 0; y < height; y++)
+        for(int x = 0; x < width(); x++)
+            for(int y = 0; y < height(); y++)
                 this.highlight(x, y, foreground, background);
         return this;
     }
@@ -135,9 +132,9 @@ public class Canvas {
 
     // printing //
 
-    public void print_monochrome() {
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++)
+    public void printMonochrome() {
+        for(int y = 0; y < height(); y++) {
+            for(int x = 0; x < width(); x++)
                 System.out.print(this.text[x][y]);
             System.out.println();
         }
@@ -146,8 +143,8 @@ public class Canvas {
     public void print() {
         StringBuilder builder = new StringBuilder();
 
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++)
+        for(int y = 0; y < height(); y++) {
+            for(int x = 0; x < width(); x++)
                 print(builder, x, y);
             builder.append('\n');
         }
@@ -175,7 +172,7 @@ public class Canvas {
     public Canvas text(String string, int x, int y) {
         int length = string.length();
         int minchar = x < 0 ? -x : 0;
-        int maxchar = Math.min(width - x, length);
+        int maxchar = Math.min(width() - x, length);
 
         for(int i = minchar; i < maxchar; i++)
             set(x + i, y, string.charAt(i));
@@ -214,8 +211,8 @@ public class Canvas {
         // get bounds of the inserted canvas
         int xmin = Math.max(0, offx);
         int ymin = Math.max(0, offy);
-        int xmax = Math.min(width, offx + other.width) - 1;
-        int ymax = Math.min(height, offy + other.height) - 1;
+        int xmax = Math.min(width(), offx + other.width()) - 1;
+        int ymax = Math.min(height(), offy + other.height()) - 1;
 
         // overwrite the chars on this canvas with the ones on the inserted canvas
         for(int x = xmin; x <= xmax; x++) {

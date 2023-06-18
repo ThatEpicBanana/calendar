@@ -7,6 +7,7 @@ import calendar.input.Key;
 import calendar.input.LayerChange;
 import calendar.input.LayerType;
 import calendar.state.State;
+import calendar.state.layer.SelectionsLayer;
 import calendar.storage.Calendar;
 import calendar.storage.Section;
 
@@ -15,6 +16,7 @@ import calendar.storage.Section;
 public class SectionSelectorLayer implements InputLayer {
     private int index;
     private State state;
+    private SelectionsLayer selector;
     // a callback that gets run any time the layer gets changed
     // for example: in order to update the selection and the screen
     private Updater<Integer> callback;
@@ -22,9 +24,10 @@ public class SectionSelectorLayer implements InputLayer {
     private List<Section> sections() { return state.calendar.sections(); }
     private int maxIndex() { return sections().size(); }
 
-    public SectionSelectorLayer(State state, Updater<Integer> callback) {
+    public SectionSelectorLayer(State state, SelectionsLayer selector, Updater<Integer> callback) {
         this.index = 0;
         this.state = state;
+        this.selector = selector;
         this.callback = callback;
     }
 
@@ -50,12 +53,12 @@ public class SectionSelectorLayer implements InputLayer {
     }
 
     public void start() {
-        state.startEditingHover();
+        selector.startEditing();
     }
 
     public void exit() {
         this.callback.update(index);
-        state.endEditingHover();
+        selector.endEditing();
     }
 
     public LayerType type() { return LayerType.Component; }

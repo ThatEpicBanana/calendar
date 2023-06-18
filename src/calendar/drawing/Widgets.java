@@ -5,17 +5,22 @@ import java.util.Arrays;
 import calendar.drawing.color.Color;
 import calendar.drawing.color.Theme;
 import calendar.state.State;
+import calendar.state.layer.SelectionsLayer;
 import calendar.util.Vec2;
 
 public class Widgets {
     private State state;
+    private SelectionsLayer selector;
 
-    public Widgets(State state) { this.state = state; }
+    public Widgets(State state, SelectionsLayer selector) {
+        this.state = state;
+        this.selector = selector;
+    }
 
     public Theme colors() { return state.colors(); }
 
-    private int hover() { return state.popupHover(); }
-    private boolean selected(int y) { return hover() == y; }
+    private boolean selected(int y) { return selector != null ? selector.selected(y) : false; }
+    private boolean editingSelection() { return selector != null ? selector.editing() : false; }
 
     public Canvas.Drawer toggle(String title, Just justifification, boolean predicate, int selection) {
         return (canvas) -> {
@@ -30,7 +35,7 @@ public class Widgets {
         return (canvas) -> {
             Canvas inset = justification.getCanvas(canvas, new Vec2(canvas.width(), 1));
 
-            Color foreground = selected(selection) && state.editingHover() ? colors().editingForeground() : colors().highlightText();
+            Color foreground = selected(selection) && editingSelection() ? colors().editingForeground() : colors().highlightText();
 
             inset.text(title, Just.centeredOnRow(0))
                  .highlightBox(0, 0, inset.width(), 1, foreground, color);
@@ -56,7 +61,7 @@ public class Widgets {
 
     private String sanitize(String text, int maxWidth, int selection) {
         int len = text.length();
-        if(selected(selection) && state.editingHover())
+        if(selected(selection) && selector.editing())
             // from the end
             return text.substring(len - Math.min(len, maxWidth));
         else
@@ -69,7 +74,7 @@ public class Widgets {
     }
 
     private Color titledTextForeground(int line, Color highlight) {
-        return selected(line) && state.editingHover() ? highlight : colors().text();
+        return selected(line) && editingSelection() ? highlight : colors().text();
     }
 
     public Canvas.Drawer titledText(String title, Just justification, String text, Color highlight, int selection) {

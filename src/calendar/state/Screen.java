@@ -5,17 +5,19 @@ import calendar.drawing.Drawable;
 import calendar.drawing.color.Theme;
 import calendar.drawing.layer.AddEventDrawer;
 import calendar.drawing.layer.HelpDrawer;
-import calendar.drawing.layer.Month;
+import calendar.drawing.layer.MonthDrawer;
 import calendar.drawing.layer.PopupDrawer;
 import calendar.drawing.layer.PreferencesDrawer;
 import calendar.drawing.layer.SectionDrawer;
+import calendar.state.layer.AddEventLayer;
+import calendar.state.layer.SelectionsLayer;
 import calendar.storage.EditingEvent;
 
 // represents the entire drawable screen - month and popup
 // when drawing, it centers them both onto the terminal screen
 // it also handles the creation and destruction of popups
 public class Screen implements Drawable {
-    public Month month;
+    public MonthDrawer month;
     public PopupDrawer popup;
 
     private int width;
@@ -27,7 +29,7 @@ public class Screen implements Drawable {
     private State state;
 
     public Screen(int width, int height, int cellWidth, int cellHeight, State state) {
-        this.month = new Month(state, cellWidth, cellHeight);
+        this.month = new MonthDrawer(state, cellWidth, cellHeight);
         this.popup = null;
 
         this.state = state;
@@ -57,15 +59,15 @@ public class Screen implements Drawable {
 
     // adds a section popup
     // returns if it succeeds
-    public boolean addSectionPopup() { 
-        return addPopup(new SectionDrawer(popupWidth(), state));
+    public boolean addSectionPopup(SelectionsLayer selector) { 
+        return addPopup(new SectionDrawer(popupWidth(), state, selector));
     }
 
     // adds an event popup
     // returns the event currently being edited
     // or null if the popup couldn't be created
-    public boolean addAddEventPopup(EditingEvent event) { 
-        return addPopup(new AddEventDrawer(popupWidth(), event, state));
+    public boolean addAddEventPopup(AddEventLayer layer) { 
+        return addPopup(new AddEventDrawer(popupWidth(), state, layer));
     }
 
     // adds an info popup
@@ -76,8 +78,8 @@ public class Screen implements Drawable {
 
     // adds the preferences popup
     // returns if it succeeds
-    public boolean addPreferencesPopup() {
-        return addPopup(new PreferencesDrawer(popupWidth(), state));
+    public boolean addPreferencesPopup(SelectionsLayer selector) {
+        return addPopup(new PreferencesDrawer(popupWidth(), state, selector));
     }
 
 
@@ -102,7 +104,7 @@ public class Screen implements Drawable {
     }
 
     public void reinitializeMonth() {
-        this.month = new Month(state, cellWidth, cellHeight);
+        this.month = new MonthDrawer(state, cellWidth, cellHeight);
         this.state.updateScreen();
     }
 

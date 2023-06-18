@@ -7,13 +7,14 @@ import calendar.input.LayerType;
 import calendar.input.component.SectionSelectorLayer;
 import calendar.input.component.TextBoxLayer;
 import calendar.state.State;
+import calendar.state.layer.AddEventLayer;
 import calendar.storage.EditingEvent;
 
 // the input layer for the add event popup
 // allows the user to add an event, nothing else
 public class AddEventInputLayer implements InputLayer {
     private State state;
-    private EditingEvent event;
+    private AddEventLayer layer;
 
     private boolean setTitle = false;
 
@@ -25,12 +26,17 @@ public class AddEventInputLayer implements InputLayer {
     // - 4 confirm (left)
     // - 5 abandon (right)
 
-    private int hover() { return state.popupHover(); }
+    private int selection() { return layer.selection(); }
 
-    public AddEventInputLayer(State state, EditingEvent event) {
+    public AddEventInputLayer(State state, AddEventLayer layer) {
         this.state = state;
-        this.event = event;
+        this.layer = layer;
+        // actually goes from 0-5,
+        // but these are the bounds of the middle lines
+        layer.setBounds(0, 4);
     }
+
+    private EditingEvent event() { return layer.event; }
 
     public LayerChange handle(Key character) {
         if(character.toLowerCase() == 'q' || character.toLowerCase() == 'a') 
@@ -42,7 +48,7 @@ public class AddEventInputLayer implements InputLayer {
         else if(character.isRight()) right();
 
         if(character.isEnter()) {
-            switch(hover()) {
+            switch(selection()) {
                 case 0: return editTitle();
                 case 1: return editStart();
                 case 2: return editEnd();
@@ -56,26 +62,28 @@ public class AddEventInputLayer implements InputLayer {
     }
 
     private void up() {
-        if(hover() > 3) state.setPopupHover(3);
-        else state.movePopupHover(-1, 0, 4);
+        if(selection() > 3) layer.setSelection(3);
+        else layer.prevSelection();;
     }
 
     private void down() {
-        state.movePopupHover(1, 0, 4);
+        layer.nextSelection();
     }
 
-    private void left() { state.setPopupHover(4); }
-    private void right() { state.setPopupHover(5); }
+    private void left() { layer.setSelection(4); }
+    private void right() { layer.setSelection(5); }
 
     private LayerChange editTitle() {
-        InputLayer newLayer = new TextBoxLayer(state, setTitle ? event.title() : "", value -> event.setTitle(value));
+        EditingEvent event = event();
+        InputLayer newLayer = new TextBoxLayer(layer, setTitle ? event().title() : "", value -> event.setTitle(value));
         setTitle = true; // title for the first edit is empty
         return LayerChange.switchTo(newLayer);
     }
 
     private LayerChange editStart() {
+        EditingEvent event = event();
         InputLayer newLayer = new TextBoxLayer(
-            state, event.start(),
+            layer, event.start(),
             value -> event.setStart(value),
             value -> event.setStartChecked(value, state)
         );
@@ -83,8 +91,9 @@ public class AddEventInputLayer implements InputLayer {
     }
 
     private LayerChange editEnd() {
+        EditingEvent event = event();
         InputLayer newLayer = new TextBoxLayer(
-            state, event.end(),
+            layer, event.end(),
             value -> event.setEnd(value),
             value -> event.setEndChecked(value, state)
         );
@@ -92,12 +101,13 @@ public class AddEventInputLayer implements InputLayer {
     }
 
     private LayerChange editSection() {
-        InputLayer newLayer = new SectionSelectorLayer(state, index -> event.setSection(index));
+        EditingEvent event = event();
+        InputLayer newLayer = new SectionSelectorLayer(state, layer, index -> event.setSection(index));
         return LayerChange.switchTo(newLayer);
     }
 
     private LayerChange saveSection() {
-        state.calendar.addEvent(event);
+        state.calendar.addEvent(event());
         return LayerChange.exit();
     }
 

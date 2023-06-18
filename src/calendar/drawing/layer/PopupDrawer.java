@@ -16,10 +16,13 @@ public class PopupDrawer implements Drawable {
     protected Widgets wid;
 
     public PopupDrawer(int width, State state) {
-        this.width = width;
+        this(width, state, new Widgets(state, null));
+    }
 
+    protected PopupDrawer(int width, State state, Widgets widgets) {
+        this.width = width;
         this.state = state;
-        this.wid = new Widgets(state);
+        this.wid = widgets;
     }
 
     public Theme colors() { return state.colors(); }
@@ -30,20 +33,4 @@ public class PopupDrawer implements Drawable {
 
     public int width() { return this.width; }
     public int height() { return this.height; }
-
-    protected int line(int y) { return y + 2; }
-    protected int maxLines() { return height() - 4; }
-
-    protected int hover() { return state.popupHover(); }
-    protected boolean selected(int y) { return hover() == y; }
-
-    public String sanitize(String text, int maxWidth, int line) {
-        int len = text.length();
-        if(selected(line) && state.editingHover())
-            // from the end
-            return text.substring(len - Math.min(len, maxWidth));
-        else
-            // from the beginning
-            return text.substring(0, Math.min(len, maxWidth));
-    }
 }
