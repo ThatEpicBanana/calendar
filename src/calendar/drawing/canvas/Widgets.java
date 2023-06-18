@@ -29,7 +29,7 @@ public class Widgets {
             Canvas inset = justifification.getCanvas(canvas, new Vec2(canvas.width(), 1));
 
             inset.text(title + " " + (predicate ? '✓' : '✕'), Just.centeredOnRow(0))
-                .highlightBox(0, 0, inset.width(), 1, selected(selection) ? colors().text() : colors().buttonText(), colors().buttonBackground());
+                 .highlightBox(0, 0, inset.width(), 1, selected(selection) ? colors().text() : colors().buttonText(), colors().buttonBackground());
         };
     }
 
@@ -61,6 +61,9 @@ public class Widgets {
         };
     }
 
+    // draws a scrollbar on the side
+    // with overflow, the scrollbar is drawn outside the canvas on the right edge
+    // without overflow, the scrollbar is drawn within the canvas with some margins
     public Canvas.Drawer scrollbar(boolean overflow) {
         return (canvas) -> {
             ScrollableLayer scrolling = (ScrollableLayer) selector;
@@ -70,15 +73,16 @@ public class Widgets {
             int full = scrolling.fullHeight() + 1;
 
             if(full > win) {
-                int height = win * win / full;
-                int y = scroll * win / full;
+                int max = win - (overflow ? 0 : 2);
+
+                int height = win * max / full;
+                int y = scroll * max / full + (overflow ? 0 : 1);
 
                 int x = canvas.width() - (overflow ? 0 : 2);
-                int maxHeight = canvas.height() - (overflow ? 0 : 2);
 
-                height = Math.min(height, maxHeight);
-
-                canvas.highlightBox(x, y, 1, height, null, colors().text());
+                canvas
+                    .highlightBox(x, 0, 1, win - 1, colors().scrollbarBackground(), colors().scrollbarBackground())
+                    .highlightBox(x, y, 1, height, colors().scrollbarForeground(), colors().scrollbarForeground());
             }
         };
     }
@@ -116,9 +120,9 @@ public class Widgets {
             String sanitizedText = sanitize(text, maxWidth - 2, selection);
             
             inset.text(title, Just.centeredOnRow(0))
-                .highlightBox(0, 0, width, 1, colors().highlightText(), highlight);
+                 .highlightBox(0, 0, width, 1, colors().highlightText(), highlight);
             inset.text(sanitizedText, Just.centeredOnRow(1))
-                .highlightBox(0, 1, width, 1, titledTextForeground(selection, highlight), titledTextBackground(selection));
+                 .highlightBox(0, 1, width, 1, titledTextForeground(selection, highlight), titledTextBackground(selection));
         };
     }
 
@@ -132,13 +136,13 @@ public class Widgets {
             Canvas inset = justification.getCanvas(canvas, new Vec2(width, 1 + text.length));
 
             inset.text(title, Just.centeredOnRow(0))
-                .highlightBox(0, 0, width, 1, colors().highlightText(), highlight);
+                 .highlightBox(0, 0, width, 1, colors().highlightText(), highlight);
 
             for(int i = 0; i < text.length; i++) {
                 String sanitizedText = sanitize(text[i], maxWidth - 2, selection);
 
                 inset.text(sanitizedText, Just.centeredOnRow(i + 1))
-                    .highlightBox(0, i + 1, width, 1, titledTextForeground(selection + i, highlight), titledTextBackground(selection + i));
+                     .highlightBox(0, i + 1, width, 1, titledTextForeground(selection + i, highlight), titledTextBackground(selection + i));
             }
         };
     }

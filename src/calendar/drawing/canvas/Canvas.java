@@ -75,6 +75,10 @@ public class Canvas {
         return new ScrollableCanvas(this, layer);
     }
 
+    // stops scrolling the view
+    // usually to draw a scrollbar on top
+    public Canvas unscroll() { return this; }
+
     // drawer //
 
     public interface Drawer {

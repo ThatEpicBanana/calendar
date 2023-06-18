@@ -2,7 +2,6 @@ package calendar.drawing.canvas;
 
 import calendar.drawing.color.Color;
 
-// TODO: a similar class that handles a scrollable area
 public class OffsetCanvas extends Canvas {
     protected int offx;
     protected int offy;

@@ -77,6 +77,9 @@ public enum Theme {
         public Color editingBackground() { return surface0(); }
 
         public Color error() { return red(); }
+
+        public Color scrollbarBackground() { return null; }
+        public Color scrollbarForeground() { return crust(); }
     },
     Frappe {
         public Color rosewater() { return new Color(242, 213, 207); }
@@ -149,6 +152,9 @@ public enum Theme {
         public Color editingBackground() { return surface2(); }
 
         public Color error() { return red(); }
+
+        public Color scrollbarBackground() { return null; }
+        public Color scrollbarForeground() { return surface0(); }
     },
     Macchiato {
         public Color rosewater() { return new Color(244, 219, 214); }
@@ -221,6 +227,9 @@ public enum Theme {
         public Color editingBackground() { return surface2(); }
 
         public Color error() { return red(); }
+
+        public Color scrollbarBackground() { return null; }
+        public Color scrollbarForeground() { return surface0(); }
     },
     Mocha {
  	    public Color rosewater() { return new Color(245, 224, 220); }
@@ -293,6 +302,9 @@ public enum Theme {
         public Color editingBackground() { return surface2(); }
 
         public Color error() { return red(); }
+
+        public Color scrollbarBackground() { return null; }
+        public Color scrollbarForeground() { return surface0(); }
     },
     Transparent {
         public Color text() { return Frappe.text(); }
@@ -324,6 +336,9 @@ public enum Theme {
         public Color editingBackground() { return Frappe.editingBackground(); }
 
         public Color error() { return Frappe.error(); }
+
+        public Color scrollbarBackground() { return Frappe.scrollbarBackground(); }
+        public Color scrollbarForeground() { return Frappe.scrollbarForeground(); }
     };
 
     public static final int HIGHLIGHT_COUNT = 12;
@@ -354,6 +369,9 @@ public enum Theme {
     public abstract Color editingBackground();
 
     public abstract Color error();
+
+    public abstract Color scrollbarBackground();
+    public abstract Color scrollbarForeground();
 
     public Color monthToColor(int month) {
         return highlights()[trueMod(month - 1 - 6, HIGHLIGHT_COUNT)];

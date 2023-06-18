@@ -30,9 +30,8 @@ public class SectionDrawer extends SelectablePopupDrawer {
 
         int sectionsHeight = inset.height() - 4;
         inset.offsetCenteredMargin(2, 2, sectionsHeight)
-             .draw(wid.scrollbar(true))
-             .scroll(scrolling)
-             .draw(this::drawSections);
+             .scroll(scrolling).draw(this::drawSections)
+             .unscroll().draw(wid.scrollbar(true));
 
         inset.offsetCenteredMargin(sectionsHeight + 3, 2, 1)
              .draw(this::drawInfoLine);

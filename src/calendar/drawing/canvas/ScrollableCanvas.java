@@ -16,7 +16,7 @@ public class ScrollableCanvas extends OffsetCanvas {
     }
 
     // an offset on a ScrollableCanvas
-    // has to also be scrollable to scroll as well
+    // has to also be scrollable so the offset scrolls as well
     protected ScrollableCanvas(ScrollableCanvas other, int x, int y, int width, int height, ScrollableLayer layer) {
         super(other, x, y, width, height);
         this.layer = layer;
@@ -59,5 +59,11 @@ public class ScrollableCanvas extends OffsetCanvas {
     // mainly used with widgets
     public Canvas offset(int x, int y, int width, int height) {
         return new ScrollableCanvas(this, x, y, width, height, layer);
+    }
+
+    // stops scrolling the view
+    // usually to draw a scrollbar on top
+    public Canvas unscroll() {
+        return new OffsetCanvas(this);
     }
 }
