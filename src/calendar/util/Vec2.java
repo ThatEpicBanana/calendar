@@ -18,6 +18,8 @@ public class Vec2 {
     public Vec2 mult(int by) { return new Vec2(this.x * by, this.y * by); }
     public Vec2 multElements(Vec2 other) { return new Vec2(this.x * other.x, this.y * other.y); }
 
+    public Vec2 div(int by) { return new Vec2(this.x / by, this.y / by); }
+
     public double len() { return Math.sqrt(x*x + y*y); }
 
     public Vec2 withX(int x) { return new Vec2(x, this.y); }
@@ -25,6 +27,9 @@ public class Vec2 {
 
     public Vec2 addX(int x) { return new Vec2(this.x + x, y); }
     public Vec2 addY(int y) { return new Vec2(x, this.y + y); }
+
+    public Vec2 subX(int x) { return new Vec2(this.x - x, y); }
+    public Vec2 subY(int y) { return new Vec2(x, this.y - y); }
 
     public boolean equals(Vec2 other) {
         return this.x == other.x && this.y == other.y;

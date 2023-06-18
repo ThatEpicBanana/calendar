@@ -260,6 +260,16 @@ public class Canvas {
         );
     }
 
+    public Canvas overlay(Canvas other, Just justification) {
+        Vec2 off = justification.get(this.dims, other.dims);
+        return this.overlay(off.x, off.y, other);
+    }
+
+    public Canvas merge(Canvas other, Just justification) {
+        Vec2 off = justification.get(this.dims, other.dims);
+        return this.merge(off.x, off.y, other);
+    }
+
     // line drawing //
 
     public Canvas verticalLine(int x, int start, int end, boolean heavy)

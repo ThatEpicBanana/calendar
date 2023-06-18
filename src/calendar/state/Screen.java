@@ -1,7 +1,16 @@
 package calendar.state;
 
 import calendar.drawing.canvas.Canvas;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import calendar.drawing.Drawable;
+import calendar.drawing.Just;
+import calendar.drawing.JustOffset;
+import calendar.drawing.JustOffset.DrawableWithOffset;
 import calendar.drawing.color.Theme;
 import calendar.drawing.layer.AddEventDrawer;
 import calendar.drawing.layer.HelpDrawer;
@@ -19,7 +28,7 @@ import calendar.util.Vec2;
 // it also handles the creation and destruction of popups
 public class Screen implements Drawable {
     public MonthDrawer month;
-    public PopupDrawer popup;
+    public ArrayList<PopupDrawer> popups;
 
     private Vec2 dims;
 
@@ -30,7 +39,7 @@ public class Screen implements Drawable {
 
     public Screen(int width, int height, int cellWidth, int cellHeight, State state) {
         this.month = new MonthDrawer(state, cellWidth, cellHeight);
-        this.popup = null;
+        this.popups = new ArrayList<>();
 
         this.state = state;
 
@@ -47,13 +56,12 @@ public class Screen implements Drawable {
     private int popupWidth() 
         { return cellWidth * 3 - 4; }
 
+    public PopupDrawer peekPopup() { return popups.get(popups.size() - 1); }
+
     private boolean addPopup(PopupDrawer popup) {
-        if(this.popup == null) {
-            this.popup = popup;
-            state.updateScreen();
-            return true;
-        } else 
-            return false;
+        this.popups.add(popup);
+        state.updateScreen();
+        return true;
     }
 
     // adds a section popup
@@ -71,8 +79,8 @@ public class Screen implements Drawable {
 
     // adds an info popup
     // returns if it succeeds
-    public boolean addHelpPopup(String[] text) {
-        return addPopup(new HelpDrawer(popupWidth(), state, text));
+    public boolean addHelpPopup(String[] text, boolean standalone) {
+        return addPopup(new HelpDrawer(popupWidth(), state, text, standalone));
     }
 
     // adds the preferences popup
@@ -85,11 +93,34 @@ public class Screen implements Drawable {
     // removes the current popup
     // returns if it succeeds
     public boolean removePopup() {
-        if(this.popup != null) {
-            this.popup = null;
-            return true;
-        } else 
-            return false;
+        if(popups.size() < 1) return false;
+
+        // remove child popups
+        while(!peekPopup().isStandalone())
+            popups.remove(popups.size() - 1);
+
+        // remove parent popup
+        popups.remove(popups.size() - 1);
+
+        state.updateScreen();
+        return true;
+    }
+
+    // removes a dependant popup,
+    // one whose input layer is shared with the parent
+    // returns if it succeeds
+    public boolean removeDependantPopup() {
+        if(popups.size() < 1 || peekPopup().isStandalone()) return false;
+
+        popups.remove(popups.size() - 1);
+
+        state.updateScreen();
+        return true;
+    }
+
+    // returns if the top level popup is a help popup
+    public boolean showingHelp() {
+        return popups.size() > 0 && this.peekPopup() instanceof HelpDrawer;
     }
 
     // updates the dimensions of the screen,
@@ -104,9 +135,11 @@ public class Screen implements Drawable {
     public Canvas draw() {
         Canvas canvas = new Canvas(dims.x, dims.y, null, colors().background());
 
-        center(canvas, month.draw(), 0);
-        if(popup != null)
-            center(canvas, popup.draw(), 2);
+        canvas.overlay(month.draw(), Just.centered());
+
+        @SuppressWarnings("unchecked") // java is too dumb to realize that PopupDrawer implements DrawableOffset
+        List<DrawableWithOffset> drawablePoupus = (List) popups;
+        canvas.draw(JustOffset.drawAll(drawablePoupus, Just.offsetFrom(Just.centered(), new Vec2(0, 2))));
 
         return canvas;
     }
@@ -114,11 +147,5 @@ public class Screen implements Drawable {
     public void reinitializeMonth() {
         this.month = new MonthDrawer(state, cellWidth, cellHeight);
         this.state.updateScreen();
-    }
-
-    private void center(Canvas self, Canvas other, int offset) {
-        int x = (width() - other.width()) / 2;
-        int y = (height() - other.height()) / 2 + offset;
-        self.overlay(x, y, other);
     }
 }

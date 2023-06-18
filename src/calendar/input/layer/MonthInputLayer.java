@@ -32,7 +32,7 @@ public class MonthInputLayer implements InputLayer {
             case 's':
                 return LayerChange.switchTo(state.showSectionPopup());
             case '?':
-                return LayerChange.switchTo(state.showHelpPopup(help()));
+                return LayerChange.switchTo(state.showStandaloneHelpPopup(help()));
             case 'p':
                 return LayerChange.switchTo(state.showPreferencesPopup());
             case 'r':
@@ -72,7 +72,7 @@ public class MonthInputLayer implements InputLayer {
 
     private String[] help() {
         return new String[]{
-            "(arrows) (hjkl)", "move between days",
+            "(←,↓,↑,→) (h,j,k,l)", "move between days",
             "",
             "(H) (shift-left)", "last month",
             "(L) (shift-right)", "next month",

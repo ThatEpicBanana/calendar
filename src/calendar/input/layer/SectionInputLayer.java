@@ -51,6 +51,8 @@ public class SectionInputLayer implements InputLayer {
                 return remove();
             case 'a':
                 return add();
+            case '?':
+                return toggleHelp();
         }
 
         if(character.isUp()) 
@@ -61,6 +63,15 @@ public class SectionInputLayer implements InputLayer {
             previousHighlight();
         else if(character.isRight()) 
             nextHighlight();
+
+        return LayerChange.keep();
+    }
+
+    private LayerChange toggleHelp() {
+        if(state.screen.showingHelp())
+            state.screen.removeDependantPopup();
+        else
+            state.showHelpPopup(help());
 
         return LayerChange.keep();
     }
@@ -107,6 +118,22 @@ public class SectionInputLayer implements InputLayer {
     private void previousHighlight() {
         if(section() != null)
             section().addColor(-1);
+    }
+
+    private String[] help() {
+        return new String[]{
+            "Sections are used",
+            "  to group events",
+            "  ex: birthdays",
+            "",
+            "(a) add section",
+            "(r) remove section",
+            "",
+            "(↓,↑) (j,k)", 
+            "  move",
+            "(←,→) (h,l)", 
+            "  change color",
+        };
     }
 
     public LayerType type() { return LayerType.Popup; }

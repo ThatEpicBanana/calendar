@@ -2,6 +2,7 @@ package calendar.drawing.layer;
 
 import calendar.drawing.canvas.Canvas;
 import calendar.drawing.Just;
+import calendar.drawing.JustOffset;
 import calendar.state.State;
 
 // a generic help popup
@@ -9,15 +10,9 @@ import calendar.state.State;
 public class HelpDrawer extends PopupDrawer {
     private String[] rows;
 
-    public HelpDrawer(int width, State state, String[] rows) {
-        super(width, state);
+    public HelpDrawer(int width, State state, String[] rows, boolean standalone) {
+        super(width, state, standalone);
         this.rows = rows;
-    }
-
-    public HelpDrawer(int width, State state, String rows) {
-        super(width, state, null);
-
-        this.rows = rows.split("\n");
     }
 
     public Canvas draw() {
@@ -33,5 +28,9 @@ public class HelpDrawer extends PopupDrawer {
             box.text(rows[i], Just.leftOfRow(i));
 
         return canvas;
+    }
+
+    public JustOffset offset() {
+        return JustOffset.rightBy(0);
     }
 }

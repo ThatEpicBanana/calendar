@@ -62,7 +62,6 @@ public class Input {
             return false;
 
         this.layers.pop().exit();
-        this.state.updateScreen();
 
         return this.layers.isEmpty();
     }
@@ -83,22 +82,5 @@ public class Input {
         } catch(IOException e) { e.printStackTrace(); }
 
         return false;
-    }
-
-    public void inputLoop() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
-        try {
-            while(true) {
-                Key key = Key.next(reader);
-
-                if(key != Key.UNKNOWN) {
-                    state.resetError();
-
-                    boolean exit = handle(key);
-                    if(exit) break;
-                }
-            }
-        } catch(IOException e) { e.printStackTrace(); }
     }
 }

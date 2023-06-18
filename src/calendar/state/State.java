@@ -114,11 +114,15 @@ public class State {
             return null;
     }
 
-    public InputLayer showHelpPopup(String[] text) {
-        if(screen.addHelpPopup(text))
+    public InputLayer showStandaloneHelpPopup(String[] text) {
+        if(screen.addHelpPopup(text, true))
             return new HelpInputLayer();
         else
             return null;
+    }
+
+    public void showHelpPopup(String[] text) {
+        screen.addHelpPopup(text, false);
     }
 
     public InputLayer showPreferencesPopup() {
