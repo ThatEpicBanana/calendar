@@ -1,5 +1,6 @@
 package calendar;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -18,6 +19,7 @@ import org.jline.terminal.TerminalBuilder;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        // General Idea:
         // This is a calendar app that allows you to:
         // - define different Sections
         // - that each have different sets of Events
@@ -44,16 +46,6 @@ public class Main {
         //   - all centered in Input.java
         //   - defines a set of InputLayers for each screen
         //   - each InputLayer has its own keybindings
-        // 
-        // There is one library that we *had* to use to make it all work called Jline
-        // It has many functionalities, but we only use it to:
-        // - enter the terminal into raw mode
-        //   - if this doesn't get done, for each key the user presses, they would have to press enter as well
-        //   - this is easy enough to enable separately on unix (linux and mac), but on windows you have to use native code
-        //     - so you pretty much have to use a library to enable it for all users
-        // - get the dimensions of the screen
-        //   - again, this isn't that bad to do on linux, but I couldn't find a good way for windows
-        // The only place that uses JLine is right below this comment
 
         // get info from terminal
 
@@ -61,7 +53,7 @@ public class Main {
         terminal.enterRawMode();
         Vec2 dimensions = new Vec2(terminal.getWidth(), terminal.getHeight());
 
-        // set up a test state
+        // setup
 
         State state = setupState(dimensions);
         
@@ -72,9 +64,19 @@ public class Main {
         state.updateScreen();
 
         Input input = new Input(state);
+        BufferedReader reader = input.initializeReader();
 
-        input.inputLoop();
+        // event loop
+        while(true) {
+            Vec2 dims = new Vec2(terminal.getWidth(), terminal.getHeight());
+            state.screen.updateDims(dims);
 
+            // returns if the app should exit
+            if(input.readInput(reader))
+                break;
+        }
+
+        // cleanup
         Ansi.showCursor();
         state.updateFiles();
     }

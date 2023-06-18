@@ -25,4 +25,8 @@ public class Vec2 {
 
     public Vec2 addX(int x) { return new Vec2(this.x + x, y); }
     public Vec2 addY(int y) { return new Vec2(x, this.y + y); }
+
+    public boolean equals(Vec2 other) {
+        return this.x == other.x && this.y == other.y;
+    }
 }

@@ -67,6 +67,24 @@ public class Input {
         return this.layers.isEmpty();
     }
 
+    public BufferedReader initializeReader() {
+        return new BufferedReader(new InputStreamReader(System.in));
+    }
+
+    public boolean readInput(BufferedReader reader) {
+        try {
+            Key key = Key.next(reader);
+
+            if(key != Key.UNKNOWN) {
+                state.resetError();
+                
+                return handle(key);
+            }
+        } catch(IOException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
     public void inputLoop() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         

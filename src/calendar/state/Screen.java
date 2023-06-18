@@ -12,6 +12,7 @@ import calendar.drawing.layer.SectionDrawer;
 import calendar.state.layer.AddEventLayer;
 import calendar.state.layer.ScrollableLayer;
 import calendar.state.layer.SelectionsLayer;
+import calendar.util.Vec2;
 
 // represents the entire drawable screen - month and popup
 // when drawing, it centers them both onto the terminal screen
@@ -20,8 +21,7 @@ public class Screen implements Drawable {
     public MonthDrawer month;
     public PopupDrawer popup;
 
-    private int width;
-    private int height;
+    private Vec2 dims;
 
     private int cellWidth;
     private int cellHeight;
@@ -34,16 +34,15 @@ public class Screen implements Drawable {
 
         this.state = state;
 
-        this.width = width;
-        this.height = height;
+        this.dims = new Vec2(width, height);
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
     }
 
     public Theme colors() { return state.colors(); }
 
-    public int width() { return this.width; }
-    public int height() { return this.height; }
+    public int width() { return this.dims.x; }
+    public int height() { return this.dims.y; }
 
     private int popupWidth() 
         { return cellWidth * 3 - 4; }
@@ -93,8 +92,17 @@ public class Screen implements Drawable {
             return false;
     }
 
+    // updates the dimensions of the screen,
+    // updating the screen if necessary
+    public void updateDims(Vec2 dims) {
+        if(!this.dims.equals(dims)) {
+            this.dims = dims;
+            state.updateScreen();
+        }
+    }
+
     public Canvas draw() {
-        Canvas canvas = new Canvas(width, height, null, colors().background());
+        Canvas canvas = new Canvas(dims.x, dims.y, null, colors().background());
 
         center(canvas, month.draw(), 0);
         if(popup != null)
