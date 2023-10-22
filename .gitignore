@@ -3,3 +3,4 @@ build/
 /calendar
 calendar.jar
 calendar.build_artifacts.txt
+*.ser

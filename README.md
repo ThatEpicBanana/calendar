@@ -4,13 +4,21 @@ A simple Calendar app that I wrote in a week for class.
 
 ## Usage
 
+### Universal
+
+Download `calendar.jar` from the [releases](https://github.com/baanan/calendar/releases/latest) and run it with `java -jar calendar.jar`
+
 ### Linux / Mac
 
 Run `run.sh`
 
 ### Windows
 
-Run `run.bat`. If there's issues with color, run `chcp 932` before running
+Run `run.bat`
+
+## Known Issues
+
+- The color sometimes messes up when using windows. To fix this, run `chcp 932` before running.
 
 ## Gallery
 
