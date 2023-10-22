@@ -17,7 +17,8 @@ public interface Just {
 
 
 
-    static int maxX(Vec2 dims, Vec2 drawingDims) { return dims.x - drawingDims.x - 1; }
+    static int maxX(Vec2 dims, Vec2 drawingDims) { return maxX(dims, drawingDims, 1); }
+    static int maxX(Vec2 dims, Vec2 drawingDims, int off) { return dims.x - drawingDims.x - off; }
     static int maxY(Vec2 dims, Vec2 drawingDims) { return dims.y - drawingDims.y; }
 
     static int centeredX(Vec2 dims, Vec2 drawingDims) { return (dims.x - drawingDims.x) / 2; }
@@ -42,17 +43,22 @@ public interface Just {
         return (dims, drawingDims) -> new Vec2(centeredX(dims, drawingDims), y); }
 
 
-    public static Just topLeft() {
-        return (dims, drawingDims) -> new Vec2(1, 1); }
+    public static Just topLeft() { return offTopLeftBy(1); }
+    public static Just topRight() { return offTopRightBy(1); }
+    public static Just bottomLeft() { return offBottomLeftBy(1); }
+    public static Just bottomRight() { return offBottomRightBy(1); }
 
-    public static Just topRight() {
-        return (dims, drawingDims) -> new Vec2(maxX(dims, drawingDims), 1); }
+    public static Just offTopLeftBy(int off) {
+        return (dims, drawingDims) -> new Vec2(off, 0); }
 
-    public static Just bottomLeft() {
-        return (dims, drawingDims) -> new Vec2(1, maxY(dims, drawingDims)); }
+    public static Just offTopRightBy(int off) {
+        return (dims, drawingDims) -> new Vec2(maxX(dims, drawingDims, off), 0); }
 
-    public static Just bottomRight() {
-        return (dims, drawingDims) -> new Vec2(maxX(dims, drawingDims), maxY(dims, drawingDims)); }
+    public static Just offBottomLeftBy(int off) {
+        return (dims, drawingDims) -> new Vec2(off, maxY(dims, drawingDims)); }
+
+    public static Just offBottomRightBy(int off) {
+        return (dims, drawingDims) -> new Vec2(maxX(dims, drawingDims, off), maxY(dims, drawingDims)); }
 
 
     public static Just centerTop() {

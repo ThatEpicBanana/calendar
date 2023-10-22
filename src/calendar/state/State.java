@@ -125,6 +125,13 @@ public class State {
         screen.addHelpPopup(text, false);
     }
 
+    public void toggleHelp(String[] text) {
+        if(this.screen.showingHelp())
+            this.screen.removeDependantPopup();
+        else
+            this.showHelpPopup(text);
+    }
+
     public InputLayer showPreferencesPopup() {
         SelectionsLayer selector = new SelectionsLayer(this);
         if(screen.addPreferencesPopup(selector))

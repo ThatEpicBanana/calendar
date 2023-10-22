@@ -21,6 +21,10 @@ public class HelpDrawer extends PopupDrawer {
 
         inset.text(" Help ", Just.centeredOnRow(0), state.monthColorText(), state.monthColor());
 
+        // TODO: make this look nice
+        inset.text(" (<) ", Just.offTopLeftBy(2), state.monthColorText(), state.monthColor());
+        inset.text(" (>) ", Just.offTopRightBy(2), state.monthColorText(), state.monthColor());
+
         Canvas box = inset.offsetCenteredMargin(2, 2, inset.height() - 2);
         box.fill(colors().helpText(), colors().textBackground());
 

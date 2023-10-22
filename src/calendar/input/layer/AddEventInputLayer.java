@@ -58,6 +58,9 @@ public class AddEventInputLayer implements InputLayer {
             }
         }
 
+        if(character.toLowerCase() == '?')
+            return toggleHelp();
+
         return LayerChange.keep(); // for now
     }
 
@@ -110,6 +113,26 @@ public class AddEventInputLayer implements InputLayer {
         state.calendar.addEvent(event());
         return LayerChange.exit();
     }
+
+    private static String[] help = new String[]{
+        "Add an event within",
+        "  the specified",
+        "  timeframe and",
+        "  section",
+        "",
+        "Time Frame:",
+        "  Currently, only",
+        "  text is supported",
+        "  ex:",
+        "    1/1/23 12p",
+        "    7.1.23 6:01",
+    };
+
+    private LayerChange toggleHelp() {
+        state.toggleHelp(help);
+        return LayerChange.keep();
+    }
+
 
     public LayerType type() { return LayerType.Popup; }
 }

@@ -67,15 +67,6 @@ public class SectionInputLayer implements InputLayer {
         return LayerChange.keep();
     }
 
-    private LayerChange toggleHelp() {
-        if(state.screen.showingHelp())
-            state.screen.removeDependantPopup();
-        else
-            state.showHelpPopup(help());
-
-        return LayerChange.keep();
-    }
-
     private LayerChange edit() {
         Section section = section();
         if(section == null) return LayerChange.keep();
@@ -120,21 +111,25 @@ public class SectionInputLayer implements InputLayer {
             section().addColor(-1);
     }
 
-    private String[] help() {
-        return new String[]{
-            "Sections are used",
-            "  to group events",
-            "  ex: birthdays",
-            "",
-            "(a) add section",
-            "(r) remove section",
-            "",
-            "(↓,↑) (j,k)", 
-            "  move",
-            "(←,→) (h,l)", 
-            "  change color",
-        };
+    private static String[] help = new String[]{
+        "Sections are used",
+        "  to group events",
+        "  ex: birthdays",
+        "",
+        "(a) add section",
+        "(r) remove section",
+        "",
+        "(↓,↑) (j,k)", 
+        "  move",
+        "(←,→) (h,l)", 
+        "  change color",
+    };
+
+    private LayerChange toggleHelp() {
+        state.toggleHelp(help);
+        return LayerChange.keep();
     }
+
 
     public LayerType type() { return LayerType.Popup; }
 }

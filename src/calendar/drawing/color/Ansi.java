@@ -44,5 +44,10 @@ public class Ansi {
     }
 
     public static void showCursor() { System.out.print(SHOW_CURSOR); }
-    public static void hideCursor() { System.out.print(HIDE_CURSOR); }
+    public static void hideCursor() {
+        System.out.print(HIDE_CURSOR);
+        // ensure that the cursor gets shown whenever the process quits,
+        // such as with Ctrl-C or an exception getting thrown
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> Ansi.showCursor()));
+    }
 }
